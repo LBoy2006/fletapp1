@@ -2,8 +2,16 @@ import flet as ft
 import asyncio
 import random
 
+from cipets import *
 
 animation_in_progress = False
+
+cypet_1 = Cypet("asd", "1", 30, 7)
+cypet_2 = Cypet("sdg", "2", 30, 20)
+cypet_3 = Cypet("dfg", "3", 30, 7)
+enemy_pet_1 = Cypet("er", "4", 10, 10)
+enemy_pet_2 = Cypet("cvx", "5", 10, 20)
+enemy_pet_3 = Cypet("xc", "6", 30, 7)
 
 
 def main(page: ft.Page):
@@ -16,59 +24,70 @@ def main(page: ft.Page):
     page.vertical_alignment = "center"
     page.bgcolor = ft.colors.GREEN_ACCENT
 
-    main_st = ft.Stack(
-        width=100,
-        height=150,
-        controls=[
-            ft.Container(
-                width=80,
-                height=120,
-                border_radius=10,
-                bgcolor=ft.colors.GREEN,
-                top=5,
-                left=5,
-            ),
-            # Левый верхний круглый контейнер (серый)
-            ft.Container(
-                content=ft.Text(
-                    value="20",
-                    size=10,
-                    color=ft.colors.WHITE,
-                    text_align=ft.alignment.center,
+    def create_cypet_ui(cypet: Cypet) -> ft.Stack:
+        return ft.Stack(
+            data=cypet,
+            width=100,
+            height=150,
+            controls=[
+                # Основной контейнер с именем
+                ft.Container(
+                    content=ft.Text(value=f"{cypet.name} ({cypet.element})"),
+                    width=80,
+                    height=120,
+                    border_radius=10,
+                    bgcolor=ft.colors.GREEN,
+                    top=5,
+                    left=5,
                 ),
-                alignment=ft.alignment.center,
-                width=20,
-                height=20,
-                border=ft.border.all(2, ft.colors.WHITE),
-                bgcolor=ft.colors.GREY,
-                border_radius=10,  # Делает контейнер круглым
-                top=0,  # Отступ от верхнего края
-                left=0,  # Отступ от левого края
-            ),
-            # Правый верхний круглый контейнер (красный)
-            ft.Container(
-                content=ft.Text(
-                    value="20",
-                    size=10,
-                    color=ft.colors.WHITE,
-                    text_align=ft.alignment.center,
+                # Левый верхний круглый контейнер (атака)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"{cypet.attack}",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    width=20,
+                    height=20,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    bgcolor=ft.colors.GREY,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    left=0,  # Отступ от левого края
                 ),
-                alignment=ft.alignment.center,
-                border=ft.border.all(2, ft.colors.WHITE),
-                width=20,
-                height=20,
-                bgcolor=ft.colors.RED,
-                border_radius=10,  # Делает контейнер круглым
-                top=0,  # Отступ от верхнего края
-                right=0,  # Отступ от правого края
-            ),
-        ],
-        alignment=ft.alignment.center,
-    )
+                # Правый верхний круглый контейнер (здоровье)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"{cypet.health}",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    width=20,
+                    height=20,
+                    bgcolor=ft.colors.RED,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    right=0,  # Отступ от правого края
+                ),
+            ],
+            alignment=ft.alignment.center,
+        )
+
+    def update_hp(container):
+        container.content.controls[2].content.value=container.content.data.health
+
+
+        return container
+
 
     # Контейнеры игрока
     container_l = ft.Container(
-        content=main_st,
+        content=create_cypet_ui(cypet_2),
         margin=0,
         padding=0,
         alignment=ft.alignment.center,
@@ -84,7 +103,7 @@ def main(page: ft.Page):
     )
 
     container_f = ft.Container(
-        content=main_st,
+        content=create_cypet_ui(cypet_1),
         margin=0,
         padding=0,
         alignment=ft.alignment.center,
@@ -100,7 +119,7 @@ def main(page: ft.Page):
     )
 
     container_r = ft.Container(
-        content=main_st,
+        content=create_cypet_ui(cypet_3),
         margin=0,
         padding=0,
         alignment=ft.alignment.center,
@@ -126,31 +145,7 @@ def main(page: ft.Page):
     # Контейнеры врагов
     enemy1 = ft.Container(
         bgcolor=ft.colors.WHITE,
-        content=main_st,
-        width=90,
-        height=130,
-        border_radius=10,
-        ink=True,
-        top=0,
-        left=160,
-        animate_position=ft.animation.Animation(300, ft.AnimationCurve.EASE_IN_BACK),
-        animate_rotation=ft.animation.Animation(300),
-    )
-    enemy2 = ft.Container(
-        bgcolor=ft.colors.WHITE,
-        content=main_st,
-        width=90,
-        height=130,
-        border_radius=10,
-        ink=True,
-        top=0,
-        left=60,
-        animate_position=ft.animation.Animation(300, ft.AnimationCurve.EASE_IN_BACK),
-        animate_rotation=ft.animation.Animation(300),
-    )
-    enemy3 = ft.Container(
-        bgcolor=ft.colors.WHITE,
-        content=main_st,
+        content=create_cypet_ui(enemy_pet_1),
         width=90,
         height=130,
         border_radius=10,
@@ -160,14 +155,38 @@ def main(page: ft.Page):
         animate_position=ft.animation.Animation(300, ft.AnimationCurve.EASE_IN_BACK),
         animate_rotation=ft.animation.Animation(300),
     )
+    enemy2 = ft.Container(
+        bgcolor=ft.colors.WHITE,
+        content=create_cypet_ui(enemy_pet_2),
+        width=90,
+        height=130,
+        border_radius=10,
+        ink=True,
+        top=0,
+        left=160,
+        animate_position=ft.animation.Animation(300, ft.AnimationCurve.EASE_IN_BACK),
+        animate_rotation=ft.animation.Animation(300),
+    )
+    enemy3 = ft.Container(
+        bgcolor=ft.colors.WHITE,
+        content=create_cypet_ui(enemy_pet_3),
+        width=90,
+        height=130,
+        border_radius=10,
+        ink=True,
+        top=0,
+        left=60,
+        animate_position=ft.animation.Animation(300, ft.AnimationCurve.EASE_IN_BACK),
+        animate_rotation=ft.animation.Animation(300),
+    )
 
-    enemies = [enemy1, enemy2, enemy3]  # Список врагов
+    enemies = [enemy3, enemy1, enemy2]  # Список врагов
     current_enemy_index = 0  # Индекс текущего атакующего врага
 
     kick = ft.Stack(
-        [
+        controls=[
             ft.Image(src="assets/kick.png", width=50),
-            ft.Text(value="10", size=10, color=ft.colors.RED),
+            ft.Text(value=f"damage", size=10, color=ft.colors.RED),
         ],
         alignment=ft.alignment.center,
         opacity=0,  # Начинаем с полной прозрачности
@@ -188,6 +207,7 @@ def main(page: ft.Page):
         original_left = attacker.left
 
         # Размещаем kick на позиции цели
+        kick.controls[1].value = attacker.content.data.attack
         kick.top = target.top + (target.height / 2) - 25  # Центрируем относительно цели
         kick.left = target.left + (target.width / 2) - 25
 
@@ -198,9 +218,12 @@ def main(page: ft.Page):
         attacker.bgcolor = ft.colors.RED
         attacker.top = target.top
         attacker.left = target.left
-        page.update()
+        attacker.content.data.attack_target(target.content.data)
 
-        await asyncio.sleep(0.4)
+        page.update()
+        update_hp(target)
+
+        await asyncio.sleep(0.3)
 
         # Удаляем эффект удара с экрана
 
@@ -216,15 +239,29 @@ def main(page: ft.Page):
         kick.opacity = 0
 
         st1.controls.remove(kick)
-        await asyncio.sleep(0.6)
+        await asyncio.sleep(0.3)
+        page.update()
+        if not target.content.data.is_alive():
+            """ДОБАВИТЬ ТУТ АНИМАЦИЮ СМЕРТИ"""
+            st1.controls.remove(target)
+            if target in enemies:
+                enemies.remove(target)
+            else:
+                player_containers.remove(target)
+            page.update()
+        if len(player_containers) == 0:
+            await asyncio.sleep(1)
+            page.remove(st1)
+            page.add(ft.Text(value="Проиграл", text_align=ft.alignment.center))
+        elif len(enemies) == 0:
+            await asyncio.sleep(1)
+            page.remove(st1)
+            page.add(ft.Text(value="Победа", text_align=ft.alignment.center))
         page.update()
 
     def select_next_player():
         """Выделить следующий контейнер игрока по очереди."""
         nonlocal current_player_index
-
-        # Сбрасываем выделение текущего контейнера
-        player_containers[current_player_index].bgcolor = ft.colors.WHITE
 
         # Переходим к следующему контейнеру
         current_player_index = (current_player_index + 1) % len(player_containers)
@@ -234,8 +271,11 @@ def main(page: ft.Page):
 
     async def enemy_attack():
         """Ответная атака врага по случайному игроку."""
+
         nonlocal current_enemy_index
 
+        # Переходим к следующему врагу
+        current_enemy_index = (current_enemy_index + 1) % len(enemies)
         # Выбираем случайного игрока
         target_player = random.choice(player_containers)
 
@@ -255,8 +295,6 @@ def main(page: ft.Page):
 
         page.update()
 
-        # Переходим к следующему врагу
-        current_enemy_index = (current_enemy_index + 1) % len(enemies)
 
     async def attack_enemy(e):
         global animation_in_progress
@@ -280,15 +318,17 @@ def main(page: ft.Page):
         target.bgcolor = ft.colors.WHITE
         page.update()
         # Ответная атака врага
-        await asyncio.sleep(1)
-        await enemy_attack()
+        await asyncio.sleep(0.6)
+        if len(player_containers) != 0 and len(enemies) != 0:
+            await enemy_attack()
 
-        # Переходим к следующему игроку
-        await asyncio.sleep(1)
-        select_next_player()
-        # Разрешаем взаимодействие после завершения анимации
-        animation_in_progress = False
-        page.update()
+            # Переходим к следующему игроку
+            await asyncio.sleep(0.3)
+            select_next_player()
+            # Разрешаем взаимодействие после завершения анимации
+            animation_in_progress = False
+            page.update()
+
 
     # Привязываем клик на врагов
     for enemy in enemies:
@@ -300,8 +340,8 @@ def main(page: ft.Page):
             container_l,
             container_f,
             container_r,
-            enemy1,
             enemy2,
+            enemy1,
             enemy3,
         ],
         width=300,
