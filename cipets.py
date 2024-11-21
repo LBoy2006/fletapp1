@@ -1,30 +1,22 @@
 
+import os
 
 import requests
 
-import time
 
-"""def fetch_nft_metadata( token_id):  # получение данных NFT
-    url = f"https://polygon-mainnet.g.alchemy.com/v2/{alchemy_api}/getNFTMetadata?contractAddress=0xebeafdfd15bd0bfaedac3eb8e70b4836df6774b5&tokenId={token_id}&refreshCache=false"
-    headers = {"accept": "application/json"}
-    response = requests.get(url, headers=headers)
-
-    return response.json()
-nft_metadata = fetch_nft_metadata("201173")
-nftelement = nft_metadata["metadata"]["attributes"][2]["value"]
-nftname = nft_metadata["metadata"]["attributes"][4]["value"]
-cypet_attack = nft_metadata["metadata"]["attributes"][5]["value"]
-cypet_health = nft_metadata["metadata"]["attributes"][6]["value"]
-
-print(nftelement, nftname, cypet_health , cypet_attack)"""
 
 class Cypet:
 
 
-    def __init__(self, id : str):
+    def __init__(self, id : str, name, health, attack, img):
         self.id = id
+        self.name = name
+        self.health = health
+        self.attack = attack
+        self.element = ""
+        self.img = img
 
-        def fetch_nft_metadata(id):  # получение данных NFT
+    """def fetch_nft_metadata(id):  # получение данных NFT
             url = f"https://storage.googleapis.com/trace_cypets_metadata/{id}"
             headers = {"accept": "application/json"}
             response = requests.get(url, headers=headers)
@@ -32,17 +24,48 @@ class Cypet:
             print(response.json())
             return response.json()
 
+        def download_image_to_assets(image_url):
+           
+            # Загружает изображение по URL и сохраняет в папку assets.
+            # 
+            # :param image_url: Ссылка на изображение
+            # :param filename: Имя файла для сохранения
+            # :param assets_folder: Папка для сохранения (по умолчанию "assets")
+            
+            assets_folder = "assets"
+            filename=image_url.split("/")[-1]+".png"
+            # Проверяем, существует ли папка assets, если нет - создаём
+            if not os.path.exists(assets_folder):
+                os.makedirs(assets_folder)
+
+            # Путь для сохранения изображения
+            file_path = os.path.join(assets_folder, filename)
+            # Проверяем, существует ли файл
+            if os.path.exists(file_path):
+                print(f"Файл уже существует: {file_path}")
+                return filename
+
+            # Загружаем изображение
+            response = requests.get(image_url, stream=True)
+            if response.status_code == 200:
+                with open(file_path, "wb") as file:
+                    for chunk in response.iter_content(1024):
+                         file.write(chunk)
+                print(f"Изображение успешно сохранено: {file_path}")
+            else:
+                raise Exception(f"Ошибка загрузки изображения: {response.status_code}")
+            return filename
 
         nft_metadata = fetch_nft_metadata(id)
 
-        """
-        Инициализация нового Cypet.
+       
+        # Инициализация нового Cypet.
 
-        :param name: Имя питомца (строка).
-        :param element: Стихия питомца (строка, например, "Огонь", "Вода").
-        :param health: Очки здоровья питомца (целое число).
-        :param attack: Сила атаки питомца (целое число).
-        """
+        # :param name: Имя питомца (строка).
+        # :param element: Стихия питомца (строка, например, "Огонь", "Вода").
+        # :param health: Очки здоровья питомца (целое число).
+        # :param attack: Сила атаки питомца (целое число).
+        
 
 
         self.name = nft_metadata["attributes"][4]["value"]
@@ -50,7 +73,7 @@ class Cypet:
         self.health = nft_metadata["attributes"][6]["value"]
         self.attack = nft_metadata["attributes"][5]["value"]
 
-        self.img = nft_metadata["image"]                                #f"https://storage.googleapis.com/trace_cypets_metadata/{id}_img.png"
+        self.img = download_image_to_assets(nft_metadata["image"])       """                        #f"https://storage.googleapis.com/trace_cypets_metadata/{id}_img.png"
 
 
 
@@ -87,8 +110,5 @@ class Cypet:
         """
         return f"{self.name} ({self.element}): {self.health} HP, {self.attack} ATK"
 
-c = Cypet("201174")
-
-print(c)
 
 
