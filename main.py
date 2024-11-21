@@ -2,15 +2,6 @@ import flet as ft
 import asyncio
 import random
 
-from cipets import Cypet
-
-cypet_1 = Cypet("201174", "DOGCY", 15, 15, "05020057_img.png")
-cypet_2 = Cypet("109829", "PUFF", 26, 12, "05050068_img.png")
-cypet_3 = Cypet("110792", "CRYSTAL", 19, 25, "05030014_img.png")
-enemy_pet_1 = Cypet("217404", "FOXCY", 18, 23, "05060027_img.png")
-enemy_pet_2 = Cypet("216978", "GHOSTY", 23, 19, "05070010_img.png")
-enemy_pet_3 = Cypet("222508", "NOVA", 25, 18, "05020021_img.png")
-
 animation_in_progress = False
 
 
@@ -23,18 +14,18 @@ def main(page: ft.Page):
     page.horizontal_alignment = "center"
     page.vertical_alignment = "center"
     page.bgcolor = ft.colors.GREEN_ACCENT
-    #page.url_strategy = "path"
+    # page.url_strategy = "path"
 
-    def create_cypet_ui(cypet: Cypet):
-        return ft.Stack(
-            data=cypet,
+    container_l = ft.Container(
+        content=ft.Stack(
+
             width=100,
             height=150,
             controls=[
                 # Основной контейнер с именем
                 ft.Container(
-                    content=ft.Text(value=f"\n\n\n\n\n{cypet.name}", color=ft.colors.WHITE),
-                    image_src=f"{cypet.img}",
+                    content=ft.Text(value=f"\n\n\n\n\n DOGCY", color=ft.colors.WHITE),
+                    image_src=f"05020057_img.png",
                     image_fit=ft.ImageFit.FIT_HEIGHT,
                     clip_behavior=ft.ClipBehavior.NONE,
                     alignment=ft.alignment.center,
@@ -48,7 +39,7 @@ def main(page: ft.Page):
                 # Левый верхний круглый контейнер (атака)
                 ft.Container(
                     content=ft.Text(
-                        value=f"{cypet.attack}",
+                        value=f"15",
                         size=10,
                         color=ft.colors.WHITE,
                         text_align=ft.TextAlign.CENTER,
@@ -65,7 +56,7 @@ def main(page: ft.Page):
                 # Правый верхний круглый контейнер (здоровье)
                 ft.Container(
                     content=ft.Text(
-                        value=f"{cypet.health}",
+                        value=f"15",
                         size=10,
                         color=ft.colors.WHITE,
                         text_align=ft.TextAlign.CENTER,
@@ -82,10 +73,7 @@ def main(page: ft.Page):
 
             ],
             alignment=ft.alignment.center,
-        )
-
-    container_l = ft.Container(
-        content=create_cypet_ui(cypet_2),
+        ),
         margin=0,
         padding=0,
         alignment=ft.alignment.center,
@@ -101,7 +89,63 @@ def main(page: ft.Page):
     )
 
     container_f = ft.Container(
-        content=create_cypet_ui(cypet_1),
+        content=ft.Stack(
+
+            width=100,
+            height=150,
+            controls=[
+                # Основной контейнер с именем
+                ft.Container(
+                    content=ft.Text(value=f"\n\n\n\n\n PUFF", color=ft.colors.WHITE),
+                    image_src=f"05050068_img.png",
+                    image_fit=ft.ImageFit.FIT_HEIGHT,
+                    clip_behavior=ft.ClipBehavior.NONE,
+                    alignment=ft.alignment.center,
+                    width=80,
+                    height=120,
+                    border_radius=10,
+
+                    top=5,
+                    left=5,
+                ),
+                # Левый верхний круглый контейнер (атака)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"12",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    width=20,
+                    height=20,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    bgcolor=ft.colors.GREY,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    left=0,  # Отступ от левого края
+                ),
+                # Правый верхний круглый контейнер (здоровье)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"26",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    width=20,
+                    height=20,
+                    bgcolor=ft.colors.RED,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    right=0,  # Отступ от правого края
+                ),
+
+            ],
+            alignment=ft.alignment.center,
+        ),
         margin=0,
         padding=0,
         alignment=ft.alignment.center,
@@ -117,7 +161,63 @@ def main(page: ft.Page):
     )
 
     container_r = ft.Container(
-        content=create_cypet_ui(cypet_3),
+        content=ft.Stack(
+
+            width=100,
+            height=150,
+            controls=[
+                # Основной контейнер с именем
+                ft.Container(
+                    content=ft.Text(value=f"\n\n\n\n\n CRYSTAL", color=ft.colors.WHITE),
+                    image_src=f"05030014_img.png",
+                    image_fit=ft.ImageFit.FIT_HEIGHT,
+                    clip_behavior=ft.ClipBehavior.NONE,
+                    alignment=ft.alignment.center,
+                    width=80,
+                    height=120,
+                    border_radius=10,
+
+                    top=5,
+                    left=5,
+                ),
+                # Левый верхний круглый контейнер (атака)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"25",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    width=20,
+                    height=20,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    bgcolor=ft.colors.GREY,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    left=0,  # Отступ от левого края
+                ),
+                # Правый верхний круглый контейнер (здоровье)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"19",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    width=20,
+                    height=20,
+                    bgcolor=ft.colors.RED,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    right=0,  # Отступ от правого края
+                ),
+
+            ],
+            alignment=ft.alignment.center,
+        ),
         margin=0,
         padding=0,
         alignment=ft.alignment.center,
@@ -142,7 +242,63 @@ def main(page: ft.Page):
     # Контейнеры врагов
     enemy1 = ft.Container(
         bgcolor=ft.colors.WHITE,
-        content=create_cypet_ui(enemy_pet_1),
+        content=ft.Stack(
+            
+            width=100,
+            height=150,
+            controls=[
+                # Основной контейнер с именем
+                ft.Container(
+                    content=ft.Text(value=f"\n\n\n\n\n FOXCY", color=ft.colors.WHITE),
+                    image_src=f"05060027_img.png",
+                    image_fit=ft.ImageFit.FIT_HEIGHT,
+                    clip_behavior=ft.ClipBehavior.NONE,
+                    alignment=ft.alignment.center,
+                    width=80,
+                    height=120,
+                    border_radius=10,
+
+                    top=5,
+                    left=5,
+                ),
+                # Левый верхний круглый контейнер (атака)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"23",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    width=20,
+                    height=20,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    bgcolor=ft.colors.GREY,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    left=0,  # Отступ от левого края
+                ),
+                # Правый верхний круглый контейнер (здоровье)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"18",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    width=20,
+                    height=20,
+                    bgcolor=ft.colors.RED,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    right=0,  # Отступ от правого края
+                ),
+
+            ],
+            alignment=ft.alignment.center,
+        ),
         width=90,
         height=130,
         border_radius=10,
@@ -152,9 +308,66 @@ def main(page: ft.Page):
         animate_position=ft.animation.Animation(300, ft.AnimationCurve.EASE_IN_BACK),
         animate_rotation=ft.animation.Animation(300),
     )
+
     enemy2 = ft.Container(
         bgcolor=ft.colors.WHITE,
-        content=create_cypet_ui(enemy_pet_2),
+        content=ft.Stack(
+
+            width=100,
+            height=150,
+            controls=[
+                # Основной контейнер с именем
+                ft.Container(
+                    content=ft.Text(value=f"\n\n\n\n\n GHOSTY", color=ft.colors.WHITE),
+                    image_src=f"05070010_img.png",
+                    image_fit=ft.ImageFit.FIT_HEIGHT,
+                    clip_behavior=ft.ClipBehavior.NONE,
+                    alignment=ft.alignment.center,
+                    width=80,
+                    height=120,
+                    border_radius=10,
+
+                    top=5,
+                    left=5,
+                ),
+                # Левый верхний круглый контейнер (атака)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"19",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    width=20,
+                    height=20,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    bgcolor=ft.colors.GREY,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    left=0,  # Отступ от левого края
+                ),
+                # Правый верхний круглый контейнер (здоровье)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"23",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    width=20,
+                    height=20,
+                    bgcolor=ft.colors.RED,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    right=0,  # Отступ от правого края
+                ),
+
+            ],
+            alignment=ft.alignment.center,
+        ),
         width=90,
         height=130,
         border_radius=10,
@@ -164,9 +377,66 @@ def main(page: ft.Page):
         animate_position=ft.animation.Animation(300, ft.AnimationCurve.EASE_IN_BACK),
         animate_rotation=ft.animation.Animation(300),
     )
+
     enemy3 = ft.Container(
         bgcolor=ft.colors.WHITE,
-        content=create_cypet_ui(enemy_pet_3),
+        content=ft.Stack(
+
+            width=100,
+            height=150,
+            controls=[
+                # Основной контейнер с именем
+                ft.Container(
+                    content=ft.Text(value=f"\n\n\n\n\n NOVA", color=ft.colors.WHITE),
+                    image_src=f"05020021_img.png",
+                    image_fit=ft.ImageFit.FIT_HEIGHT,
+                    clip_behavior=ft.ClipBehavior.NONE,
+                    alignment=ft.alignment.center,
+                    width=80,
+                    height=120,
+                    border_radius=10,
+
+                    top=5,
+                    left=5,
+                ),
+                # Левый верхний круглый контейнер (атака)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"18",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    width=20,
+                    height=20,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    bgcolor=ft.colors.GREY,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    left=0,  # Отступ от левого края
+                ),
+                # Правый верхний круглый контейнер (здоровье)
+                ft.Container(
+                    content=ft.Text(
+                        value=f"25",
+                        size=10,
+                        color=ft.colors.WHITE,
+                        text_align=ft.TextAlign.CENTER,
+                    ),
+                    alignment=ft.alignment.center,
+                    border=ft.border.all(2, ft.colors.WHITE),
+                    width=20,
+                    height=20,
+                    bgcolor=ft.colors.RED,
+                    border_radius=10,  # Делает контейнер круглым
+                    top=0,  # Отступ от верхнего края
+                    right=0,  # Отступ от правого края
+                ),
+
+            ],
+            alignment=ft.alignment.center,
+        ),
         width=90,
         height=130,
         border_radius=10,
@@ -360,6 +630,6 @@ def main(page: ft.Page):
 
 
 ft.app(
-    target=main, assets_dir="assets", #view=ft.AppView.WEB_BROWSER,
+    target=main, assets_dir="assets",  # view=ft.AppView.WEB_BROWSER,
 )
 # print(str(cypet_3.img))
