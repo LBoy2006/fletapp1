@@ -6,12 +6,13 @@ from cipets import *
 
 animation_in_progress = False
 
-cypet_1 = Cypet("asd", "1", 30, 7)
-cypet_2 = Cypet("sdg", "2", 30, 20)
-cypet_3 = Cypet("dfg", "3", 30, 7)
-enemy_pet_1 = Cypet("er", "4", 10, 10)
-enemy_pet_2 = Cypet("cvx", "5", 10, 20)
-enemy_pet_3 = Cypet("xc", "6", 30, 7)
+cypet_1 = Cypet("201174")
+cypet_2 = Cypet("109829")
+cypet_3 = Cypet("110792")
+enemy_pet_1 = Cypet("217404")
+enemy_pet_2 = Cypet("216978")
+enemy_pet_3 = Cypet("222508")
+
 
 
 def main(page: ft.Page):
@@ -23,6 +24,7 @@ def main(page: ft.Page):
     page.horizontal_alignment = "center"
     page.vertical_alignment = "center"
     page.bgcolor = ft.colors.GREEN_ACCENT
+    page.route_strategy = "hash"
 
     def create_cypet_ui(cypet: Cypet) -> ft.Stack:
         return ft.Stack(
@@ -32,11 +34,15 @@ def main(page: ft.Page):
             controls=[
                 # Основной контейнер с именем
                 ft.Container(
-                    content=ft.Text(value=f"{cypet.name} ({cypet.element})"),
+                    content=ft.Text(value=f"\n\n\n\n\n{cypet.name}", color=ft.colors.WHITE ),
+                    image_src=f"{cypet.img}",
+                    image_fit=ft.ImageFit.FIT_HEIGHT,
+                    clip_behavior=ft.ClipBehavior.NONE,
+                    alignment=ft.alignment.center,
                     width=80,
                     height=120,
                     border_radius=10,
-                    bgcolor=ft.colors.GREEN,
+
                     top=5,
                     left=5,
                 ),
@@ -74,6 +80,7 @@ def main(page: ft.Page):
                     top=0,  # Отступ от верхнего края
                     right=0,  # Отступ от правого края
                 ),
+
             ],
             alignment=ft.alignment.center,
         )
@@ -185,7 +192,7 @@ def main(page: ft.Page):
 
     kick = ft.Stack(
         controls=[
-            ft.Image(src="assets/kick.png", width=50),
+            ft.Image(src="kick.png", width=50),
             ft.Text(value=f"damage", size=10, color=ft.colors.RED),
         ],
         alignment=ft.alignment.center,
@@ -351,7 +358,7 @@ def main(page: ft.Page):
     # Добавляем элементы на страницу
     page.add(st1)
 
-
 ft.app(
-    target=main, #view=ft.AppView.WEB_BROWSER
+    target=main, assets_dir="assets", view=ft.AppView.WEB_BROWSER
 )
+#print(str(cypet_3.img))

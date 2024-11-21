@@ -1,5 +1,40 @@
+
+
+import requests
+
+import time
+
+"""def fetch_nft_metadata( token_id):  # получение данных NFT
+    url = f"https://polygon-mainnet.g.alchemy.com/v2/{alchemy_api}/getNFTMetadata?contractAddress=0xebeafdfd15bd0bfaedac3eb8e70b4836df6774b5&tokenId={token_id}&refreshCache=false"
+    headers = {"accept": "application/json"}
+    response = requests.get(url, headers=headers)
+
+    return response.json()
+nft_metadata = fetch_nft_metadata("201173")
+nftelement = nft_metadata["metadata"]["attributes"][2]["value"]
+nftname = nft_metadata["metadata"]["attributes"][4]["value"]
+cypet_attack = nft_metadata["metadata"]["attributes"][5]["value"]
+cypet_health = nft_metadata["metadata"]["attributes"][6]["value"]
+
+print(nftelement, nftname, cypet_health , cypet_attack)"""
+
 class Cypet:
-    def __init__(self, name : str, element: str, health : int, attack: int):
+
+
+    def __init__(self, id : str):
+        self.id = id
+
+        def fetch_nft_metadata(id):  # получение данных NFT
+            url = f"https://storage.googleapis.com/trace_cypets_metadata/{id}"
+            headers = {"accept": "application/json"}
+            response = requests.get(url, headers=headers)
+
+            print(response.json())
+            return response.json()
+
+
+        nft_metadata = fetch_nft_metadata(id)
+
         """
         Инициализация нового Cypet.
 
@@ -8,10 +43,16 @@ class Cypet:
         :param health: Очки здоровья питомца (целое число).
         :param attack: Сила атаки питомца (целое число).
         """
-        self.name = name
-        self.element = element
-        self.health = health
-        self.attack = attack
+
+
+        self.name = nft_metadata["attributes"][4]["value"]
+        self.element = nft_metadata["attributes"][2]["value"]
+        self.health = nft_metadata["attributes"][6]["value"]
+        self.attack = nft_metadata["attributes"][5]["value"]
+
+        self.img = nft_metadata["image"]                                #f"https://storage.googleapis.com/trace_cypets_metadata/{id}_img.png"
+
+
 
     def take_damage(self, damage):
         """
@@ -45,3 +86,9 @@ class Cypet:
         Возвращает строковое представление питомца.
         """
         return f"{self.name} ({self.element}): {self.health} HP, {self.attack} ATK"
+
+c = Cypet("201174")
+
+print(c)
+
+
