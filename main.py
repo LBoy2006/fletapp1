@@ -472,157 +472,157 @@ def main(page: ft.Page):
         height=600,
     )
 
-    def update_hp(container):
-        container.content.controls[2].content.value = container.content.data.health
+    # def update_hp(container):
+    #     container.content.controls[2].content.value = container.content.data.health
 
-        return container
+    #     return container
 
-    # Контейнеры игрока
+    # # Контейнеры игрока
 
-    def move_on_top(control):
-        """Moves draggable card to the top of the stack"""
-        st1.controls.append(kick)
-        st1.controls.remove(control)
-        st1.controls.append(control)
-        page.update()
+    # def move_on_top(control):
+    #     """Moves draggable card to the top of the stack"""
+    #     st1.controls.append(kick)
+    #     st1.controls.remove(control)
+    #     st1.controls.append(control)
+    #     page.update()
 
-    async def animate_attack(attacker, target):
-        move_on_top(attacker)
-        """Анимация атаки: перемещение атакующего к цели и возврат обратно с анимацией эффекта."""
-        original_top = attacker.top
-        original_left = attacker.left
+    # async def animate_attack(attacker, target):
+    #     move_on_top(attacker)
+    #     """Анимация атаки: перемещение атакующего к цели и возврат обратно с анимацией эффекта."""
+    #     original_top = attacker.top
+    #     original_left = attacker.left
 
-        # Размещаем kick на позиции цели
-        kick.controls[1].value = attacker.content.data.attack
-        kick.top = target.top + (target.height / 2) - 25  # Центрируем относительно цели
-        kick.left = target.left + (target.width / 2) - 25
+    #     # Размещаем kick на позиции цели
+    #     kick.controls[1].value = attacker.content.data.attack
+    #     kick.top = target.top + (target.height / 2) - 25  # Центрируем относительно цели
+    #     kick.left = target.left + (target.width / 2) - 25
 
-        # Добавляем эффект удара на страницу
+    #     # Добавляем эффект удара на страницу
 
-        # Перемещаем атакующего к цели
-        attacker.rotate = -0.3
-        attacker.bgcolor = ft.colors.RED
-        attacker.top = target.top
-        attacker.left = target.left
-        attacker.content.data.attack_target(target.content.data)
+    #     # Перемещаем атакующего к цели
+    #     attacker.rotate = -0.3
+    #     attacker.bgcolor = ft.colors.RED
+    #     attacker.top = target.top
+    #     attacker.left = target.left
+    #     attacker.content.data.attack_target(target.content.data)
 
-        page.update()
-        update_hp(target)
+    #     page.update()
+    #     update_hp(target)
 
-        await asyncio.sleep(0.3)
+    #     await asyncio.sleep(0.3)
 
-        # Удаляем эффект удара с экрана
+    #     # Удаляем эффект удара с экрана
 
-        # Возвращаем атакующего на исходную позицию
-        attacker.top = original_top
-        attacker.left = original_left
-        attacker.rotate = 0
-        attacker.bgcolor = ft.colors.WHITE
-        page.update()
-        kick.opacity = 1
-        page.update()
-        # Анимация исчезновения эффекта удара
-        kick.opacity = 0
+    #     # Возвращаем атакующего на исходную позицию
+    #     attacker.top = original_top
+    #     attacker.left = original_left
+    #     attacker.rotate = 0
+    #     attacker.bgcolor = ft.colors.WHITE
+    #     page.update()
+    #     kick.opacity = 1
+    #     page.update()
+    #     # Анимация исчезновения эффекта удара
+    #     kick.opacity = 0
 
-        st1.controls.remove(kick)
-        await asyncio.sleep(0.3)
-        page.update()
-        if not target.content.data.is_alive():
-            """ДОБАВИТЬ ТУТ АНИМАЦИЮ СМЕРТИ"""
-            st1.controls.remove(target)
-            if target in enemies:
-                enemies.remove(target)
-            else:
-                player_containers.remove(target)
-            page.update()
-        if len(player_containers) == 0:
-            await asyncio.sleep(1)
-            page.remove(st1)
-            page.add(ft.Text(value="Проиграл", text_align=ft.alignment.center))
+    #     st1.controls.remove(kick)
+    #     await asyncio.sleep(0.3)
+    #     page.update()
+    #     if not target.content.data.is_alive():
+    #         """ДОБАВИТЬ ТУТ АНИМАЦИЮ СМЕРТИ"""
+    #         st1.controls.remove(target)
+    #         if target in enemies:
+    #             enemies.remove(target)
+    #         else:
+    #             player_containers.remove(target)
+    #         page.update()
+    #     if len(player_containers) == 0:
+    #         await asyncio.sleep(1)
+    #         page.remove(st1)
+    #         page.add(ft.Text(value="Проиграл", text_align=ft.alignment.center))
 
-        elif len(enemies) == 0:
-            await asyncio.sleep(1)
-            page.remove(st1)
-            page.add(ft.Text(value="Победа", text_align=ft.alignment.center))
-        page.update()
+    #     elif len(enemies) == 0:
+    #         await asyncio.sleep(1)
+    #         page.remove(st1)
+    #         page.add(ft.Text(value="Победа", text_align=ft.alignment.center))
+    #     page.update()
 
-    current_player_index = 0
+    # current_player_index = 0
 
-    def select_next_player():
-        """Выделить следующий контейнер игрока по очереди."""
-        nonlocal current_player_index
+    # def select_next_player():
+    #     """Выделить следующий контейнер игрока по очереди."""
+    #     nonlocal current_player_index
 
-        # Переходим к следующему контейнеру
-        if len(player_containers) != 0:
-            current_player_index = (current_player_index + 1) % len(player_containers)
-            player_containers[current_player_index].bgcolor = ft.colors.RED
+    #     # Переходим к следующему контейнеру
+    #     if len(player_containers) != 0:
+    #         current_player_index = (current_player_index + 1) % len(player_containers)
+    #         player_containers[current_player_index].bgcolor = ft.colors.RED
 
-        page.update()
+    #     page.update()
 
-    current_enemy_index = 0  # Индекс текущего атакующего врага
+    # current_enemy_index = 0  # Индекс текущего атакующего врага
 
-    async def enemy_attack():
-        """Ответная атака врага по случайному игроку."""
+    # async def enemy_attack():
+    #     """Ответная атака врага по случайному игроку."""
 
-        nonlocal current_enemy_index
+    #     nonlocal current_enemy_index
 
-        # Переходим к следующему врагу
-        current_enemy_index = (current_enemy_index + 1) % len(enemies)
-        # Выбираем случайного игрока
-        target_player = random.choice(player_containers)
+    #     # Переходим к следующему врагу
+    #     current_enemy_index = (current_enemy_index + 1) % len(enemies)
+    #     # Выбираем случайного игрока
+    #     target_player = random.choice(player_containers)
 
-        # Атакующий враг
-        attacking_enemy = enemies[current_enemy_index]
+    #     # Атакующий враг
+    #     attacking_enemy = enemies[current_enemy_index]
 
-        # Выполняем атаку
-        attacking_enemy.bgcolor = ft.colors.RED
-        target_player.bgcolor = ft.colors.PURPLE
-        page.update()
+    #     # Выполняем атаку
+    #     attacking_enemy.bgcolor = ft.colors.RED
+    #     target_player.bgcolor = ft.colors.PURPLE
+    #     page.update()
 
-        await animate_attack(attacking_enemy, target_player)
+    #     await animate_attack(attacking_enemy, target_player)
 
-        # Сбрасываем цвет врага
-        attacking_enemy.bgcolor = ft.colors.WHITE
-        target_player.bgcolor = ft.colors.WHITE
+    #     # Сбрасываем цвет врага
+    #     attacking_enemy.bgcolor = ft.colors.WHITE
+    #     target_player.bgcolor = ft.colors.WHITE
 
-        page.update()
+    #     page.update()
 
-    async def attack_enemy(e):
-        global animation_in_progress
-        if animation_in_progress:
-            return  # Если анимация уже идет, ничего не делаем
+    # async def attack_enemy(e):
+    #     global animation_in_progress
+    #     if animation_in_progress:
+    #         return  # Если анимация уже идет, ничего не делаем
 
-        # Блокируем взаимодействие
-        animation_in_progress = True
-        page.update()
-        """Обработка атаки выбранным контейнером на врага."""
-        target = e.control  # Контейнер, на который кликнули
-        target.bgcolor = ft.colors.PURPLE  # Меняем цвет цели
-        page.update()
+    #     # Блокируем взаимодействие
+    #     animation_in_progress = True
+    #     page.update()
+    #     """Обработка атаки выбранным контейнером на врага."""
+    #     target = e.control  # Контейнер, на который кликнули
+    #     target.bgcolor = ft.colors.PURPLE  # Меняем цвет цели
+    #     page.update()
 
-        selected_container = player_containers[
-            current_player_index
-        ]  # Текущий выбранный контейнер
-        await animate_attack(selected_container, target)
+    #     selected_container = player_containers[
+    #         current_player_index
+    #     ]  # Текущий выбранный контейнер
+    #     await animate_attack(selected_container, target)
 
-        # Сбрасываем цвет цели
-        target.bgcolor = ft.colors.WHITE
-        page.update()
-        # Ответная атака врага
-        await asyncio.sleep(1)
-        if len(player_containers) != 0 and len(enemies) != 0:
-            await enemy_attack()
+    #     # Сбрасываем цвет цели
+    #     target.bgcolor = ft.colors.WHITE
+    #     page.update()
+    #     # Ответная атака врага
+    #     await asyncio.sleep(1)
+    #     if len(player_containers) != 0 and len(enemies) != 0:
+    #         await enemy_attack()
 
-            # Переходим к следующему игроку
-            await asyncio.sleep(0.3)
-            select_next_player()
-            # Разрешаем взаимодействие после завершения анимации
-            animation_in_progress = False
-            page.update()
+    #         # Переходим к следующему игроку
+    #         await asyncio.sleep(0.3)
+    #         select_next_player()
+    #         # Разрешаем взаимодействие после завершения анимации
+    #         animation_in_progress = False
+    #         page.update()
 
-    # Привязываем клик на врагов
-    for enemy in enemies:
-        enemy.on_click = attack_enemy
+    # # Привязываем клик на врагов
+    # for enemy in enemies:
+    #     enemy.on_click = attack_enemy
 
     # Игровое поле
     page.add(st1)
