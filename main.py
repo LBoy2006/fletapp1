@@ -10,5 +10,5 @@ def main(page: ft.Page):
         ft.ElevatedButton("Stop playing", on_click=lambda _: audio1.pause()),
     )
 
-ft.app(main, #view=ft.AppView.WEB_BROWSER
+ft.app(main, view=ft.AppView.WEB_BROWSER
        )
