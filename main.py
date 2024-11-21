@@ -24,7 +24,7 @@ def main(page: ft.Page):
     page.horizontal_alignment = "center"
     page.vertical_alignment = "center"
     page.bgcolor = ft.colors.GREEN_ACCENT
-    page.route_strategy = "hash"
+    
 
     def create_cypet_ui(cypet: Cypet) -> ft.Stack:
         return ft.Stack(
