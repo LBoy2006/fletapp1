@@ -359,6 +359,6 @@ def main(page: ft.Page):
     page.add(st1)
 
 ft.app(
-    target=main, assets_dir="assets", view=ft.AppView.WEB_BROWSER
+    target=main, assets_dir="assets",# view=ft.AppView.WEB_BROWSER
 )
 #print(str(cypet_3.img))
