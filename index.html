@@ -26,6 +26,13 @@
         Telegram.WebApp.close();
     });
 </script>
+      <script type="text/javascript">
+        // Когда приложение загружено
+        Telegram.WebApp.ready();
+
+        // Отправка данных в Telegram WebApp
+        Telegram.WebApp.sendData("WebApp открыт!");
+    </script>
 <body style="background-color: #ffffff">
 <div style="position: absolute; margin-top: 5vh; margin-left: 5vw; height: 90vh; width: 90vw; border-radius: 5vh; background-color: var(--tg-theme-bg-color); box-shadow: 0 0 2vw
  #000000;">
