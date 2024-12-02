@@ -10,20 +10,22 @@
     <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
 </head>
 <script type="text/javascript">
-    const colorPicker = new iro.ColorPicker('#picker', {
-        borderColor: "#ffffff",
-        borderWidth: 1,
-        width: Math.round(document.documentElement.clientWidth / 2),
-    });
-    colorPicker.on('color:change', function (color) {
-        document.body.style.background = color.hexString;
-    });
+    // Инициализация Web App
+Telegram.WebApp.ready();
 
-    Telegram.WebApp.ready();
-    Telegram.WebApp.MainButton.setText('Choose Color').show().onClick(function () {
-        const data = JSON.stringify({hex: colorPicker.color.hexString, rgb: colorPicker.color.rgb});
-        Telegram.WebApp.sendData(data);
-        Telegram.WebApp.close();
+// Получаем данные пользователя из initData
+const userData = Telegram.WebApp.initDataUnsafe.user; // Получаем информацию о пользователе
+const userId = userData.id;  // ID пользователя
+const userName = userData.first_name + " " + userData.last_name; // Имя и фамилия пользователя (если доступны)
+
+// Создание объекта данных с ID и именем пользователя
+const data = JSON.stringify({
+    userId: userId,
+    userName: userName
+});
+
+// Отправка данных в Telegram Web App
+Telegram.WebApp.sendData(data);
     });
 </script>
       <script type="text/javascript">
