@@ -1,38 +1,59 @@
-<!--
-    Simple static Telegram WebApp. Does not verify the WebAppInitData, as a bot token would be needed for that.
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>python-telegram-bot Example WebApp</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram Web App</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
-<script type="text/javascript">
-    const colorPicker = new iro.ColorPicker('#picker', {
-        borderColor: "#ffffff",
-        borderWidth: 1,
-        width: Math.round(document.documentElement.clientWidth / 2),
-    });
-    colorPicker.on('color:change', function (color) {
-        document.body.style.background = color.hexString;
-    });
+<body>
+  <h1>Добро пожаловать в Telegram Web App</h1>
+  <p id="user-info">Загрузка данных...</p>
 
-    Telegram.WebApp.ready();   
-    const data = JSON.stringify({"sdasdasd"});
-    Telegram.WebApp.sendData(data);
-    
-    });
-</script>
-<body style="background-color: #ffffff">
-<div style="position: absolute; margin-top: 5vh; margin-left: 5vw; height: 90vh; width: 90vw; border-radius: 5vh; background-color: var(--tg-theme-bg-color); box-shadow: 0 0 2vw
- #000000;">
-    <div id="picker"
-         style="display: flex; justify-content: center; align-items: center; height: 100%; width: 100%"></div>
-</div>
+  <script>
+    // Инициализация Telegram Web App
+    const tg = window.Telegram.WebApp;
+
+    // Убедимся, что Telegram SDK готов
+    tg.ready();
+
+    // Получаем данные пользователя
+    const userData = tg.initDataUnsafe?.user || {};
+
+    // Отображаем данные пользователя
+    const userInfo = document.getElementById("user-info");
+    userInfo.textContent = `Привет, ${userData.first_name || "гость"}!`;
+
+    // Отправляем данные на сервер
+    const sendDataToServer = async () => {
+      try {
+        const response = await fetch("https://your-server.com/api/telegram", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            initData: tg.initData,
+            initDataUnsafe: tg.initDataUnsafe,
+          }),
+        });
+
+        const result = await response.json();
+        console.log("Ответ сервера:", result);
+
+        if (result.status === "ok") {
+          alert("Данные успешно отправлены на сервер!");
+        } else {
+          alert("Ошибка на сервере: " + result.message);
+        }
+      } catch (error) {
+        console.error("Ошибка при отправке данных:", error);
+        alert("Не удалось отправить данные на сервер.");
+      }
+    };
+
+    // Отправить данные сразу после загрузки
+    sendDataToServer();
+  </script>
 </body>
-<script type="text/javascript">
-    Telegram.WebApp.expand();
-</script>
 </html>
