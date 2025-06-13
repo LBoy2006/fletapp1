@@ -3,39 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Профессиональный сайт</title>
+  <title>Instagram</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+  <style>
+    .logo-font {
+      font-family: 'Great Vibes', cursive;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans leading-normal tracking-normal">
-
-  <header class="bg-blue-600 text-white p-4">
-    <h1 class="text-3xl font-bold">Добро пожаловать</h1>
-    <p>Этот сайт создан с помощью Codex.</p>
-  </header>
-
-  <main class="p-4">
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2">О проекте</h2>
-      <p>Это пример простого и красочного сайта, использующего Tailwind CSS.</p>
-      <img src="assets/icon.png" alt="Icon" class="w-32 mt-4">
-    </section>
-
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-2">Пример javascript.exe</h2>
-      <p>Вы можете запускать JavaScript-файлы через консоль командой:</p>
-      <pre class="bg-gray-200 p-2 rounded">javascript.exe script.js</pre>
-      <p>Ниже приведён небольшой пример кода.</p>
-      <script>
-        function showMessage() {
-          alert('Пример работы javascript.exe');
-        }
-      </script>
-      <button onclick="showMessage()" class="bg-green-500 text-white px-4 py-2 rounded">Запустить</button>
-    </section>
-  </main>
-
-  <footer class="bg-gray-800 text-white p-4 text-center">
-    &copy; 2023 Codex Example
-  </footer>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen">
+  <div class="flex flex-col md:flex-row items-center space-y-8 md:space-y-0 md:space-x-16">
+    <img src="assets/05020021_img.png" alt="app screenshot" class="hidden md:block w-80">
+    <div class="w-80">
+      <div class="border border-gray-300 bg-white p-8">
+        <h1 class="logo-font text-5xl text-center mb-6">Instagram</h1>
+        <form>
+          <input type="text" placeholder="Телефон, имя пользователя или эл. адрес" class="border rounded-sm w-full p-2 mb-2 bg-gray-50 text-sm">
+          <input type="password" placeholder="Пароль" class="border rounded-sm w-full p-2 mb-4 bg-gray-50 text-sm">
+          <button class="bg-blue-500 text-white w-full p-2 rounded-lg font-semibold">Войти</button>
+        </form>
+        <div class="flex items-center my-4">
+          <div class="flex-grow border-t"></div>
+          <span class="mx-2 text-gray-500 text-xs font-semibold">ИЛИ</span>
+          <div class="flex-grow border-t"></div>
+        </div>
+        <button class="text-blue-900 text-sm font-semibold mb-4">Войти через Facebook</button>
+        <a href="#" class="text-blue-500 text-xs text-center block">Забыли пароль?</a>
+      </div>
+      <div class="border border-gray-300 bg-white p-4 text-center mt-4">
+        <span class="text-sm mr-2">У вас ещё нет аккаунта?</span>
+        <a href="#" class="text-blue-500 font-semibold text-sm">Зарегистрироваться</a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
