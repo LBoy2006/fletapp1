@@ -3,57 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telegram Web App</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <title>титул</title>
+ 
 </head>
 <body>
-  <h1>Добро пожаловать в Telegram Web App</h1>
-  <p id="user-info">Загрузка данных...</p>
+  <h1>Добро пожаловать </h1>
+  
 
-  <script>
-    // Инициализация Telegram Web App
-    const tg = window.Telegram.WebApp;
-
-    // Убедимся, что Telegram SDK готов
-    tg.ready();
-
-    // Получаем данные пользователя
-    const userData = tg.initDataUnsafe?.user || {};
-
-    // Отображаем данные пользователя
-    const userInfo = document.getElementById("user-info");
-    userInfo.textContent = `Привет, ${userData.first_name || "гость"}!`;
-
-    // Отправляем данные на сервер
-    const sendDataToServer = async () => {
-      try {
-        const response = await fetch("https://your-server.com/api/telegram", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            initData: tg.initData,
-            initDataUnsafe: tg.initDataUnsafe,
-          }),
-        });
-
-        const result = await response.json();
-        console.log("Ответ сервера:", result);
-
-        if (result.status === "ok") {
-          alert("Данные успешно отправлены на сервер!");
-        } else {
-          alert("Ошибка на сервере: " + result.message);
-        }
-      } catch (error) {
-        console.error("Ошибка при отправке данных:", error);
-        alert("Не удалось отправить данные на сервер.");
-      }
-    };
-
-    // Отправить данные сразу после загрузки
-    sendDataToServer();
-  </script>
+ 
 </body>
 </html>
