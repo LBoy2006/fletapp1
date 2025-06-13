@@ -1,5 +1,5 @@
-# Flet Instagram Style App
+# Pinbax Landing Page
 
-This project demonstrates a simple static site that resembles the Instagram login page. It uses Tailwind CSS and a Google font.
+This repository contains a simple static page inspired by the site pinbax.fun. The layout is created with Tailwind CSS and uses a Google font for the logo text.
 
-To run the app, simply open `index.html` in your browser or serve the directory with any web server.
+Open `index.html` in your browser or serve the directory with any web server to view the page.
