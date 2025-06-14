@@ -168,7 +168,7 @@
     document.querySelectorAll('.page').forEach(page => {
       if (isFullscreen && safeInset) {
         const insetTop = parseInt(safeInset.top) || 0;
-        const extraOffset = 50;
+        const extraOffset = 46;
         page.style.paddingTop = `${insetTop + extraOffset}px`;
       } else {
         page.style.paddingTop = '';
