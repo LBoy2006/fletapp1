@@ -12,25 +12,29 @@
       --bg-color: #0b0b0b;
       --page-bg-color: #1a1a1a;
       --text-color: #ffffff;
-      --nav-bg-color: #2d3748; /* gray-800 */
-      --nav-border-color: #4a5568; /* gray-700 */
-      --nav-text-color: #9ca3af; /* gray-400 */
+      --nav-bg-color: #2d3748;
+      --nav-border-color: #4a5568;
+      --nav-text-color: #9ca3af;
       --active-color: #39ff14;
     }
 
     body.light {
       --bg-color: #ffffff;
-      --page-bg-color: #f3f4f6; /* gray-100 */
+      --page-bg-color: #f3f4f6;
       --text-color: #000000;
-      --nav-bg-color: #f9fafb; /* gray-50 */
-      --nav-border-color: #e5e7eb; /* gray-200 */
-      --nav-text-color: #6b7280; /* gray-500 */
+      --nav-bg-color: #f9fafb;
+      --nav-border-color: #e5e7eb;
+      --nav-text-color: #6b7280;
       --active-color: #008000;
     }
 
     body { background-color: var(--bg-color); color: var(--text-color); }
     .page { background-color: var(--page-bg-color); }
-    nav { background-color: var(--nav-bg-color); border-color: var(--nav-border-color); color: var(--nav-text-color); }
+    nav {
+      background-color: var(--nav-bg-color);
+      border-color: var(--nav-border-color);
+      color: var(--nav-text-color);
+    }
     .nav-btn .icon {
       color: blue;
       transition: transform 0.3s;
@@ -107,24 +111,27 @@
   </nav>
 
   <script>
-  const wrapper = document.getElementById('pages-wrapper');
-  const buttons = document.querySelectorAll('.nav-btn');
-  const themeToggle = document.getElementById('theme-toggle');
-  const fullscreenToggle = document.getElementById('fullscreen-toggle');
-  const safeInset = window.Telegram?.WebApp?.contentSafeAreaInset;
-  
-if (safeInset) {
-  const pagesEl = document.getElementById('pages');
-  pagesEl.style.paddingBottom = `${safeInset.bottom}px`;
-  document.querySelector('nav').style.bottom = `${safeInset.bottom}px`;
+    const wrapper = document.getElementById('pages-wrapper');
+    const buttons = document.querySelectorAll('.nav-btn');
+    const themeToggle = document.getElementById('theme-toggle');
+    const fullscreenToggle = document.getElementById('fullscreen-toggle');
 
-  document.querySelectorAll('.page').forEach(page => {
-    page.style.paddingTop = `calc(${safeInset.top}px + 16px)`;
-  });
-}
+    const safeInset = window.Telegram?.WebApp?.contentSafeAreaInset;
 
-  const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
-  let currentIndex = pageOrder.indexOf('home');
+    if (safeInset) {
+      const pagesEl = document.getElementById('pages');
+      pagesEl.style.paddingBottom = `${safeInset.bottom}px`;
+      document.querySelector('nav').style.bottom = `${safeInset.bottom}px`;
+
+      document.querySelectorAll('.page').forEach(page => {
+        const insetTop = parseInt(safeInset.top) || 0;
+        const extraOffset = 40;
+        page.style.paddingTop = `${insetTop + extraOffset}px`;
+      });
+    }
+
+    const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
+    let currentIndex = pageOrder.indexOf('home');
 
     function updateTransform() {
       wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
@@ -134,11 +141,7 @@ if (safeInset) {
       currentIndex = pageOrder.indexOf(id);
       updateTransform();
       buttons.forEach(btn => {
-        if (btn.dataset.page === id) {
-          btn.classList.add('active');
-        } else {
-          btn.classList.remove('active');
-        }
+        btn.classList.toggle('active', btn.dataset.page === id);
       });
     }
 
@@ -156,56 +159,29 @@ if (safeInset) {
       themeToggle.checked = saved === 'dark';
     }
 
-  themeToggle.addEventListener('change', () => {
-    const theme = themeToggle.checked ? 'dark' : 'light';
-    applyTheme(theme);
-    localStorage.setItem('theme', theme);
-  });
+    themeToggle.addEventListener('change', () => {
+      const theme = themeToggle.checked ? 'dark' : 'light';
+      applyTheme(theme);
+      localStorage.setItem('theme', theme);
+    });
 
-  function initFullscreen() {
-    if (window.Telegram?.WebApp) {
-      fullscreenToggle.checked = Telegram.WebApp.isFullscreen === true;
+    function initFullscreen() {
+      if (window.Telegram?.WebApp) {
+        fullscreenToggle.checked = Telegram.WebApp.isFullscreen === true;
+      }
     }
-  }
 
-  fullscreenToggle.addEventListener('change', () => {
-    if (!window.Telegram?.WebApp) return;
-    if (fullscreenToggle.checked) {
-      Telegram.WebApp.requestFullscreen();
-    } else {
-      Telegram.WebApp.exitFullscreen();
-    }
-  });
+    fullscreenToggle.addEventListener('change', () => {
+      if (!window.Telegram?.WebApp) return;
+      if (fullscreenToggle.checked) {
+        Telegram.WebApp.requestFullscreen();
+      } else {
+        Telegram.WebApp.exitFullscreen();
+      }
+    });
 
     const container = document.getElementById('pages');
     let startX = null;
 
     container.addEventListener('touchstart', e => {
       if (e.touches.length === 1) {
-        startX = e.touches[0].clientX;
-      }
-    });
-
-    container.addEventListener('touchend', e => {
-      if (startX === null) return;
-      const deltaX = e.changedTouches[0].clientX - startX;
-      if (Math.abs(deltaX) > 50) {
-        if (deltaX < 0 && currentIndex < pageOrder.length - 1) {
-          showPage(pageOrder[currentIndex + 1]);
-        } else if (deltaX > 0 && currentIndex > 0) {
-          showPage(pageOrder[currentIndex - 1]);
-        }
-      }
-      startX = null;
-    });
-
-  if (window.Telegram?.WebApp) {
-    Telegram.WebApp.ready();
-    initFullscreen();
-  }
-
-  initTheme();
-  showPage('home');
-  </script>
-</body>
-</html>
