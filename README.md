@@ -16,3 +16,7 @@ within Telegram as a mini‑app) to try it out. На мобильных устр
 можно переключать, свайпая вправо или влево. Перелистывание сопровождается
 плавной анимацией.
 
+
+## External assets
+
+The main stylesheet is now `style.css` and the main script is `script.js`. To serve them via a CDN, host these files on a service such as jsDelivr or GitHub Pages and update the paths in `index.html` accordingly.

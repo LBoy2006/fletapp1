@@ -1,0 +1,48 @@
+:root {
+  --bg-color: #0b0b0b;
+  --page-bg-color: #1a1a1a;
+  --text-color: #ffffff;
+  --nav-bg-color: #2d3748;
+  --nav-border-color: #4a5568;
+  --nav-text-color: #9ca3af;
+  --active-color: #39ff14;
+}
+
+body.light {
+  --bg-color: #ffffff;
+  --page-bg-color: #f3f4f6;
+  --text-color: #000000;
+  --nav-bg-color: #f9fafb;
+  --nav-border-color: #e5e7eb;
+  --nav-text-color: #6b7280;
+  --active-color: #008000;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.page {
+  background-color: var(--page-bg-color);
+}
+
+nav {
+  background-color: var(--nav-bg-color);
+  border-color: var(--nav-border-color);
+  color: var(--nav-text-color);
+}
+
+.nav-btn .icon {
+  color: blue;
+  transition: transform 0.3s;
+}
+
+.nav-btn.active .icon {
+  color: var(--active-color);
+  transform: scale(1.25);
+}
+
+.nav-btn.active {
+  color: var(--active-color);
+}
