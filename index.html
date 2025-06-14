@@ -111,6 +111,13 @@
   const buttons = document.querySelectorAll('.nav-btn');
   const themeToggle = document.getElementById('theme-toggle');
   const fullscreenToggle = document.getElementById('fullscreen-toggle');
+  const safeInset = window.Telegram?.WebApp?.contentSafeAreaInset;
+  if (safeInset) {
+    const pagesEl = document.getElementById('pages');
+    pagesEl.style.paddingTop = `${safeInset.top}px`;
+    pagesEl.style.paddingBottom = `${safeInset.bottom}px`;
+    document.querySelector('nav').style.bottom = `${safeInset.bottom}px`;
+  }
 
   const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
   let currentIndex = pageOrder.indexOf('home');
