@@ -16,25 +16,25 @@
   <div id="pages" class="flex-grow relative overflow-hidden" style="touch-action: pan-y">
     <div id="pages-wrapper" class="flex h-full transition-transform duration-300" style="transform: translateX(-200%)">
       <section id="leaderboard" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
-        <h2 class="text-2xl font-bold mb-4">Лидерборд</h2>
+        <h2 id="leaderboard-title" class="text-2xl font-bold mb-4">Лидерборд</h2>
         <p>Здесь будет таблица лидеров.</p>
       </section>
       <section id="task" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
-        <h2 class="text-2xl font-bold mb-4">Задание</h2>
+        <h2 id="task-title" class="text-2xl font-bold mb-4">Задание</h2>
         <p>Описание текущего задания.</p>
       </section>
       <section id="home" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
-        <h2 class="text-2xl font-bold mb-4">Главная</h2>
+        <h2 id="home-title" class="text-2xl font-bold mb-4">Главная</h2>
         <p>Привет, Севастополь!</p>
       </section>
       <section id="collections" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
-        <h2 class="text-2xl font-bold mb-4">Рюкзак</h2>
+        <h2 id="collections-title" class="text-2xl font-bold mb-4">Рюкзак</h2>
         <p>Ваши собранные предметы.</p>
       </section>
       <section id="settings" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
-        <h2 class="text-2xl font-bold mb-4">Настройки</h2>
+        <h2 id="settings-title" class="text-2xl font-bold mb-4">Настройки</h2>
         <div class="mb-4 flex items-center">
-          <span class="mr-2">Темная тема</span>
+          <span id="theme-label" class="mr-2">Темная тема</span>
          <label class="relative inline-flex items-center cursor-pointer">
            <input type="checkbox" id="theme-toggle" class="sr-only peer">
            <div class="w-11 h-6 bg-gray-300 rounded-full transition-colors duration-300 peer-checked:bg-blue-600 before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-5 before:h-5 before:bg-white before:border before:border-gray-300 before:rounded-full before:transition-transform before:duration-300 peer-checked:before:translate-x-full"></div>
@@ -42,11 +42,18 @@
 
         </div>
         <div class="mb-4 flex items-center">
-          <span class="mr-2">Полноэкранный режим</span>
+          <span id="fullscreen-label" class="mr-2">Полноэкранный режим</span>
           <label class="relative inline-flex items-center cursor-pointer">
             <input type="checkbox" id="fullscreen-toggle" class="sr-only peer">
             <div class="w-11 h-6 bg-gray-300 rounded-full transition-colors duration-300 peer-checked:bg-blue-600 before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-5 before:h-5 before:bg-white before:border before:border-gray-300 before:rounded-full before:transition-transform before:duration-300 peer-checked:before:translate-x-full"></div>
           </label>
+        </div>
+        <div class="mb-4 flex items-center">
+          <span id="language-label" class="mr-2">Язык</span>
+          <select id="language-select" class="border rounded p-1">
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+          </select>
         </div>
       </section>
     </div>
@@ -55,23 +62,23 @@
   <nav class="fixed bottom-0 left-0 right-0 border-t flex text-center text-sm transition-colors">
     <button data-page="leaderboard" class="nav-btn flex-1 py-3 flex flex-col items-center rounded">
       <i class="fas fa-trophy icon text-xl mb-1"></i>
-      <span>Лидерборд</span>
+      <span id="nav-leaderboard">Лидерборд</span>
     </button>
     <button data-page="task" class="nav-btn flex-1 py-3 flex flex-col items-center rounded">
       <i class="fas fa-clipboard-list icon text-xl mb-1"></i>
-      <span>Задание</span>
+      <span id="nav-task">Задание</span>
     </button>
     <button data-page="home" class="nav-btn flex-1 py-3 flex flex-col items-center rounded">
       <i class="fas fa-home icon text-xl mb-1"></i>
-      <span>Главная</span>
+      <span id="nav-home">Главная</span>
     </button>
     <button data-page="collections" class="nav-btn flex-1 py-3 flex flex-col items-center rounded">
       <i class="fas fa-boxes icon text-xl mb-1"></i>
-      <span>Рюкзак</span>
+      <span id="nav-collections">Рюкзак</span>
     </button>
     <button data-page="settings" class="nav-btn flex-1 py-3 flex flex-col items-center rounded">
       <i class="fas fa-cog icon text-xl mb-1"></i>
-      <span>Настройки</span>
+      <span id="nav-settings">Настройки</span>
     </button>
    </nav>
 

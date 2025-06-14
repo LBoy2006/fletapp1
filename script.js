@@ -2,6 +2,30 @@ const wrapper = document.getElementById('pages-wrapper');
 const buttons = document.querySelectorAll('.nav-btn');
 const themeToggle = document.getElementById('theme-toggle');
 const fullscreenToggle = document.getElementById('fullscreen-toggle');
+const languageSelect = document.getElementById('language-select');
+
+const translations = {
+  ru: {
+    leaderboard: 'Лидерборд',
+    task: 'Задание',
+    home: 'Главная',
+    collections: 'Рюкзак',
+    settings: 'Настройки',
+    theme: 'Темная тема',
+    fullscreen: 'Полноэкранный режим',
+    language: 'Язык'
+  },
+  en: {
+    leaderboard: 'Leaderboard',
+    task: 'Task',
+    home: 'Home',
+    collections: 'Backpack',
+    settings: 'Settings',
+    theme: 'Dark theme',
+    fullscreen: 'Fullscreen mode',
+    language: 'Language'
+  }
+};
 const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
 let currentIndex = pageOrder.indexOf('home');
 
@@ -19,6 +43,30 @@ function showPage(id) {
 
 function applyTheme(theme) {
   document.body.classList.toggle('light', theme === 'light');
+}
+
+function applyTranslations(lang) {
+  const t = translations[lang] || translations.ru;
+  document.documentElement.lang = lang;
+  document.getElementById('leaderboard-title').textContent = t.leaderboard;
+  document.getElementById('task-title').textContent = t.task;
+  document.getElementById('home-title').textContent = t.home;
+  document.getElementById('collections-title').textContent = t.collections;
+  document.getElementById('settings-title').textContent = t.settings;
+  document.getElementById('theme-label').textContent = t.theme;
+  document.getElementById('fullscreen-label').textContent = t.fullscreen;
+  document.getElementById('language-label').textContent = t.language;
+  document.getElementById('nav-leaderboard').textContent = t.leaderboard;
+  document.getElementById('nav-task').textContent = t.task;
+  document.getElementById('nav-home').textContent = t.home;
+  document.getElementById('nav-collections').textContent = t.collections;
+  document.getElementById('nav-settings').textContent = t.settings;
+  languageSelect.value = lang;
+}
+
+function initLanguage() {
+  const saved = localStorage.getItem('lang') || 'ru';
+  applyTranslations(saved);
 }
 
 function initTheme() {
@@ -58,6 +106,7 @@ if (window.Telegram?.WebApp) {
 
   initTheme();
   initFullscreen();
+  initLanguage();
   applySafeInsets();
   showPage('home');
 
@@ -80,6 +129,12 @@ themeToggle.addEventListener('change', () => {
   const theme = themeToggle.checked ? 'dark' : 'light';
   applyTheme(theme);
   localStorage.setItem('theme', theme);
+});
+
+languageSelect.addEventListener('change', () => {
+  const lang = languageSelect.value;
+  applyTranslations(lang);
+  localStorage.setItem('lang', lang);
 });
 
 // свайпы
