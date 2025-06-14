@@ -5,9 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Telegram Mini App</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body { background-color: #0b0b0b; }
+    .page { background-color: #1a1a1a; }
+    .nav-btn .icon { transition: transform 0.3s; }
+    .nav-btn.active .icon { transform: scale(1.25); }
+    .nav-btn.active { color: #39ff14; }
+  </style>
 </head>
-<body class="h-screen flex flex-col bg-gray-100">
+<body class="h-screen flex flex-col text-white">
 
   <div id="pages" class="flex-grow relative overflow-hidden" style="touch-action: pan-y">
     <div id="pages-wrapper" class="flex h-full transition-transform duration-300" style="transform: translateX(-200%)">
@@ -35,12 +43,27 @@
     </div>
   </div>
 
-  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex text-center text-sm">
-    <button data-page="leaderboard" class="nav-btn flex-1 py-3">Лидерборд</button>
-    <button data-page="task" class="nav-btn flex-1 py-3">Задание</button>
-    <button data-page="home" class="nav-btn flex-1 py-3">Главная</button>
-    <button data-page="collections" class="nav-btn flex-1 py-3">Мои коллекции</button>
-    <button data-page="settings" class="nav-btn flex-1 py-3">Настройки</button>
+  <nav class="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 flex text-center text-sm text-gray-400">
+    <button data-page="leaderboard" class="nav-btn flex-1 py-3 flex flex-col items-center rounded">
+      <i class="fas fa-trophy icon text-xl mb-1"></i>
+      <span>Лидерборд</span>
+    </button>
+    <button data-page="task" class="nav-btn flex-1 py-3 flex flex-col items-center rounded">
+      <i class="fas fa-clipboard-list icon text-xl mb-1"></i>
+      <span>Задание</span>
+    </button>
+    <button data-page="home" class="nav-btn flex-1 py-3 flex flex-col items-center rounded">
+      <i class="fas fa-home icon text-xl mb-1"></i>
+      <span>Главная</span>
+    </button>
+    <button data-page="collections" class="nav-btn flex-1 py-3 flex flex-col items-center rounded">
+      <i class="fas fa-boxes icon text-xl mb-1"></i>
+      <span>Мои коллекции</span>
+    </button>
+    <button data-page="settings" class="nav-btn flex-1 py-3 flex flex-col items-center rounded">
+      <i class="fas fa-cog icon text-xl mb-1"></i>
+      <span>Настройки</span>
+    </button>
   </nav>
 
   <script>
@@ -59,9 +82,9 @@
       updateTransform();
       buttons.forEach(btn => {
         if (btn.dataset.page === id) {
-          btn.classList.add('bg-blue-500', 'text-white');
+          btn.classList.add('active');
         } else {
-          btn.classList.remove('bg-blue-500', 'text-white');
+          btn.classList.remove('active');
         }
       });
     }
