@@ -19,4 +19,4 @@ within Telegram as a mini‑app) to try it out. На мобильных устр
 
 ## External assets
 
-The main stylesheet is now `style.css` and the main script is `script.js`. To serve them via a CDN, host these files on a service such as jsDelivr or GitHub Pages and update the paths in `index.html` accordingly.
+The main stylesheet is now `style.css` and the main script is `script.js`. To serve them via a CDN, host these files on a service such as jsDelivr or GitHub Pages and update the paths in `index.html` accordingly. This demo loads both files from GitHub via jsDelivr using `https://cdn.jsdelivr.net/gh/LBoy2006/fletapp1@main/<file>`. Replace `@main` with a specific tag to pin to a release if desired.
