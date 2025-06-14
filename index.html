@@ -9,28 +9,30 @@
 </head>
 <body class="h-screen flex flex-col bg-gray-100">
 
-  <div id="pages" class="flex-grow overflow-auto" style="touch-action: pan-y">
+  <div id="pages" class="flex-grow relative overflow-hidden" style="touch-action: pan-y">
+    <div id="pages-wrapper" class="flex h-full transition-transform duration-300" style="transform: translateX(-200%)">
 
-    <section id="leaderboard" class="page hidden p-4">
-      <h2 class="text-2xl font-bold mb-4">Лидерборд</h2>
-      <p>Здесь будет таблица лидеров.</p>
-    </section>
-    <section id="task" class="page hidden p-4">
-      <h2 class="text-2xl font-bold mb-4">Задание</h2>
-      <p>Описание текущего задания.</p>
-    </section>
-    <section id="home" class="page p-4">
-      <h2 class="text-2xl font-bold mb-4">Главная</h2>
-      <p>Добро пожаловать в мини‑приложение!</p>
-    </section>
-    <section id="collections" class="page hidden p-4">
-      <h2 class="text-2xl font-bold mb-4">Мои коллекции</h2>
-      <p>Ваши собранные предметы.</p>
-    </section>
-    <section id="settings" class="page hidden p-4">
-      <h2 class="text-2xl font-bold mb-4">Настройки</h2>
-      <p>Параметры приложения.</p>
-    </section>
+      <section id="leaderboard" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
+        <h2 class="text-2xl font-bold mb-4">Лидерборд</h2>
+        <p>Здесь будет таблица лидеров.</p>
+      </section>
+      <section id="task" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
+        <h2 class="text-2xl font-bold mb-4">Задание</h2>
+        <p>Описание текущего задания.</p>
+      </section>
+      <section id="home" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
+        <h2 class="text-2xl font-bold mb-4">Главная</h2>
+        <p>Добро пожаловать в мини‑приложение!</p>
+      </section>
+      <section id="collections" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
+        <h2 class="text-2xl font-bold mb-4">Мои коллекции</h2>
+        <p>Ваши собранные предметы.</p>
+      </section>
+      <section id="settings" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
+        <h2 class="text-2xl font-bold mb-4">Настройки</h2>
+        <p>Параметры приложения.</p>
+      </section>
+    </div>
   </div>
 
   <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex text-center text-sm">
@@ -42,17 +44,19 @@
   </nav>
 
   <script>
-    const pages = document.querySelectorAll('.page');
+    const wrapper = document.getElementById('pages-wrapper');
     const buttons = document.querySelectorAll('.nav-btn');
 
     const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
     let currentIndex = pageOrder.indexOf('home');
 
+    function updateTransform() {
+      wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
     function showPage(id) {
       currentIndex = pageOrder.indexOf(id);
-
-      pages.forEach(p => p.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
+      updateTransform();
       buttons.forEach(btn => {
         if (btn.dataset.page === id) {
           btn.classList.add('bg-blue-500', 'text-white');
@@ -87,7 +91,6 @@
       }
       startX = null;
     });
-
 
     if (window.Telegram?.WebApp) {
       Telegram.WebApp.ready();

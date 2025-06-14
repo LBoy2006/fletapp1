@@ -13,5 +13,5 @@ The layout uses [Tailwind CSS](https://tailwindcss.com/) and integrates the
 Telegram Web Apps script. Open `index.html` in a browser (or within Telegram as a
 
 mini‑app) to try it out. На мобильных устройствах страницы можно переключать,
-свайпая вправо или влево.
+свайпая вправо или влево. Перелистывание сопровождается плавной анимацией.
 
