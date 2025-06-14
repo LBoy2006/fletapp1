@@ -13,19 +13,4 @@ jobs:
         uses: peter-evans/enable-pull-request-automerge@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          merge-method: squash   # Можно заменить на 'merge' или 'rebase', если нужно
-
-      - name: Merge pull request
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const pr = context.payload.pull_request;
-            if (pr.auto_merge) {
-              await github.rest.pulls.merge({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: pr.number,
-                merge_method: "squash"
-              });
-            }
+          merge-method: squash   # или merge, rebase
