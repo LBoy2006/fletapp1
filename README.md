@@ -6,7 +6,7 @@ pages that can be switched using a bottom navigation bar:
 1. “Лидерборд”
 2. “Задание”
 3. “Главная”
-4. “Мои коллекции”
+4. “Рюкзак”
 5. “Настройки”
 
 The layout uses [Tailwind CSS](https://tailwindcss.com/) and integrates the
