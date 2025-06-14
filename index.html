@@ -116,27 +116,30 @@
     const themeToggle = document.getElementById('theme-toggle');
     const fullscreenToggle = document.getElementById('fullscreen-toggle');
 
-    if (window.Telegram?.WebApp) {
-      Telegram.WebApp.ready();
+   if (window.Telegram?.WebApp) {
+  Telegram.WebApp.ready();
 
-      const safeInset = Telegram.WebApp.contentSafeAreaInset;
-      const isFullscreen = Telegram.WebApp.isExpanded === true;
+  const safeInset = Telegram.WebApp.contentSafeAreaInset;
+  const isFullscreen = Telegram.WebApp.isFullscreen;
 
-      if (safeInset) {
-        document.getElementById('pages').style.paddingBottom = `${safeInset.bottom}px`;
-        document.querySelector('nav').style.bottom = `${safeInset.bottom}px`;
-      }
+  if (safeInset) {
+    document.getElementById('pages').style.paddingBottom = `${safeInset.bottom}px`;
+    document.querySelector('nav').style.bottom = `${safeInset.bottom}px`;
+  }
 
-      if (isFullscreen) {
-        document.querySelectorAll('.page').forEach(page => {
-          const insetTop = parseInt(safeInset?.top) || 0;
-          const extraOffset = 56;
-          page.style.paddingTop = `${insetTop + extraOffset}px`;
-        });
-      }
-
-      initFullscreen();
+  document.querySelectorAll('.page').forEach(page => {
+    if (isFullscreen) {
+      const insetTop = parseInt(safeInset?.top) || 0;
+      const extraOffset = 56;
+      page.style.paddingTop = `${insetTop + extraOffset}px`;
+    } else {
+      page.style.paddingTop = ''; // Убираем отступ, если не fullscreen
     }
+  });
+
+  initFullscreen();
+}
+
 
     const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
     let currentIndex = pageOrder.indexOf('home');
