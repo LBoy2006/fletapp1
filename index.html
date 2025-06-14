@@ -185,3 +185,30 @@
 
     container.addEventListener('touchstart', e => {
       if (e.touches.length === 1) {
+        startX = e.touches[0].clientX;
+      }
+    });
+
+    container.addEventListener('touchend', e => {
+      if (startX === null) return;
+      const deltaX = e.changedTouches[0].clientX - startX;
+      if (Math.abs(deltaX) > 50) {
+        if (deltaX < 0 && currentIndex < pageOrder.length - 1) {
+          showPage(pageOrder[currentIndex + 1]);
+        } else if (deltaX > 0 && currentIndex > 0) {
+          showPage(pageOrder[currentIndex - 1]);
+        }
+      }
+      startX = null;
+    });
+
+    if (window.Telegram?.WebApp) {
+      Telegram.WebApp.ready();
+      initFullscreen();
+    }
+
+    initTheme();
+    showPage('home');
+  </script>
+</body>
+</html>
