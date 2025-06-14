@@ -38,9 +38,14 @@ nav {
   transition: transform 0.3s;
 }
 
+
 .nav-btn.active .icon {
   color: var(--active-color);
-  transform: scale(1.25);
+  transform: scale(1.6);
+}
+
+.nav-btn.active span {
+  display: none;
 }
 
 .nav-btn.active {
