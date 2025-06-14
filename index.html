@@ -31,9 +31,21 @@
     body { background-color: var(--bg-color); color: var(--text-color); }
     .page { background-color: var(--page-bg-color); }
     nav { background-color: var(--nav-bg-color); border-color: var(--nav-border-color); color: var(--nav-text-color); }
-    .nav-btn .icon { transition: transform 0.3s; }
-    .nav-btn.active .icon { transform: scale(1.25); }
+    .nav-btn .icon {
+      color: blue;
+      transition: transform 0.3s;
+    }
+    .nav-btn.active .icon {
+      color: var(--active-color);
+      transform: scale(1.25);
+    }
     .nav-btn.active { color: var(--active-color); }
+    #settings {
+      background: linear-gradient(to bottom,
+        white 0%, white 33.33%,
+        #0039a6 33.33%, #0039a6 66.66%,
+        #d52b1e 66.66%, #d52b1e 100%);
+    }
   </style>
 </head>
 <body class="h-screen flex flex-col">
@@ -51,7 +63,7 @@
       </section>
       <section id="home" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
         <h2 class="text-2xl font-bold mb-4">Главная</h2>
-        <p>Добро пожаловать в мини‑приложение!</p>
+        <p>Привет, Севастополь!</p>
       </section>
       <section id="collections" class="page w-full h-full flex-shrink-0 overflow-auto p-4">
         <h2 class="text-2xl font-bold mb-4">Рюкзак</h2>
