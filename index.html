@@ -8,7 +8,9 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body class="h-screen flex flex-col bg-gray-100">
+
   <div id="pages" class="flex-grow overflow-auto" style="touch-action: pan-y">
+
     <section id="leaderboard" class="page hidden p-4">
       <h2 class="text-2xl font-bold mb-4">Лидерборд</h2>
       <p>Здесь будет таблица лидеров.</p>
@@ -42,11 +44,13 @@
   <script>
     const pages = document.querySelectorAll('.page');
     const buttons = document.querySelectorAll('.nav-btn');
+
     const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
     let currentIndex = pageOrder.indexOf('home');
 
     function showPage(id) {
       currentIndex = pageOrder.indexOf(id);
+
       pages.forEach(p => p.classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
       buttons.forEach(btn => {
@@ -83,6 +87,7 @@
       }
       startX = null;
     });
+
 
     if (window.Telegram?.WebApp) {
       Telegram.WebApp.ready();
