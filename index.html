@@ -8,7 +8,9 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body class="h-screen flex flex-col bg-gray-100">
-  <div id="pages" class="flex-grow overflow-auto">
+
+  <div id="pages" class="flex-grow overflow-auto" style="touch-action: pan-y">
+
     <section id="leaderboard" class="page hidden p-4">
       <h2 class="text-2xl font-bold mb-4">Лидерборд</h2>
       <p>Здесь будет таблица лидеров.</p>
@@ -43,7 +45,12 @@
     const pages = document.querySelectorAll('.page');
     const buttons = document.querySelectorAll('.nav-btn');
 
+    const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
+    let currentIndex = pageOrder.indexOf('home');
+
     function showPage(id) {
+      currentIndex = pageOrder.indexOf(id);
+
       pages.forEach(p => p.classList.add('hidden'));
       document.getElementById(id).classList.remove('hidden');
       buttons.forEach(btn => {
@@ -58,6 +65,29 @@
     buttons.forEach(btn => {
       btn.addEventListener('click', () => showPage(btn.dataset.page));
     });
+
+    const container = document.getElementById('pages');
+    let startX = null;
+
+    container.addEventListener('touchstart', e => {
+      if (e.touches.length === 1) {
+        startX = e.touches[0].clientX;
+      }
+    });
+
+    container.addEventListener('touchend', e => {
+      if (startX === null) return;
+      const deltaX = e.changedTouches[0].clientX - startX;
+      if (Math.abs(deltaX) > 50) {
+        if (deltaX < 0 && currentIndex < pageOrder.length - 1) {
+          showPage(pageOrder[currentIndex + 1]);
+        } else if (deltaX > 0 && currentIndex > 0) {
+          showPage(pageOrder[currentIndex - 1]);
+        }
+      }
+      startX = null;
+    });
+
 
     if (window.Telegram?.WebApp) {
       Telegram.WebApp.ready();
