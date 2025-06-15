@@ -9,8 +9,9 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'codex')
     runs-on: ubuntu-latest
     steps:
-      - name: Enable auto-merge
-        uses: peter-evans/enable-pull-request-automerge@v3
+      - name: Automerge
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          merge-method: squash   # или merge, rebase
+          merge-method: squash
