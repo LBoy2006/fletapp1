@@ -41,7 +41,7 @@ nav {
 
 .nav-btn.active .icon {
   color: var(--active-color);
-  transform: scale(1.6);
+  transform: scale(2.4);
 }
 
 .nav-btn.active span {
