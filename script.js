@@ -3,6 +3,9 @@ const buttons = document.querySelectorAll('.nav-btn');
 const themeToggle = document.getElementById('theme-toggle');
 const fullscreenToggle = document.getElementById('fullscreen-toggle');
 const languageSelect = document.getElementById('language-select');
+const infoButton = document.getElementById('info-button');
+const infoModal = document.getElementById('info-modal');
+const infoClose = document.getElementById('info-close');
 
 const translations = {
   ru: {
@@ -159,3 +162,19 @@ container.addEventListener('touchend', e => {
   }
   startX = null;
 });
+
+if (infoButton && infoModal && infoClose) {
+  infoButton.addEventListener('click', () => {
+    infoModal.classList.remove('hidden');
+  });
+
+  infoClose.addEventListener('click', () => {
+    infoModal.classList.add('hidden');
+  });
+
+  infoModal.addEventListener('click', e => {
+    if (e.target === infoModal) {
+      infoModal.classList.add('hidden');
+    }
+  });
+}
