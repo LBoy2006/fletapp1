@@ -1,22 +1,15 @@
-# Telegram Mini App Demo
+# Демо мини-приложения Telegram
 
-This project contains a simple example of a Telegram mini‑app. It showcases five
-pages that can be switched using a bottom navigation bar:
+Этот проект демонстрирует простое мини-приложение Telegram. В нём пять страниц, между которыми можно переключаться через нижнюю панель навигации:
 
-1. “Лидерборд”
-2. “Задание”
-3. “Главная”
-4. “Рюкзак”
-5. “Настройки”
+1. «Лидерборд»
+2. «Задание»
+3. «Главная»
+4. «Рюкзак»
+5. «Настройки»
 
-The layout uses [Tailwind CSS](https://tailwindcss.com/) and integrates the
-Telegram Web Apps script. The example respects `contentSafeAreaInset` so UI
-elements never overlap Telegram controls. Open `index.html` in a browser (or
-within Telegram as a mini‑app) to try it out. На мобильных устройствах страницы
-можно переключать, свайпая вправо или влево. Перелистывание сопровождается
-плавной анимацией.
+Вёрстка использует [Tailwind CSS](https://tailwindcss.com/) и подключает скрипт Telegram Web Apps. Пример соблюдает `contentSafeAreaInset`, чтобы элементы интерфейса не перекрывали кнопки Telegram. Откройте `index.html` в браузере (или в Telegram как мини-приложение), чтобы попробовать его. На мобильных устройствах страницы можно менять свайпом вправо или влево; переходы сопровождаются плавной анимацией.
 
+## Внешние ресурсы
 
-## External assets
-
-The main stylesheet is now `style.css` and the main script is `script.js`. To serve them via a CDN, host these files on a service such as jsDelivr or GitHub Pages and update the paths in `index.html` accordingly. This demo loads both files from GitHub via jsDelivr using `https://cdn.jsdelivr.net/gh/LBoy2006/fletapp1@main/<file>`. Replace `@main` with a specific tag to pin to a release if desired.
+Основные стили находятся в `style.css`, скрипты — в `script.js`. Чтобы загрузить их через CDN, разместите эти файлы, например, на jsDelivr или GitHub Pages и обновите пути в `index.html`. В демо они подгружаются через jsDelivr по ссылке `https://cdn.jsdelivr.net/gh/LBoy2006/fletapp1@main/<file>`. При необходимости замените `@main` на конкретную метку релиза.
