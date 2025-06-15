@@ -44,9 +44,6 @@ nav {
   transform: scale(2.4);
 }
 
-.nav-btn.active span {
-  display: none;
-}
 
 .nav-btn.active {
   color: var(--active-color);
