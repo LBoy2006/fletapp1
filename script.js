@@ -6,6 +6,9 @@ const languageSelect = document.getElementById('language-select');
 const infoButton = document.getElementById('info-button');
 const infoModal = document.getElementById('info-modal');
 const infoClose = document.getElementById('info-close');
+const extraButton = document.getElementById('extra-button');
+const extraModal = document.getElementById('extra-modal');
+const extraClose = document.getElementById('extra-close');
 
 const translations = {
   ru: {
@@ -175,6 +178,22 @@ if (infoButton && infoModal && infoClose) {
   infoModal.addEventListener('click', e => {
     if (e.target === infoModal) {
       infoModal.classList.add('hidden');
+    }
+  });
+}
+
+if (extraButton && extraModal && extraClose) {
+  extraButton.addEventListener('click', () => {
+    extraModal.classList.remove('hidden');
+  });
+
+  extraClose.addEventListener('click', () => {
+    extraModal.classList.add('hidden');
+  });
+
+  extraModal.addEventListener('click', e => {
+    if (e.target === extraModal) {
+      extraModal.classList.add('hidden');
     }
   });
 }
