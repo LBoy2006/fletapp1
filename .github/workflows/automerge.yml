@@ -1,0 +1,20 @@
+name: Fully Automerge PRs with codex label
+
+on:
+  pull_request:
+    types: [labeled, opened, synchronize, reopened]
+
+jobs:
+  automerge:
+    # Автомердж только если есть лейбл 'codex'
+    if: contains(github.event.pull_request.labels.*.name, 'codex')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Automerge PR
+        uses: pascalgn/automerge-action@v0.16.3
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        with:
+          mergeMethod: squash      # или merge/rebase, если нужно другой способ
+          labels: codex           # автомердж только для PR с этим лейблом
+          # Дополнительно: если нужно требовать успешный CI, добавь required_statuses: "название-проверки"
