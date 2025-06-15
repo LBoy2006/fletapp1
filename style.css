@@ -48,3 +48,8 @@ nav {
 .nav-btn.active {
   color: var(--active-color);
 }
+
+#info-modal .modal-content {
+  background-color: var(--page-bg-color);
+  color: var(--text-color);
+}
