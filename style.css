@@ -53,3 +53,8 @@ nav {
   background-color: var(--page-bg-color);
   color: var(--text-color);
 }
+
+#extra-modal .modal-content {
+  background-color: var(--page-bg-color);
+  color: var(--text-color);
+}
