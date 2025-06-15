@@ -1,11 +1,13 @@
 name: Deploy static content to Pages
 
 on:
-  workflow_run:
+  push:
+    branches: ["main"]                # 1. Обычный push в main
+  workflow_run:                        # 2. Успешное завершение workflow автомёрджа
     workflows: ["Fully Automerge Codex PRs"]
     types:
       - completed
-  workflow_dispatch:
+  workflow_dispatch:                   # 3. Ручной запуск
 
 permissions:
   contents: read
