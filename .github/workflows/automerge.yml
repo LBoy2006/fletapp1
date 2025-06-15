@@ -8,7 +8,6 @@ on:
 
 jobs:
   automerge:
-    if: contains(github.event.pull_request.labels.*.name, 'codex')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,6 +15,5 @@ jobs:
         uses: pascalgn/automerge-action@v0.16.3
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        with:
-          merge_method: squash
-          labels: codex
+          MERGE_METHOD: squash       # <--- ВАЖНО: только через env!
+          MERGE_LABELS: codex        # <--- тоже через env!
