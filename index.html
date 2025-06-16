@@ -69,7 +69,7 @@
 
 <div id="app" class="h-full flex flex-col">
   <!-- Pages -->
-  <div ref="pages" class="flex-grow relative overflow-hidden" style="touch-action: pan-y">
+  <div ref="pagesRef" class="flex-grow relative overflow-hidden" style="touch-action: pan-y">
     <div
       class="flex h-full transition-transform duration-300"
       :style="{transform: `translateX(-${currentIndex.value * 100}%)`}"
