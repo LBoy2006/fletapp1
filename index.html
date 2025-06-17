@@ -202,6 +202,9 @@ const Settings = {
           Telegram.WebApp.exitFullscreen();
           fullscreen.value = false;
         }
+        setTimeout(() => {
+          if (window.applySafeInsets) window.applySafeInsets();
+        }, 100);
       }
 
     function changeLang(e) {
@@ -321,6 +324,7 @@ createApp({
         });
       }
     }
+    window.applySafeInsets = applySafeInsets;
 
     onMounted(() => {
       if (window.Telegram?.WebApp) {
