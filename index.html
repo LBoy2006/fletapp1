@@ -230,9 +230,9 @@ const Leaderboard = {
           {{ t[key] }}
         </button>
       </div>
-      <div class="flex-1 overflow-y-auto">
-        <div class="border border-gray-700 rounded p-2 mb-20">
-          <ul>
+      <div class="flex-1 flex flex-col">
+        <div class="border border-gray-700 rounded p-2 mb-4 flex flex-col h-full">
+          <ul class="flex-1 overflow-y-auto">
           <li
             v-for="(player, idx) in players.slice(0, 10)"
             :key="idx"
