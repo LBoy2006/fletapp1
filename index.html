@@ -193,18 +193,16 @@ const Settings = {
       localStorage.setItem('theme', theme.value);
     }
 
-    function toggleFullscreen() {
-      if (!window.Telegram?.WebApp) return;
-      if (!fullscreen.value) {
-        Telegram.WebApp.requestFullscreen().then(() => {
+      function toggleFullscreen() {
+        if (!window.Telegram?.WebApp) return;
+        if (!fullscreen.value) {
+          Telegram.WebApp.requestFullscreen();
           fullscreen.value = true;
-        });
-      } else {
-        Telegram.WebApp.exitFullscreen().then(() => {
+        } else {
+          Telegram.WebApp.exitFullscreen();
           fullscreen.value = false;
-        });
+        }
       }
-    }
 
     function changeLang(e) {
       lang.value = e.target.value;
