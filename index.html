@@ -477,50 +477,6 @@ createApp({
       });
     });
 
-    // Анимация растягивания при попытке пролистать выше верхней границы
-    onMounted(() => {
-      document.querySelectorAll('.page').forEach(page => {
-        let startY = null;
-        let startPadding = 0;
-        let pulling = false;
-
-        page.addEventListener('touchstart', e => {
-          if (page.scrollTop <= 0) {
-            startY = e.touches[0].clientY;
-            startPadding = parseFloat(window.getComputedStyle(page).paddingTop) || 0;
-          } else {
-            startY = null;
-          }
-        });
-
-        page.addEventListener('touchmove', e => {
-          if (startY === null) return;
-          const delta = e.touches[0].clientY - startY;
-          if (delta > 0 && page.scrollTop <= 0) {
-            pulling = true;
-            const offset = Math.min(delta / 2, 80);
-            page.style.paddingTop = `${startPadding + offset}px`;
-            e.preventDefault();
-          }
-        }, { passive: false });
-
-        const endPull = () => {
-          if (pulling) {
-            page.style.transition = 'padding-top 0.3s';
-            page.style.paddingTop = `${startPadding}px`;
-            setTimeout(() => {
-              page.style.transition = '';
-            }, 300);
-          }
-          pulling = false;
-          startY = null;
-        };
-
-        page.addEventListener('touchend', endPull);
-        page.addEventListener('touchcancel', endPull);
-      });
-    });
-
     function revealLabels() {
       showLabels.value = true;
       clearTimeout(hideTimer);
