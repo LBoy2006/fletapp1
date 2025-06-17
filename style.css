@@ -28,9 +28,10 @@ body {
 }
 
 nav {
-  background-color: var(--nav-bg-color);
+  background-color: transparent;
   border-color: var(--nav-border-color);
   color: var(--nav-text-color);
+  overflow: visible;
 }
 
 .nav-btn .icon {

@@ -35,10 +35,10 @@
       background-color: var(--page-bg-color);
     }
     nav {
-      background-color: var(--nav-bg-color);
+      background-color: transparent;
       border-color: var(--nav-border-color);
       color: var(--nav-text-color);
-      overflow: hidden;
+      overflow: visible;
     }
     .nav-btn .icon {
       color: blue;
@@ -103,7 +103,7 @@
     <button
       v-for="(page, idx) in pageOrder"
       :key="page"
-      class="nav-btn flex-1 py-3 flex flex-col items-center rounded relative"
+      class="nav-btn flex-1 py-5 flex flex-col items-center rounded relative"
       :class="{'active': currentIndex === idx}"
       @click="showPage(page)"
     >
