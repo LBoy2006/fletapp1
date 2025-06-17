@@ -103,7 +103,7 @@
     <div v-if="infoModal" id="info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10">
       <div class="modal-content p-4 rounded" style="background-color: var(--page-bg-color); color: var(--text-color); min-width:240px;">
         <p>Это небольшое информационное окно.</p>
-        <button @click="infoModal.value = false" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Закрыть</button>
+        <button @click="infoModal = false" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Закрыть</button>
       </div>
     </div>
   </transition>
