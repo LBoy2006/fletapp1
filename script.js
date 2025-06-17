@@ -106,6 +106,7 @@ function applySafeInsets() {
 
 if (window.Telegram?.WebApp) {
   Telegram.WebApp.ready();
+  Telegram.WebApp.disableVerticalSwipes();
 
   initTheme();
   initFullscreen();
