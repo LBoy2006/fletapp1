@@ -510,6 +510,7 @@ createApp({
     onMounted(() => {
       if (window.Telegram?.WebApp) {
         Telegram.WebApp.ready();
+        Telegram.WebApp.disableVerticalSwipes();
         applySafeInsets();
       }
       showPage('home');
