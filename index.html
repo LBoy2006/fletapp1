@@ -33,6 +33,7 @@
     }
     .page {
       background-color: var(--page-bg-color);
+      overscroll-behavior-y: contain; /* prevent body scroll and enable custom bounce */
     }
     nav {
       background-color: transparent;
@@ -474,6 +475,42 @@ createApp({
         const deltaY = e.changedTouches[0].clientY - startY;
         if (deltaY < -30) revealLabels();
         startY = null;
+      });
+    });
+
+    // Легкая пружина при достижении края страниц
+    onMounted(() => {
+      const pages = innerRef.value.querySelectorAll('.page');
+      pages.forEach(page => {
+        let startY = null;
+        let pulling = false;
+        page.addEventListener('touchstart', e => {
+          if (e.touches.length !== 1) return;
+          startY = e.touches[0].clientY;
+          pulling = false;
+          page.style.transition = '';
+        });
+        page.addEventListener('touchmove', e => {
+          if (startY === null || isDragging.value) return;
+          const currentY = e.touches[0].clientY;
+          const diff = currentY - startY;
+          const atTop = page.scrollTop <= 0;
+          const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
+          if ((atTop && diff > 0) || (atBottom && diff < 0)) {
+            e.preventDefault();
+            pulling = true;
+            page.style.transform = `translateY(${diff / 4}px)`;
+          }
+        });
+        const reset = () => {
+          if (!pulling) { startY = null; return; }
+          page.style.transition = 'transform 0.3s';
+          page.style.transform = 'translateY(0)';
+          startY = null;
+          pulling = false;
+        };
+        page.addEventListener('touchend', reset);
+        page.addEventListener('touchcancel', reset);
       });
     });
 
