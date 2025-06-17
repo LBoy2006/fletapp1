@@ -38,6 +38,7 @@
       background-color: var(--nav-bg-color);
       border-color: var(--nav-border-color);
       color: var(--nav-text-color);
+      overflow: hidden;
     }
     .nav-btn .icon {
       color: blue;
@@ -49,6 +50,19 @@
     }
     .nav-btn.active {
       color: var(--active-color);
+    }
+    .nav-label {
+      position: absolute;
+      left: 50%;
+      bottom: 0.25rem;
+      transform: translate(-50%, 100%);
+      opacity: 0;
+      transition: transform 0.3s, opacity 0.3s;
+      pointer-events: none;
+    }
+    nav.show-labels .nav-label {
+      transform: translate(-50%, 0);
+      opacity: 1;
     }
     #info-modal .modal-content {
       background-color: var(--page-bg-color);
@@ -85,16 +99,16 @@
   </div>
 
   <!-- Навигация -->
-  <nav class="fixed bottom-0 left-0 right-0 border-t flex text-center text-sm transition-colors">
+  <nav ref="navRef" :class="{'show-labels': showLabels}" class="fixed bottom-0 left-0 right-0 border-t flex text-center text-sm transition-colors">
     <button
       v-for="(page, idx) in pageOrder"
       :key="page"
-      class="nav-btn flex-1 py-3 flex flex-col items-center rounded"
+      class="nav-btn flex-1 py-3 flex flex-col items-center rounded relative"
       :class="{'active': currentIndex === idx}"
       @click="showPage(page)"
     >
       <i :class="pageIcons[page] + ' icon text-xl mb-1'"></i>
-      <span>{{ t[page] }}</span>
+      <span class="nav-label">{{ t[page] }}</span>
     </button>
   </nav>
 
@@ -264,6 +278,9 @@ createApp({
     const currentIndex = ref(pageOrder.indexOf('home'));
     const infoModal = ref(false);
     const pagesRef = ref(null);
+    const navRef = ref(null);
+    const showLabels = ref(false);
+    let hideTimer = null;
 
     // Изменение языка через событие
     function onLangChange(e) {
@@ -283,7 +300,7 @@ createApp({
       document.body.classList.toggle('light', (localStorage.getItem('theme') || 'dark') === 'light');
     });
 
-    // Свайпы
+    // Свайпы страниц
     let startX = null;
     onMounted(() => {
       const el = pagesRef.value;
@@ -303,6 +320,29 @@ createApp({
         startX = null;
       });
     });
+
+    // Свайп вверх по навигации для показа подписей
+    onMounted(() => {
+      const nav = navRef.value;
+      let startY = null;
+      nav.addEventListener('touchstart', e => {
+        if (e.touches.length === 1) startY = e.touches[0].clientY;
+      });
+      nav.addEventListener('touchend', e => {
+        if (startY === null) return;
+        const deltaY = e.changedTouches[0].clientY - startY;
+        if (deltaY < -30) revealLabels();
+        startY = null;
+      });
+    });
+
+    function revealLabels() {
+      showLabels.value = true;
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        showLabels.value = false;
+      }, 5000);
+    }
 
     // Safe Insets для Telegram WebApp
     function applySafeInsets() {
@@ -344,7 +384,9 @@ createApp({
       pageOrder,
       pageIcons,
       pages,
-      pagesRef
+      pagesRef,
+      navRef,
+      showLabels
     };
   }
 }).mount('#app');
