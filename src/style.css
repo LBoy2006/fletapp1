@@ -7,7 +7,6 @@
   --nav-text-color: #9ca3af;
   --active-color: #39ff14;
 }
-
 body.light {
   --bg-color: #ffffff;
   --page-bg-color: #f3f4f6;
@@ -17,40 +16,72 @@ body.light {
   --nav-text-color: #6b7280;
   --active-color: #008000;
 }
-
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
-
 .page {
   background-color: var(--page-bg-color);
+  overscroll-behavior-y: contain;
 }
-
 nav {
   background-color: transparent;
   border-color: var(--nav-border-color);
   color: var(--nav-text-color);
   overflow: visible;
 }
-
 .nav-btn .icon {
   color: blue;
   transition: transform 0.3s;
 }
-
-
 .nav-btn.active .icon {
   color: var(--active-color);
   transform: scale(2.4) translateY(-0.3rem);
 }
-
-
 .nav-btn.active {
   color: var(--active-color);
 }
-
+.nav-label {
+  position: absolute;
+  left: 50%;
+  bottom: 0.25rem;
+  transform: translate(-50%, 100%);
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+  pointer-events: none;
+}
+nav.show-labels .nav-label {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
 #info-modal .modal-content {
   background-color: var(--page-bg-color);
   color: var(--text-color);
+}
+.modal-fade {
+  transition: opacity 0.2s;
+}
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.2s;
+}
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+.snackbar {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+.snackbar-slide-enter-from,
+.snackbar-slide-leave-to {
+  opacity: 0;
+  transform: translate(-50%, 100%);
+}
+.snackbar-slide-enter-active,
+.snackbar-slide-leave-active {
+  transition: transform 0.3s, opacity 0.3s;
 }
