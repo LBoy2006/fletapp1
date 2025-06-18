@@ -1,0 +1,22 @@
+{
+  "name": "fletapp1",
+  "version": "1.0.0",
+  "description": "Этот репозиторий содержит пример мини-приложения для Telegram, созданный с использованием Vue 3 и Tailwind CSS. Приложение состоит из пяти экранов, между которыми можно переключаться через нижнюю панель навигации или свайпами.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "vite": "^6.3.5",
+    "vue": "^3.5.17"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4"
+  }
+}
