@@ -13,6 +13,15 @@ export const translations = {
     overall: 'Общий',
     monthly: 'Месячный',
     daily: 'Дневной'
+    ,agentNumber: 'Номер агента'
+    ,daysInClub: 'Дней в клубе'
+    ,location: 'Локация'
+    ,status: 'Статус'
+    ,aboutClub: 'О клубе'
+    ,secretChannel: 'Закрытый канал'
+    ,chat: 'Чат'
+    ,support: 'Техподдержка'
+    ,settings: 'Настройки'
   },
   en: {
     feed: 'Feed',
@@ -27,7 +36,16 @@ export const translations = {
     points: 'Points',
     overall: 'Overall',
     monthly: 'Monthly',
-    daily: 'Daily'
+    daily: 'Daily',
+    agentNumber: 'Agent ID',
+    daysInClub: 'Days in club',
+    location: 'Location',
+    status: 'Status',
+    aboutClub: 'About club',
+    secretChannel: 'Private channel',
+    chat: 'Chat',
+    support: 'Support',
+    settings: 'Settings'
   }
 };
 

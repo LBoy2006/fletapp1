@@ -48,12 +48,13 @@ import Finds from './components/Finds.vue';
 import Suppliers from './components/Suppliers.vue';
 import Affiliate from './components/Affiliate.vue';
 import Profile from './components/Profile.vue';
+import ProfileSettings from './components/ProfileSettings.vue';
 import { userData } from './state';
 import { translations } from './translations.js';
 
 
 const navItems = ['feed', 'finds', 'suppliers', 'affiliate', 'profile'];
-const pageOrder = ['finds', 'suppliers', 'affiliate', 'profile'];
+const pageOrder = ['finds', 'suppliers', 'affiliate', 'profile', 'settings'];
 const pageIcons = {
   feed: 'fas fa-rss',
   finds: 'fas fa-star',
@@ -62,7 +63,7 @@ const pageIcons = {
   profile: 'fas fa-user'
 };
 
-const pages = { finds: Finds, suppliers: Suppliers, affiliate: Affiliate, profile: Profile };
+const pages = { finds: Finds, suppliers: Suppliers, affiliate: Affiliate, profile: Profile, settings: ProfileSettings };
 
 const lang = ref(localStorage.getItem('lang') || 'ru');
 const t = computed(() => translations[lang.value] || translations.ru);
@@ -235,6 +236,7 @@ function applySafeInsets() {
   }
 }
 window.applySafeInsets = applySafeInsets;
+window.showPage = showPage;
 
 onMounted(() => {
   if (window.Telegram?.WebApp) {

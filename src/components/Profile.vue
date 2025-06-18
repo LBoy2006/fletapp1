@@ -1,92 +1,76 @@
 <template>
-  <div>
-    <div class="flex items-center bg-gray-600 p-3 rounded mb-4">
-      <img :src="user.photo_url || 'assets/icon.png'" class="w-12 h-12 rounded-full mr-3" />
-      <div class="flex-1">
-        <div class="font-semibold">{{ user.username || user.first_name || 'User' }}</div>
-        <div class="text-sm">{{ t.points }}: {{ userData.score }}</div>
-        <div class="w-full bg-gray-700 rounded h-2 mt-1">
-          <div class="bg-green-500 h-2 rounded" :style="{ width: progress + '%' }"></div>
-        </div>
+  <div class="relative p-4 space-y-4">
+    <button class="absolute top-2 right-2 text-xl" @click="openSettings">
+      <i class="fas fa-cog"></i>
+    </button>
+    <div class="bg-gray-800 p-4 rounded text-center">
+      <div class="avatar mx-auto mb-3">
+        <span class="num">{{ numDisplay }}</span>
       </div>
+      <div class="font-semibold text-lg">{{ user.agent_number || '—' }}</div>
+      <div>{{ t.daysInClub }}: {{ user.days_in_club ?? '—' }}</div>
+      <div>{{ t.location }}: {{ user.location || '—' }}</div>
+      <div>{{ t.status }}: {{ user.status || '—' }}</div>
     </div>
-    <button @click="showInfo()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Инфо</button>
-    <div class="mt-4 space-y-4">
-      <div class="flex items-center justify-between w-full">
-        <span class="mr-2">{{ t.theme }}</span>
-        <label class="relative inline-flex items-center cursor-pointer ml-auto">
-          <input type="checkbox" class="sr-only peer" :checked="theme==='dark'" @change="toggleTheme" />
-          <div class="w-11 h-6 bg-gray-300 rounded-full transition-colors duration-300 peer-checked:bg-blue-600 before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-5 before:h-5 before:bg-white before:border before:border-gray-300 before:rounded-full before:transition-transform before:duration-300 peer-checked:before:translate-x-full"></div>
-        </label>
-      </div>
-      <div class="flex items-center justify-between w-full">
-        <span class="mr-2">{{ t.fullscreen }}</span>
-        <label class="relative inline-flex items-center cursor-pointer ml-auto">
-          <input type="checkbox" class="sr-only peer" :checked="fullscreen" @change="toggleFullscreen" />
-          <div class="w-11 h-6 bg-gray-300 rounded-full transition-colors duration-300 peer-checked:bg-blue-600 before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-5 before:h-5 before:bg-white before:border before:border-gray-300 before:rounded-full before:transition-transform before:duration-300 peer-checked:before:translate-x-full"></div>
-        </label>
-      </div>
-      <div class="flex items-center">
-        <span class="mr-2">{{ t.language }}</span>
-        <select class="border rounded p-1" :value="lang" @change="changeLang">
-          <option value="ru">Русский</option>
-          <option value="en">English</option>
-        </select>
-      </div>
+    <div class="bg-gray-800 p-4 rounded">
+      <h3 class="text-lg font-bold mb-2">{{ t.aboutClub }}</h3>
+      <p>Клуб единомышленников, где агенты обмениваются опытом и секретами эффективных продаж. Присоединяйся и расширяй свои возможности.</p>
+    </div>
+    <div class="flex justify-around">
+      <a href="https://t.me/secret_channel" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.secretChannel }}</a>
+      <a href="https://t.me/club_chat" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.chat }}</a>
+      <a href="https://t.me/club_support" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.support }}</a>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { userData } from '../state';
-const props = defineProps({ t: Object, showInfo: Function });
+const props = defineProps({ t: Object });
 
 const user = ref({});
-const progress = ref(Math.floor(Math.random() * 100));
-const theme = ref(localStorage.getItem('theme') || 'dark');
-const lang = ref(localStorage.getItem('lang') || 'ru');
-const fullscreen = ref(false);
 
-onMounted(() => {
-  if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
-    userData.user = Telegram.WebApp.initDataUnsafe.user;
-    user.value = userData.user;
-  }
-  if (window.Telegram?.WebApp) {
-    fullscreen.value = Telegram.WebApp.isFullscreen === true;
-  }
+const numDisplay = computed(() => {
+  if (!user.value.agent_number) return '---';
+  const parts = user.value.agent_number.split('_');
+  return parts[1] || user.value.agent_number;
 });
 
-function toggleTheme() {
-  theme.value = theme.value === 'dark' ? 'light' : 'dark';
-  document.body.classList.toggle('light', theme.value === 'light');
-  localStorage.setItem('theme', theme.value);
-}
-
-function toggleFullscreen() {
-  if (!window.Telegram?.WebApp) return;
-  if (!fullscreen.value) {
-    Telegram.WebApp.requestFullscreen();
-    fullscreen.value = true;
-  } else {
-    Telegram.WebApp.exitFullscreen();
-    fullscreen.value = false;
+async function loadUser() {
+  try {
+    const resp = await fetch('http://localhost:8000/users/1');
+    if (resp.ok) {
+      const data = await resp.json();
+      userData.user = data;
+      user.value = data;
+    }
+  } catch (e) {
+    console.error(e);
   }
-  setTimeout(() => {
-    if (window.applySafeInsets) window.applySafeInsets();
-  }, 100);
 }
 
-function changeLang(e) {
-  lang.value = e.target.value;
-  localStorage.setItem('lang', lang.value);
-  window.dispatchEvent(new CustomEvent('langchange', { detail: lang.value }));
+function openSettings() {
+  if (window.showPage) window.showPage('settings');
 }
 
-watch(theme, () => {
-  document.body.classList.toggle('light', theme.value === 'light');
-  localStorage.setItem('theme', theme.value);
-});
-
+onMounted(loadUser);
 </script>
+
+<style scoped>
+.avatar {
+  width: 96px;
+  height: 96px;
+  background: url('assets/agent.svg') no-repeat center/contain;
+  position: relative;
+  margin: auto;
+}
+.avatar .num {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: monospace;
+  color: var(--active-color);
+}
+</style>

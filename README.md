@@ -26,3 +26,12 @@ npm run dev
 
 ## Скриншоты
 Файлы изображений находятся в каталоге `assets/` и могут использоваться для демонстрации интерфейса.
+
+## Backend API
+Для получения данных профиля используется сервер на FastAPI. Подключение к PostgreSQL задаётся через переменную `DATABASE_URL`.
+
+Запуск API:
+```bash
+pip install -r requirements.txt
+uvicorn backend.main:app --reload
+```
