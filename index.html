@@ -103,14 +103,14 @@
   <!-- Навигация -->
   <nav ref="navRef" :class="{'show-labels': showLabels}" class="fixed bottom-0 left-0 right-0 flex text-center text-sm transition-colors">
     <button
-      v-for="item in navItems"
-      :key="item"
+      v-for="(page, idx) in pageOrder"
+      :key="page"
       class="nav-btn flex-1 py-5 flex flex-col items-center rounded relative"
-      :class="{'active': pageOrder[currentIndex] === item}"
-      @click="showPage(item)"
+      :class="{'active': currentIndex === idx}"
+      @click="showPage(page)"
     >
-      <i :class="pageIcons[item] + ' icon text-xl mb-1'"></i>
-      <span class="nav-label">{{ t[item] }}</span>
+      <i :class="pageIcons[page] + ' icon text-xl mb-1'"></i>
+      <span class="nav-label">{{ t[page] }}</span>
     </button>
   </nav>
 
@@ -118,7 +118,7 @@
   <transition name="modal-fade">
     <div v-if="infoModal" id="info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10" @click.self="infoModal = false">
       <div class="modal-content p-4 rounded" style="background-color: var(--page-bg-color); color: var(--text-color); min-width:240px;">
-        <p>{{ infoMessage }}</p>
+        <p>Это небольшое информационное окно.</p>
         <button @click="infoModal = false" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Закрыть</button>
       </div>
     </div>
@@ -130,11 +130,10 @@ const { createApp, ref, computed, onMounted, watch, reactive } = Vue;
 
 const translations = {
   ru: {
-    feed: 'Лента',
-    finds: 'Товары дня',
-    suppliers: 'Поставщики',
-    affiliate: 'Партнерка',
-    profile: 'Профиль',
+    leaderboard: 'Лидерборд',
+    task: 'Задание',
+    home: 'Главная',
+    collections: 'Рюкзак',
     settings: 'Настройки',
     theme: 'Темная тема',
     fullscreen: 'Полноэкранный режим',
@@ -145,11 +144,10 @@ const translations = {
     daily: 'Дневной'
   },
   en: {
-    feed: 'Feed',
-    finds: 'Finds',
-    suppliers: 'Suppliers',
-    affiliate: 'Affiliate',
-    profile: 'Profile',
+    leaderboard: 'Leaderboard',
+    task: 'Task',
+    home: 'Home',
+    collections: 'Backpack',
     settings: 'Settings',
     theme: 'Dark theme',
     fullscreen: 'Fullscreen mode',
@@ -161,32 +159,30 @@ const translations = {
   }
 };
 
-const navItems = ['feed', 'finds', 'suppliers', 'affiliate', 'profile'];
-const pageOrder = ['finds', 'suppliers', 'affiliate', 'profile'];
+const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
 const pageIcons = {
-  feed: 'fas fa-rss',
-  finds: 'fas fa-tag',
-  suppliers: 'fas fa-truck',
-  affiliate: 'fas fa-handshake',
-  profile: 'fas fa-user'
+  leaderboard: "fas fa-trophy",
+  task: "fas fa-clipboard-list",
+  home: "fas fa-home",
+  collections: "fas fa-boxes",
+  settings: "fas fa-cog"
 };
 
 const userData = reactive({ user: {}, score: Math.floor(Math.random() * 1000), rank: 0 });
 // ===== Страницы (Компоненты) ======
-const Finds = {
+const Leaderboard = {
   props: ['t'],
   template: `
     <div class="flex flex-col h-full">
-      <h2 class="text-2xl font-bold mb-2 text-center">{{ t.finds }}</h2>
-      <p>Здесь будут товары дня.</p>
+      <h2 class="text-2xl font-bold mb-2 text-center">{{ t.leaderboard }}</h2>
     </div>
   `
 };
-const Suppliers = {
+const Task = {
   props: ['t'],
   template: `<div>
-    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.suppliers }}</h2>
-    <p>Информация о поставщиках.</p>
+    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.task }}</h2>
+    <p>Описание текущего задания.</p>
   </div>`
 };
 const Home = {
@@ -216,11 +212,11 @@ const Home = {
     <button @click="showInfo()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Инфо</button>
   </div>`
 };
-const Affiliate = {
+const Collections = {
   props: ['t'],
   template: `<div>
-    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.affiliate }}</h2>
-    <p>Партнерская информация.</p>
+    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.collections }}</h2>
+    <p>Ваши собранные предметы.</p>
   </div>`
 };
 const Settings = {
@@ -296,33 +292,22 @@ const Settings = {
     </div>
   `
 };
-
-const Profile = {
-  props: ['t', 'showInfo'],
-  components: { Home, Settings },
-  template: `
-    <div class="space-y-6">
-      <Home :t="t" :show-info="showInfo" />
-      <Settings :t="t" />
-    </div>
-  `
-};
 // ================================
 
 const pages = {
-  finds: Finds,
-  suppliers: Suppliers,
-  affiliate: Affiliate,
-  profile: Profile
+  leaderboard: Leaderboard,
+  task: Task,
+  home: Home,
+  collections: Collections,
+  settings: Settings
 };
 
 createApp({
   setup() {
     const lang = ref(localStorage.getItem('lang') || 'ru');
     const t = computed(() => translations[lang.value] || translations.ru);
-    const currentIndex = ref(pageOrder.indexOf('finds'));
+    const currentIndex = ref(pageOrder.indexOf('home'));
     const infoModal = ref(false);
-    const infoMessage = ref('');
     const pagesRef = ref(null);
     const innerRef = ref(null);
     const navRef = ref(null);
@@ -343,17 +328,12 @@ createApp({
     window.addEventListener('langchange', onLangChange);
 
     function showPage(page) {
-      if (page === 'feed') {
-        showInfo(t.value.feed + ' находится в разработке');
-        return;
-      }
       currentIndex.value = pageOrder.indexOf(page);
       dragOffset.value = 0;
       isDragging.value = false;
       revealLabels();
     }
-    function showInfo(msg) {
-      infoMessage.value = msg || 'Это небольшое информационное окно.';
+    function showInfo() {
       infoModal.value = true;
     }
 
@@ -493,7 +473,7 @@ createApp({
         Telegram.WebApp.disableVerticalSwipes();
         applySafeInsets();
       }
-      showPage('finds');
+      showPage('home');
     });
 
     return {
@@ -501,7 +481,6 @@ createApp({
       lang,
       currentIndex,
       infoModal,
-      infoMessage,
       showPage,
       showInfo,
       pageOrder,
