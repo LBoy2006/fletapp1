@@ -50,3 +50,22 @@ def update_user(user_id: int, data: schemas.UserBase, db: Session = Depends(get_
     db.commit()
     db.refresh(user)
     return read_user(user_id, db)
+
+
+@app.get('/affiliate/{user_id}', response_model=schemas.AffiliateOut)
+def read_affiliate(user_id: int, db: Session = Depends(get_db)):
+    stat = db.query(models.Affiliate).filter(models.Affiliate.user_id == user_id).first()
+    if not stat:
+        raise HTTPException(status_code=404, detail='Stats not found')
+    return stat
+
+
+@app.post('/affiliate/{user_id}/withdraw', response_model=schemas.AffiliateOut)
+def request_withdraw(user_id: int, db: Session = Depends(get_db)):
+    stat = db.query(models.Affiliate).filter(models.Affiliate.user_id == user_id).first()
+    if not stat:
+        raise HTTPException(status_code=404, detail='Stats not found')
+    stat.withdraw_requested = True
+    db.commit()
+    db.refresh(stat)
+    return stat
