@@ -53,7 +53,7 @@ import { userData } from './state';
 const translations = {
   ru: {
     feed: 'Лента',
-    finds: 'Товары дня',
+    finds: 'Новинки',
     suppliers: 'Поставщики',
     affiliate: 'Партнерка',
     profile: 'Профиль',
