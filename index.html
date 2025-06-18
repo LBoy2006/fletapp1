@@ -103,14 +103,14 @@
   <!-- Навигация -->
   <nav ref="navRef" :class="{'show-labels': showLabels}" class="fixed bottom-0 left-0 right-0 flex text-center text-sm transition-colors">
     <button
-      v-for="(page, idx) in pageOrder"
-      :key="page"
+      v-for="item in navItems"
+      :key="item"
       class="nav-btn flex-1 py-5 flex flex-col items-center rounded relative"
-      :class="{'active': currentIndex === idx}"
-      @click="showPage(page)"
+      :class="{'active': currentPage === item}"
+      @click="handleNav(item)"
     >
-      <i :class="pageIcons[page] + ' icon text-xl mb-1'"></i>
-      <span class="nav-label">{{ t[page] }}</span>
+      <i :class="pageIcons[item] + ' icon text-xl mb-1'"></i>
+      <span class="nav-label">{{ t[item] }}</span>
     </button>
   </nav>
 
@@ -118,7 +118,7 @@
   <transition name="modal-fade">
     <div v-if="infoModal" id="info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10" @click.self="infoModal = false">
       <div class="modal-content p-4 rounded" style="background-color: var(--page-bg-color); color: var(--text-color); min-width:240px;">
-        <p>Это небольшое информационное окно.</p>
+        <p>{{ infoMessage }}</p>
         <button @click="infoModal = false" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Закрыть</button>
       </div>
     </div>
@@ -130,103 +130,78 @@ const { createApp, ref, computed, onMounted, watch, reactive } = Vue;
 
 const translations = {
   ru: {
-    leaderboard: 'Лидерборд',
-    task: 'Задание',
-    home: 'Главная',
-    collections: 'Рюкзак',
-    settings: 'Настройки',
+    feed: 'Лента',
+    finds: 'Товары дня',
+    suppliers: 'Поставщики',
+    affiliate: 'Партнерка',
+    profile: 'Профиль',
+    feed_unavailable: 'Лента находится в разработке',
     theme: 'Темная тема',
     fullscreen: 'Полноэкранный режим',
     language: 'Язык',
-    points: 'Очки',
-    overall: 'Общий',
-    monthly: 'Месячный',
-    daily: 'Дневной'
+    points: 'Очки'
   },
   en: {
-    leaderboard: 'Leaderboard',
-    task: 'Task',
-    home: 'Home',
-    collections: 'Backpack',
-    settings: 'Settings',
+    feed: 'Feed',
+    finds: 'Finds',
+    suppliers: 'Suppliers',
+    affiliate: 'Affiliate',
+    profile: 'Profile',
+    feed_unavailable: 'Feed is under development',
     theme: 'Dark theme',
     fullscreen: 'Fullscreen mode',
     language: 'Language',
-    points: 'Points',
-    overall: 'Overall',
-    monthly: 'Monthly',
-    daily: 'Daily'
+    points: 'Points'
   }
 };
 
-const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
+const pageOrder = ['finds', 'suppliers', 'affiliate', 'profile'];
+const navItems = ['feed', ...pageOrder];
 const pageIcons = {
-  leaderboard: "fas fa-trophy",
-  task: "fas fa-clipboard-list",
-  home: "fas fa-home",
-  collections: "fas fa-boxes",
-  settings: "fas fa-cog"
+  feed: 'fas fa-rss',
+  finds: 'fas fa-star',
+  suppliers: 'fas fa-truck',
+  affiliate: 'fas fa-handshake',
+  profile: 'fas fa-user'
 };
 
 const userData = reactive({ user: {}, score: Math.floor(Math.random() * 1000), rank: 0 });
 // ===== Страницы (Компоненты) ======
-const Leaderboard = {
-  props: ['t'],
-  template: `
-    <div class="flex flex-col h-full">
-      <h2 class="text-2xl font-bold mb-2 text-center">{{ t.leaderboard }}</h2>
-    </div>
-  `
-};
-const Task = {
+const Finds = {
   props: ['t'],
   template: `<div>
-    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.task }}</h2>
-    <p>Описание текущего задания.</p>
+    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.finds }}</h2>
+    <p>Здесь будут товары дня.</p>
   </div>`
 };
-const Home = {
+const Suppliers = {
+  props: ['t'],
+  template: `<div>
+    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.suppliers }}</h2>
+    <p>Информация о поставщиках.</p>
+  </div>`
+};
+const Affiliate = {
+  props: ['t'],
+  template: `<div>
+    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.affiliate }}</h2>
+    <p>Партнерская программа.</p>
+  </div>`
+};
+const Profile = {
   props: ['t', 'showInfo'],
   setup() {
     const user = ref({});
     const progress = ref(Math.floor(Math.random() * 100));
-    onMounted(() => {
-      if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
-        userData.user = Telegram.WebApp.initDataUnsafe.user;
-        user.value = userData.user;
-      }
-    });
-    return { user, progress, userData };
-  },
-  template: `<div>
-    <div class="flex items-center bg-gray-600 p-3 rounded mb-4">
-      <img :src="user.photo_url || 'assets/icon.png'" class="w-12 h-12 rounded-full mr-3" />
-      <div class="flex-1">
-        <div class="font-semibold">{{ user.username || user.first_name || 'User' }}</div>
-        <div class="text-sm">{{ t.points }}: {{ userData.score }}</div>
-        <div class="w-full bg-gray-700 rounded h-2 mt-1">
-          <div class="bg-green-500 h-2 rounded" :style="{ width: progress + '%' }"></div>
-        </div>
-      </div>
-    </div>
-    <button @click="showInfo()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Инфо</button>
-  </div>`
-};
-const Collections = {
-  props: ['t'],
-  template: `<div>
-    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.collections }}</h2>
-    <p>Ваши собранные предметы.</p>
-  </div>`
-};
-const Settings = {
-  props: ['t'],
-  setup() {
     const theme = ref(localStorage.getItem('theme') || 'dark');
     const lang = ref(localStorage.getItem('lang') || 'ru');
     const fullscreen = ref(false);
 
     onMounted(() => {
+      if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+        userData.user = Telegram.WebApp.initDataUnsafe.user;
+        user.value = userData.user;
+      }
       if (window.Telegram?.WebApp) {
         fullscreen.value = Telegram.WebApp.isFullscreen === true;
       }
@@ -238,19 +213,19 @@ const Settings = {
       localStorage.setItem('theme', theme.value);
     }
 
-      function toggleFullscreen() {
-        if (!window.Telegram?.WebApp) return;
-        if (!fullscreen.value) {
-          Telegram.WebApp.requestFullscreen();
-          fullscreen.value = true;
-        } else {
-          Telegram.WebApp.exitFullscreen();
-          fullscreen.value = false;
-        }
-        setTimeout(() => {
-          if (window.applySafeInsets) window.applySafeInsets();
-        }, 100);
+    function toggleFullscreen() {
+      if (!window.Telegram?.WebApp) return;
+      if (!fullscreen.value) {
+        Telegram.WebApp.requestFullscreen();
+        fullscreen.value = true;
+      } else {
+        Telegram.WebApp.exitFullscreen();
+        fullscreen.value = false;
       }
+      setTimeout(() => {
+        if (window.applySafeInsets) window.applySafeInsets();
+      }, 100);
+    }
 
     function changeLang(e) {
       lang.value = e.target.value;
@@ -263,11 +238,21 @@ const Settings = {
       localStorage.setItem('theme', theme.value);
     });
 
-    return { theme, lang, fullscreen, toggleTheme, toggleFullscreen, changeLang };
+    return { user, progress, userData, theme, lang, fullscreen, toggleTheme, toggleFullscreen, changeLang };
   },
-  template: `
+  template: `<div>
+    <div class="flex items-center bg-gray-600 p-3 rounded mb-4">
+      <img :src="user.photo_url || 'assets/icon.png'" class="w-12 h-12 rounded-full mr-3" />
+      <div class="flex-1">
+        <div class="font-semibold">{{ user.username || user.first_name || 'User' }}</div>
+        <div class="text-sm">{{ t.points }}: {{ userData.score }}</div>
+        <div class="w-full bg-gray-700 rounded h-2 mt-1">
+          <div class="bg-green-500 h-2 rounded" :style="{ width: progress + '%' }"></div>
+        </div>
+      </div>
+    </div>
+    <button @click="showInfo()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded mb-4">Инфо</button>
     <div>
-      <h2 class="text-2xl font-bold mb-4 text-center">{{ t.settings }}</h2>
       <div class="mb-4 flex items-center justify-between w-full">
         <span class="mr-2">{{ t.theme }}</span>
         <label class="relative inline-flex items-center cursor-pointer ml-auto">
@@ -290,24 +275,24 @@ const Settings = {
         </select>
       </div>
     </div>
-  `
+  </div>`
 };
 // ================================
 
 const pages = {
-  leaderboard: Leaderboard,
-  task: Task,
-  home: Home,
-  collections: Collections,
-  settings: Settings
+  finds: Finds,
+  suppliers: Suppliers,
+  affiliate: Affiliate,
+  profile: Profile
 };
 
 createApp({
   setup() {
     const lang = ref(localStorage.getItem('lang') || 'ru');
     const t = computed(() => translations[lang.value] || translations.ru);
-    const currentIndex = ref(pageOrder.indexOf('home'));
+    const currentIndex = ref(pageOrder.indexOf('finds'));
     const infoModal = ref(false);
+    const infoMessage = ref('');
     const pagesRef = ref(null);
     const innerRef = ref(null);
     const navRef = ref(null);
@@ -333,8 +318,17 @@ createApp({
       isDragging.value = false;
       revealLabels();
     }
-    function showInfo() {
+    function showInfo(message = 'Это небольшое информационное окно.') {
+      infoMessage.value = message;
       infoModal.value = true;
+    }
+
+    function handleNav(item) {
+      if (item === 'feed') {
+        showInfo(t.value.feed_unavailable);
+        return;
+      }
+      showPage(item);
     }
 
     // Тема
@@ -473,7 +467,7 @@ createApp({
         Telegram.WebApp.disableVerticalSwipes();
         applySafeInsets();
       }
-      showPage('home');
+      showPage('finds');
     });
 
     return {
@@ -481,8 +475,11 @@ createApp({
       lang,
       currentIndex,
       infoModal,
+      infoMessage,
+      handleNav,
       showPage,
       showInfo,
+      navItems,
       pageOrder,
       pageIcons,
       pages,
@@ -490,6 +487,7 @@ createApp({
       innerRef,
       navRef,
       showLabels,
+      currentPage: computed(() => pageOrder[currentIndex.value]),
       dragStyle
     };
   }
