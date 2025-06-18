@@ -1,8 +1,12 @@
 name: Deploy Vite app to Pages
 on:
   push:
-    branches: ["main"]
-  workflow_dispatch:
+    branches: ["main"]                # 1. Обычный push в main
+  workflow_run:                        # 2. Успешное завершение workflow автомёрджа
+    workflows: ["Fully Automerge Codex PRs"]
+    types:
+      - completed
+  workflow_dispatch:                   # 3. Ручной запуск
 
 permissions:
   contents: read
