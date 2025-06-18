@@ -172,86 +172,9 @@ const userData = reactive({ user: {}, score: Math.floor(Math.random() * 1000), r
 // ===== Страницы (Компоненты) ======
 const Leaderboard = {
   props: ['t'],
-  setup(props) {
-    const tab = ref('overall');
-    const tabs = ['overall', 'monthly', 'daily'];
-    const avatars = [
-      'assets/05020021_img.png',
-      'assets/05020057_img.png',
-      'assets/05030014_img.png',
-      'assets/05050068_img.png',
-      'assets/05060027_img.png',
-      'assets/05070010_img.png'
-    ];
-    const players = ref([]);
-
-    function randomPlayers() {
-      const arr = [];
-      for (let i = 1; i <= 20; i++) {
-        arr.push({
-          name: `Player ${i}`,
-          score: Math.floor(Math.random() * 1000),
-          avatar: avatars[Math.floor(Math.random() * avatars.length)]
-        });
-      }
-      arr.push({
-        name: userData.user.username || userData.user.first_name || 'You',
-        score: userData.score,
-        avatar: userData.user.photo_url || 'assets/icon.png',
-        isUser: true
-      });
-      arr.sort((a, b) => b.score - a.score);
-      userData.rank = arr.findIndex(p => p.isUser) + 1;
-      return arr;
-    }
-
-    function setTab(key) {
-      tab.value = key;
-      players.value = randomPlayers();
-    }
-
-    onMounted(() => {
-      players.value = randomPlayers();
-    });
-
-    return { tab, tabs, players, setTab, userData };
-  },
   template: `
     <div class="flex flex-col h-full">
       <h2 class="text-2xl font-bold mb-2 text-center">{{ t.leaderboard }}</h2>
-      <div class="flex justify-center mb-2">
-        <button
-          v-for="key in tabs"
-          :key="key"
-          @click="setTab(key)"
-          class="px-3 py-1 mx-1 rounded text-sm"
-          :class="tab === key ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-200'"
-        >
-          {{ t[key] }}
-        </button>
-      </div>
-      <div class="flex-1 flex flex-col">
-        <div class="border border-gray-700 rounded p-2 mb-4 flex flex-col h-full">
-          <ul class="flex-1 overflow-y-auto">
-          <li
-            v-for="(player, idx) in players"
-            :key="idx"
-            class="flex items-center py-2 border-b border-gray-700"
-          >
-            <span class="w-6 text-right mr-2">{{ idx + 1 }}</span>
-            <img :src="player.avatar" class="w-10 h-10 rounded-full mr-3" />
-            <span class="flex-1">{{ player.name }}</span>
-            <span class="font-semibold">{{ player.score }}</span>
-          </li>
-          </ul>
-          <div class="flex items-center py-2 border-t border-gray-700 mt-2">
-            <span class="w-6 text-right mr-2">{{ userData.rank }}</span>
-            <img :src="userData.user.photo_url || 'assets/icon.png'" class="w-10 h-10 rounded-full mr-3" />
-            <span class="flex-1">{{ userData.user.username || userData.user.first_name || 'You' }}</span>
-            <span class="font-semibold">{{ userData.score }}</span>
-          </div>
-        </div>
-      </div>
     </div>
   `
 };
