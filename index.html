@@ -1,300 +1,204 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Telegram Mini App (Vue)</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-      :root {
-        --bg-color: #0b0b0b;
-        --page-bg-color: #1a1a1a;
-        --text-color: #ffffff;
-        --nav-bg-color: #2d3748;
-        --nav-border-color: #4a5568;
-        --nav-text-color: #9ca3af;
-        --active-color: #39ff14;
-      }
-      body.light {
-        --bg-color: #ffffff;
-        --page-bg-color: #f3f4f6;
-        --text-color: #000000;
-        --nav-bg-color: #f9fafb;
-        --nav-border-color: #e5e7eb;
-        --nav-text-color: #6b7280;
-        --active-color: #008000;
-      }
-      body {
-        background-color: var(--bg-color);
-        color: var(--text-color);
-      }
-      .page {
-        background-color: var(--page-bg-color);
-        overscroll-behavior-y: contain; /* prevent body scroll and enable custom bounce */
-      }
-      nav {
-        background-color: transparent;
-        border-color: var(--nav-border-color);
-        color: var(--nav-text-color);
-        overflow: visible;
-      }
-      .nav-btn .icon {
-        color: blue;
-        transition: transform 0.3s;
-      }
-      .nav-btn.active .icon {
-        color: var(--active-color);
-        transform: scale(2.4) translateY(-0.3rem);
-      }
-      .nav-btn.active {
-        color: var(--active-color);
-      }
-      .nav-label {
-        position: absolute;
-        left: 50%;
-        bottom: 0.25rem;
-        transform: translate(-50%, 100%);
-        opacity: 0;
-        transition:
-          transform 0.3s,
-          opacity 0.3s;
-        pointer-events: none;
-      }
-      nav.show-labels .nav-label {
-        transform: translate(-50%, 0);
-        opacity: 1;
-      }
-      #info-modal .modal-content {
-        background-color: var(--page-bg-color);
-        color: var(--text-color);
-      }
-      .modal-fade {
-        transition: opacity 0.2s;
-      }
-      .modal-fade-enter-active,
-      .modal-fade-leave-active {
-        transition: opacity 0.2s;
-      }
-      .modal-fade-enter-from,
-      .modal-fade-leave-to {
-        opacity: 0;
-      }
-    </style>
-  </head>
-  <body class="h-screen flex flex-col">
-    <div id="app" class="h-full flex flex-col">
-      <!-- Pages -->
-      <div
-        ref="pagesRef"
-        class="flex-grow relative overflow-hidden"
-        style="touch-action: pan-y"
-      >
-        <div
-          ref="innerRef"
-          class="flex h-full transition-transform duration-300"
-          :style="dragStyle"
-        >
-          <section
-            v-for="(page, idx) in pageOrder"
-            :key="page"
-            class="page w-full h-full flex-shrink-0 overflow-auto p-4"
-          >
-            <component
-              :is="pages[page]"
-              :t="t"
-              :show-info="showInfo"
-            ></component>
-          </section>
-        </div>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Telegram Mini App (Vue)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --bg-color: #0b0b0b;
+      --page-bg-color: #1a1a1a;
+      --text-color: #ffffff;
+      --nav-bg-color: #2d3748;
+      --nav-border-color: #4a5568;
+      --nav-text-color: #9ca3af;
+      --active-color: #39ff14;
+    }
+    body.light {
+      --bg-color: #ffffff;
+      --page-bg-color: #f3f4f6;
+      --text-color: #000000;
+      --nav-bg-color: #f9fafb;
+      --nav-border-color: #e5e7eb;
+      --nav-text-color: #6b7280;
+      --active-color: #008000;
+    }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+    }
+    .page {
+      background-color: var(--page-bg-color);
+      overscroll-behavior-y: contain; /* prevent body scroll and enable custom bounce */
+    }
+    nav {
+      background-color: transparent;
+      border-color: var(--nav-border-color);
+      color: var(--nav-text-color);
+      overflow: visible;
+    }
+    .nav-btn .icon {
+      color: blue;
+      transition: transform 0.3s;
+    }
+    .nav-btn.active .icon {
+      color: var(--active-color);
+      transform: scale(2.4) translateY(-0.3rem);
+    }
+    .nav-btn.active {
+      color: var(--active-color);
+    }
+    .nav-label {
+      position: absolute;
+      left: 50%;
+      bottom: 0.25rem;
+      transform: translate(-50%, 100%);
+      opacity: 0;
+      transition: transform 0.3s, opacity 0.3s;
+      pointer-events: none;
+    }
+    nav.show-labels .nav-label {
+      transform: translate(-50%, 0);
+      opacity: 1;
+    }
+    #info-modal .modal-content {
+      background-color: var(--page-bg-color);
+      color: var(--text-color);
+    }
+    .modal-fade {
+      transition: opacity 0.2s;
+    }
+    .modal-fade-enter-active, .modal-fade-leave-active {
+      transition: opacity 0.2s;
+    }
+    .modal-fade-enter-from, .modal-fade-leave-to {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col">
 
-      <!-- Навигация -->
-      <nav
-        ref="navRef"
-        :class="{'show-labels': showLabels}"
-        class="fixed bottom-0 left-0 right-0 flex text-center text-sm transition-colors"
+<div id="app" class="h-full flex flex-col">
+  <!-- Pages -->
+  <div ref="pagesRef" class="flex-grow relative overflow-hidden" style="touch-action: pan-y">
+    <div
+      ref="innerRef"
+      class="flex h-full transition-transform duration-300"
+      :style="dragStyle"
+    >
+      <section
+        v-for="(page, idx) in pageOrder"
+        :key="page"
+        class="page w-full h-full flex-shrink-0 overflow-auto p-4"
       >
-        <button
-          v-for="page in navItems"
-          :key="page"
-          class="nav-btn flex-1 py-5 flex flex-col items-center rounded relative"
-          :class="{'active': currentPage === page}"
-          @click="handleNav(page)"
-        >
-          <i :class="pageIcons[page] + ' icon text-xl mb-1'"></i>
-          <span class="nav-label">{{ t[page] }}</span>
-        </button>
-      </nav>
-
-      <!-- Инфо-модалка -->
-      <transition name="modal-fade">
-        <div
-          v-if="infoModal"
-          id="info-modal"
-          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
-          @click.self="infoModal = false"
-        >
-          <div
-            class="modal-content p-4 rounded"
-            style="
-              background-color: var(--page-bg-color);
-              color: var(--text-color);
-              min-width: 240px;
-            "
-          >
-            <p>{{ infoModalText }}</p>
-            <button
-              @click="infoModal = false"
-              class="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-            >
-              Закрыть
-            </button>
-          </div>
-        </div>
-      </transition>
+        <component :is="pages[page]" :t="t" :show-info="showInfo"></component>
+      </section>
     </div>
+  </div>
 
-    <script type="module">
-      const { createApp, ref, computed, onMounted, watch, reactive } = Vue;
+  <!-- Навигация -->
+  <nav ref="navRef" :class="{'show-labels': showLabels}" class="fixed bottom-0 left-0 right-0 flex text-center text-sm transition-colors">
+    <button
+      v-for="(page, idx) in pageOrder"
+      :key="page"
+      class="nav-btn flex-1 py-5 flex flex-col items-center rounded relative"
+      :class="{'active': currentIndex === idx}"
+      @click="showPage(page)"
+    >
+      <i :class="pageIcons[page] + ' icon text-xl mb-1'"></i>
+      <span class="nav-label">{{ t[page] }}</span>
+    </button>
+  </nav>
 
-      const translations = {
-        ru: {
-          feed: "Лента",
-          finds: "Товары дня",
-          suppliers: "Поставщики",
-          affiliate: "Партнерка",
-          profile: "Профиль",
-          theme: "Темная тема",
-          fullscreen: "Полноэкранный режим",
-          language: "Язык",
-          points: "Очки",
-          info: "Это небольшое информационное окно.",
-          feed_dev: "Лента находится в разработке",
-        },
-        en: {
-          feed: "Feed",
-          finds: "Finds",
-          suppliers: "Suppliers",
-          affiliate: "Affiliate",
-          profile: "Profile",
-          theme: "Dark theme",
-          fullscreen: "Fullscreen mode",
-          language: "Language",
-          points: "Points",
-          info: "This is a small info window.",
-          feed_dev: "Feed is under development",
-        },
-      };
+  <!-- Инфо-модалка -->
+  <transition name="modal-fade">
+    <div v-if="infoModal" id="info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10" @click.self="infoModal = false">
+      <div class="modal-content p-4 rounded" style="background-color: var(--page-bg-color); color: var(--text-color); min-width:240px;">
+        <p>Это небольшое информационное окно.</p>
+        <button @click="infoModal = false" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Закрыть</button>
+      </div>
+    </div>
+  </transition>
+</div>
 
-      const pageOrder = ["finds", "suppliers", "affiliate", "profile"];
-      const navItems = ["feed", ...pageOrder];
-      const pageIcons = {
-        feed: "fas fa-newspaper",
-        finds: "fas fa-star",
-        suppliers: "fas fa-truck",
-        affiliate: "fas fa-handshake",
-        profile: "fas fa-user",
-      };
+<script type="module">
+const { createApp, ref, computed, onMounted, watch, reactive } = Vue;
 
-      const userData = reactive({
-        user: {},
-        score: Math.floor(Math.random() * 1000),
-        rank: 0,
-      });
-      // ===== Страницы (Компоненты) ======
-      const Finds = {
-        props: ["t"],
-        template: `<div>
-    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.finds }}</h2>
-    <p>Список товаров дня.</p>
-  </div>`,
-      };
-      const Suppliers = {
-        props: ["t"],
-        template: `<div>
-    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.suppliers }}</h2>
-    <p>Информация о поставщиках.</p>
-  </div>`,
-      };
-      const Affiliate = {
-        props: ["t"],
-        template: `<div>
-    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.affiliate }}</h2>
-    <p>Партнёрская программа.</p>
-  </div>`,
-      };
-      const Profile = {
-        props: ["t", "showInfo"],
-        setup() {
-          const user = ref({});
-          const progress = ref(Math.floor(Math.random() * 100));
-          const theme = ref(localStorage.getItem("theme") || "dark");
-          const lang = ref(localStorage.getItem("lang") || "ru");
-          const fullscreen = ref(false);
+const translations = {
+  ru: {
+    leaderboard: 'Лидерборд',
+    task: 'Задание',
+    home: 'Главная',
+    collections: 'Рюкзак',
+    settings: 'Настройки',
+    theme: 'Темная тема',
+    fullscreen: 'Полноэкранный режим',
+    language: 'Язык',
+    points: 'Очки',
+    overall: 'Общий',
+    monthly: 'Месячный',
+    daily: 'Дневной'
+  },
+  en: {
+    leaderboard: 'Leaderboard',
+    task: 'Task',
+    home: 'Home',
+    collections: 'Backpack',
+    settings: 'Settings',
+    theme: 'Dark theme',
+    fullscreen: 'Fullscreen mode',
+    language: 'Language',
+    points: 'Points',
+    overall: 'Overall',
+    monthly: 'Monthly',
+    daily: 'Daily'
+  }
+};
 
-          onMounted(() => {
-            if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
-              userData.user = Telegram.WebApp.initDataUnsafe.user;
-              user.value = userData.user;
-            }
-            if (window.Telegram?.WebApp) {
-              fullscreen.value = Telegram.WebApp.isFullscreen === true;
-            }
-          });
+const pageOrder = ['leaderboard', 'task', 'home', 'collections', 'settings'];
+const pageIcons = {
+  leaderboard: "fas fa-trophy",
+  task: "fas fa-clipboard-list",
+  home: "fas fa-home",
+  collections: "fas fa-boxes",
+  settings: "fas fa-cog"
+};
 
-          function toggleTheme() {
-            theme.value = theme.value === "dark" ? "light" : "dark";
-            document.body.classList.toggle("light", theme.value === "light");
-            localStorage.setItem("theme", theme.value);
-          }
-
-          function toggleFullscreen() {
-            if (!window.Telegram?.WebApp) return;
-            if (!fullscreen.value) {
-              Telegram.WebApp.requestFullscreen();
-              fullscreen.value = true;
-            } else {
-              Telegram.WebApp.exitFullscreen();
-              fullscreen.value = false;
-            }
-            setTimeout(() => {
-              if (window.applySafeInsets) window.applySafeInsets();
-            }, 100);
-          }
-
-          function changeLang(e) {
-            lang.value = e.target.value;
-            localStorage.setItem("lang", lang.value);
-            window.dispatchEvent(
-              new CustomEvent("langchange", { detail: lang.value }),
-            );
-          }
-
-          watch(theme, () => {
-            document.body.classList.toggle("light", theme.value === "light");
-            localStorage.setItem("theme", theme.value);
-          });
-
-          return {
-            user,
-            progress,
-            userData,
-            theme,
-            lang,
-            fullscreen,
-            toggleTheme,
-            toggleFullscreen,
-            changeLang,
-          };
-        },
-        template: `<div>
-    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.profile }}</h2>
+const userData = reactive({ user: {}, score: Math.floor(Math.random() * 1000), rank: 0 });
+// ===== Страницы (Компоненты) ======
+const Leaderboard = {
+  props: ['t'],
+  template: `
+    <div class="flex flex-col h-full">
+      <h2 class="text-2xl font-bold mb-2 text-center">{{ t.leaderboard }}</h2>
+    </div>
+  `
+};
+const Task = {
+  props: ['t'],
+  template: `<div>
+    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.task }}</h2>
+    <p>Описание текущего задания.</p>
+  </div>`
+};
+const Home = {
+  props: ['t', 'showInfo'],
+  setup() {
+    const user = ref({});
+    const progress = ref(Math.floor(Math.random() * 100));
+    onMounted(() => {
+      if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+        userData.user = Telegram.WebApp.initDataUnsafe.user;
+        user.value = userData.user;
+      }
+    });
+    return { user, progress, userData };
+  },
+  template: `<div>
     <div class="flex items-center bg-gray-600 p-3 rounded mb-4">
       <img :src="user.photo_url || 'assets/icon.png'" class="w-12 h-12 rounded-full mr-3" />
       <div class="flex-1">
@@ -305,257 +209,292 @@
         </div>
       </div>
     </div>
-    <div class="mb-4 flex items-center justify-between w-full">
-      <span class="mr-2">{{ t.theme }}</span>
-      <label class="relative inline-flex items-center cursor-pointer ml-auto">
-        <input type="checkbox" class="sr-only peer" :checked="theme==='dark'" @change="toggleTheme">
-        <div class="w-11 h-6 bg-gray-300 rounded-full transition-colors duration-300 peer-checked:bg-blue-600 before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-5 before:h-5 before:bg-white before:border before:border-gray-300 before:rounded-full before:transition-transform before:duration-300 peer-checked:before:translate-x-full"></div>
-      </label>
-    </div>
-    <div class="mb-4 flex items-center justify-between w-full">
-      <span class="mr-2">{{ t.fullscreen }}</span>
-      <label class="relative inline-flex items-center cursor-pointer ml-auto">
-        <input type="checkbox" class="sr-only peer" :checked="fullscreen" @change="toggleFullscreen">
-        <div class="w-11 h-6 bg-gray-300 rounded-full transition-colors duration-300 peer-checked:bg-blue-600 before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-5 before:h-5 before:bg-white before:border before:border-gray-300 before:rounded-full before:transition-transform before:duration-300 peer-checked:before:translate-x-full"></div>
-      </label>
-    </div>
-    <div class="mb-4 flex items-center">
-      <span class="mr-2">{{ t.language }}</span>
-      <select class="border rounded p-1" :value="lang" @change="changeLang">
-        <option value="ru">Русский</option>
-        <option value="en">English</option>
-      </select>
-    </div>
     <button @click="showInfo()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Инфо</button>
-  </div>`,
-      };
-      // ================================
+  </div>`
+};
+const Collections = {
+  props: ['t'],
+  template: `<div>
+    <h2 class="text-2xl font-bold mb-4 text-center">{{ t.collections }}</h2>
+    <p>Ваши собранные предметы.</p>
+  </div>`
+};
+const Settings = {
+  props: ['t'],
+  setup() {
+    const theme = ref(localStorage.getItem('theme') || 'dark');
+    const lang = ref(localStorage.getItem('lang') || 'ru');
+    const fullscreen = ref(false);
 
-      const pages = {
-        finds: Finds,
-        suppliers: Suppliers,
-        affiliate: Affiliate,
-        profile: Profile,
-      };
+    onMounted(() => {
+      if (window.Telegram?.WebApp) {
+        fullscreen.value = Telegram.WebApp.isFullscreen === true;
+      }
+    });
 
-      createApp({
-        setup() {
-          const lang = ref(localStorage.getItem("lang") || "ru");
-          const t = computed(() => translations[lang.value] || translations.ru);
-          const currentIndex = ref(pageOrder.indexOf("finds"));
-          const infoModal = ref(false);
-          const infoModalText = ref(t.value.info);
-          const pagesRef = ref(null);
-          const innerRef = ref(null);
-          const navRef = ref(null);
-          const showLabels = ref(false);
-          const dragOffset = ref(0);
-          const isDragging = ref(false);
-          const currentPage = computed(() => pageOrder[currentIndex.value]);
-          let hideTimer = null;
+    function toggleTheme() {
+      theme.value = theme.value === 'dark' ? 'light' : 'dark';
+      document.body.classList.toggle('light', theme.value === 'light');
+      localStorage.setItem('theme', theme.value);
+    }
 
-          const dragStyle = computed(() => ({
-            transform: `translateX(calc(-${currentIndex.value * 100}% + ${dragOffset.value}%))`,
-            transition: isDragging.value ? "none" : "",
-          }));
+      function toggleFullscreen() {
+        if (!window.Telegram?.WebApp) return;
+        if (!fullscreen.value) {
+          Telegram.WebApp.requestFullscreen();
+          fullscreen.value = true;
+        } else {
+          Telegram.WebApp.exitFullscreen();
+          fullscreen.value = false;
+        }
+        setTimeout(() => {
+          if (window.applySafeInsets) window.applySafeInsets();
+        }, 100);
+      }
 
-          // Изменение языка через событие
-          function onLangChange(e) {
-            lang.value = e.detail || e.target.value || "ru";
+    function changeLang(e) {
+      lang.value = e.target.value;
+      localStorage.setItem('lang', lang.value);
+      window.dispatchEvent(new CustomEvent('langchange', { detail: lang.value }));
+    }
+
+    watch(theme, () => {
+      document.body.classList.toggle('light', theme.value === 'light');
+      localStorage.setItem('theme', theme.value);
+    });
+
+    return { theme, lang, fullscreen, toggleTheme, toggleFullscreen, changeLang };
+  },
+  template: `
+    <div>
+      <h2 class="text-2xl font-bold mb-4 text-center">{{ t.settings }}</h2>
+      <div class="mb-4 flex items-center justify-between w-full">
+        <span class="mr-2">{{ t.theme }}</span>
+        <label class="relative inline-flex items-center cursor-pointer ml-auto">
+          <input type="checkbox" class="sr-only peer" :checked="theme==='dark'" @change="toggleTheme">
+          <div class="w-11 h-6 bg-gray-300 rounded-full transition-colors duration-300 peer-checked:bg-blue-600 before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-5 before:h-5 before:bg-white before:border before:border-gray-300 before:rounded-full before:transition-transform before:duration-300 peer-checked:before:translate-x-full"></div>
+        </label>
+      </div>
+      <div class="mb-4 flex items-center justify-between w-full">
+        <span class="mr-2">{{ t.fullscreen }}</span>
+        <label class="relative inline-flex items-center cursor-pointer ml-auto">
+          <input type="checkbox" class="sr-only peer" :checked="fullscreen" @change="toggleFullscreen">
+          <div class="w-11 h-6 bg-gray-300 rounded-full transition-colors duration-300 peer-checked:bg-blue-600 before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-5 before:h-5 before:bg-white before:border before:border-gray-300 before:rounded-full before:transition-transform before:duration-300 peer-checked:before:translate-x-full"></div>
+        </label>
+      </div>
+      <div class="mb-4 flex items-center">
+        <span class="mr-2">{{ t.language }}</span>
+        <select class="border rounded p-1" :value="lang" @change="changeLang">
+          <option value="ru">Русский</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </div>
+  `
+};
+// ================================
+
+const pages = {
+  leaderboard: Leaderboard,
+  task: Task,
+  home: Home,
+  collections: Collections,
+  settings: Settings
+};
+
+createApp({
+  setup() {
+    const lang = ref(localStorage.getItem('lang') || 'ru');
+    const t = computed(() => translations[lang.value] || translations.ru);
+    const currentIndex = ref(pageOrder.indexOf('home'));
+    const infoModal = ref(false);
+    const pagesRef = ref(null);
+    const innerRef = ref(null);
+    const navRef = ref(null);
+    const showLabels = ref(false);
+    const dragOffset = ref(0);
+    const isDragging = ref(false);
+    let hideTimer = null;
+
+    const dragStyle = computed(() => ({
+      transform: `translateX(calc(-${currentIndex.value * 100}% + ${dragOffset.value}%))`,
+      transition: isDragging.value ? 'none' : ''
+    }));
+
+    // Изменение языка через событие
+    function onLangChange(e) {
+      lang.value = (e.detail || e.target.value || 'ru');
+    }
+    window.addEventListener('langchange', onLangChange);
+
+    function showPage(page) {
+      currentIndex.value = pageOrder.indexOf(page);
+      dragOffset.value = 0;
+      isDragging.value = false;
+      revealLabels();
+    }
+    function showInfo() {
+      infoModal.value = true;
+    }
+
+    // Тема
+    onMounted(() => {
+      document.body.classList.toggle('light', (localStorage.getItem('theme') || 'dark') === 'light');
+    });
+
+    // Свайпы страниц
+    let startX = null;
+    let startY = null;
+    const dragThreshold = 20; // Минимальное смещение в пикселях для начала свайпа
+    onMounted(() => {
+      const el = pagesRef.value;
+      const width = () => el.clientWidth;
+      el.addEventListener('touchstart', e => {
+        if (e.touches.length === 1) {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+          isDragging.value = false;
+        }
+      });
+      el.addEventListener('touchmove', e => {
+        if (startX === null) return;
+        const deltaX = e.touches[0].clientX - startX;
+        const deltaY = e.touches[0].clientY - startY;
+        if (!isDragging.value) {
+          if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > dragThreshold) {
+            isDragging.value = true;
+          } else {
+            return;
           }
-          window.addEventListener("langchange", onLangChange);
-
-          function showPage(page) {
-            currentIndex.value = pageOrder.indexOf(page);
-            dragOffset.value = 0;
-            isDragging.value = false;
-            revealLabels();
+        }
+        dragOffset.value = (deltaX / width()) * 100;
+      });
+      el.addEventListener('touchend', e => {
+        if (startX === null) return;
+        const deltaX = e.changedTouches[0].clientX - startX;
+        if (isDragging.value && Math.abs(deltaX) > width() / 4) {
+          if (deltaX < 0 && currentIndex.value < pageOrder.length - 1) {
+            showPage(pageOrder[currentIndex.value + 1]);
+          } else if (deltaX > 0 && currentIndex.value > 0) {
+            showPage(pageOrder[currentIndex.value - 1]);
           }
-          function handleNav(page) {
-            if (page === "feed") {
-              infoModalText.value = t.value.feed_dev;
-              infoModal.value = true;
-            } else {
-              showPage(page);
-            }
+        }
+        dragOffset.value = 0;
+        isDragging.value = false;
+        startX = null;
+        startY = null;
+      });
+    });
+
+    // Свайп вверх по навигации для показа подписей
+    onMounted(() => {
+      const nav = navRef.value;
+      let startY = null;
+      nav.addEventListener('touchstart', e => {
+        if (e.touches.length === 1) startY = e.touches[0].clientY;
+      });
+      nav.addEventListener('touchend', e => {
+        if (startY === null) return;
+        const deltaY = e.changedTouches[0].clientY - startY;
+        if (deltaY < -30) revealLabels();
+        startY = null;
+      });
+    });
+
+    // Легкая пружина при достижении края страниц
+    onMounted(() => {
+      const pages = innerRef.value.querySelectorAll('.page');
+      pages.forEach(page => {
+        let startY = null;
+        let pulling = false;
+        page.addEventListener('touchstart', e => {
+          if (e.touches.length !== 1) return;
+          startY = e.touches[0].clientY;
+          pulling = false;
+          page.style.transition = '';
+        });
+        page.addEventListener('touchmove', e => {
+          if (startY === null || isDragging.value) return;
+          const currentY = e.touches[0].clientY;
+          const diff = currentY - startY;
+          const atTop = page.scrollTop <= 0;
+          const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
+          if ((atTop && diff > 0) || (atBottom && diff < 0)) {
+            e.preventDefault();
+            pulling = true;
+            page.style.transform = `translateY(${diff / 4}px)`;
           }
-          function showInfo() {
-            infoModalText.value = t.value.info;
-            infoModal.value = true;
+        });
+        const reset = () => {
+          if (!pulling) { startY = null; return; }
+          page.style.transition = 'transform 0.3s';
+          page.style.transform = 'translateY(0)';
+          startY = null;
+          pulling = false;
+        };
+        page.addEventListener('touchend', reset);
+        page.addEventListener('touchcancel', reset);
+      });
+    });
+
+    function revealLabels() {
+      showLabels.value = true;
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        showLabels.value = false;
+      }, 5000);
+    }
+
+    // Safe Insets для Telegram WebApp
+    function applySafeInsets() {
+      if (window.Telegram?.WebApp) {
+        const isFullscreen = Telegram.WebApp.isFullscreen;
+        const safeInset = Telegram.WebApp.contentSafeAreaInset;
+        if (safeInset) {
+          pagesRef.value.style.paddingBottom = `${safeInset.bottom}px`;
+          document.querySelector('nav').style.bottom = `${safeInset.bottom}px`;
+        }
+        document.querySelectorAll('.page').forEach(page => {
+          if (isFullscreen && safeInset) {
+            const insetTop = parseInt(safeInset.top) || 0;
+            const extraOffset = 20;
+            page.style.paddingTop = `${insetTop + extraOffset}px`;
+          } else {
+            page.style.paddingTop = '';
           }
+        });
+      }
+    }
+    window.applySafeInsets = applySafeInsets;
 
-          // Тема
-          onMounted(() => {
-            document.body.classList.toggle(
-              "light",
-              (localStorage.getItem("theme") || "dark") === "light",
-            );
-          });
+    onMounted(() => {
+      if (window.Telegram?.WebApp) {
+        Telegram.WebApp.ready();
+        Telegram.WebApp.disableVerticalSwipes();
+        applySafeInsets();
+      }
+      showPage('home');
+    });
 
-          // Свайпы страниц
-          let startX = null;
-          let startY = null;
-          const dragThreshold = 20; // Минимальное смещение в пикселях для начала свайпа
-          onMounted(() => {
-            const el = pagesRef.value;
-            const width = () => el.clientWidth;
-            el.addEventListener("touchstart", (e) => {
-              if (e.touches.length === 1) {
-                startX = e.touches[0].clientX;
-                startY = e.touches[0].clientY;
-                isDragging.value = false;
-              }
-            });
-            el.addEventListener("touchmove", (e) => {
-              if (startX === null) return;
-              const deltaX = e.touches[0].clientX - startX;
-              const deltaY = e.touches[0].clientY - startY;
-              if (!isDragging.value) {
-                if (
-                  Math.abs(deltaX) > Math.abs(deltaY) &&
-                  Math.abs(deltaX) > dragThreshold
-                ) {
-                  isDragging.value = true;
-                } else {
-                  return;
-                }
-              }
-              dragOffset.value = (deltaX / width()) * 100;
-            });
-            el.addEventListener("touchend", (e) => {
-              if (startX === null) return;
-              const deltaX = e.changedTouches[0].clientX - startX;
-              if (isDragging.value && Math.abs(deltaX) > width() / 4) {
-                if (deltaX < 0 && currentIndex.value < pageOrder.length - 1) {
-                  showPage(pageOrder[currentIndex.value + 1]);
-                } else if (deltaX > 0 && currentIndex.value > 0) {
-                  showPage(pageOrder[currentIndex.value - 1]);
-                }
-              }
-              dragOffset.value = 0;
-              isDragging.value = false;
-              startX = null;
-              startY = null;
-            });
-          });
+    return {
+      t,
+      lang,
+      currentIndex,
+      infoModal,
+      showPage,
+      showInfo,
+      pageOrder,
+      pageIcons,
+      pages,
+      pagesRef,
+      innerRef,
+      navRef,
+      showLabels,
+      dragStyle
+    };
+  }
+}).mount('#app');
+</script>
 
-          // Свайп вверх по навигации для показа подписей
-          onMounted(() => {
-            const nav = navRef.value;
-            let startY = null;
-            nav.addEventListener("touchstart", (e) => {
-              if (e.touches.length === 1) startY = e.touches[0].clientY;
-            });
-            nav.addEventListener("touchend", (e) => {
-              if (startY === null) return;
-              const deltaY = e.changedTouches[0].clientY - startY;
-              if (deltaY < -30) revealLabels();
-              startY = null;
-            });
-          });
-
-          // Легкая пружина при достижении края страниц
-          onMounted(() => {
-            const pages = innerRef.value.querySelectorAll(".page");
-            pages.forEach((page) => {
-              let startY = null;
-              let pulling = false;
-              page.addEventListener("touchstart", (e) => {
-                if (e.touches.length !== 1) return;
-                startY = e.touches[0].clientY;
-                pulling = false;
-                page.style.transition = "";
-              });
-              page.addEventListener("touchmove", (e) => {
-                if (startY === null || isDragging.value) return;
-                const currentY = e.touches[0].clientY;
-                const diff = currentY - startY;
-                const atTop = page.scrollTop <= 0;
-                const atBottom =
-                  page.scrollTop + page.clientHeight >= page.scrollHeight;
-                if ((atTop && diff > 0) || (atBottom && diff < 0)) {
-                  e.preventDefault();
-                  pulling = true;
-                  page.style.transform = `translateY(${diff / 4}px)`;
-                }
-              });
-              const reset = () => {
-                if (!pulling) {
-                  startY = null;
-                  return;
-                }
-                page.style.transition = "transform 0.3s";
-                page.style.transform = "translateY(0)";
-                startY = null;
-                pulling = false;
-              };
-              page.addEventListener("touchend", reset);
-              page.addEventListener("touchcancel", reset);
-            });
-          });
-
-          function revealLabels() {
-            showLabels.value = true;
-            clearTimeout(hideTimer);
-            hideTimer = setTimeout(() => {
-              showLabels.value = false;
-            }, 5000);
-          }
-
-          // Safe Insets для Telegram WebApp
-          function applySafeInsets() {
-            if (window.Telegram?.WebApp) {
-              const isFullscreen = Telegram.WebApp.isFullscreen;
-              const safeInset = Telegram.WebApp.contentSafeAreaInset;
-              if (safeInset) {
-                pagesRef.value.style.paddingBottom = `${safeInset.bottom}px`;
-                document.querySelector("nav").style.bottom =
-                  `${safeInset.bottom}px`;
-              }
-              document.querySelectorAll(".page").forEach((page) => {
-                if (isFullscreen && safeInset) {
-                  const insetTop = parseInt(safeInset.top) || 0;
-                  const extraOffset = 20;
-                  page.style.paddingTop = `${insetTop + extraOffset}px`;
-                } else {
-                  page.style.paddingTop = "";
-                }
-              });
-            }
-          }
-          window.applySafeInsets = applySafeInsets;
-
-          onMounted(() => {
-            if (window.Telegram?.WebApp) {
-              Telegram.WebApp.ready();
-              Telegram.WebApp.disableVerticalSwipes();
-              applySafeInsets();
-            }
-            showPage("finds");
-          });
-
-          return {
-            t,
-            lang,
-            currentIndex,
-            infoModal,
-            showPage,
-            handleNav,
-            showInfo,
-            pageOrder,
-            pageIcons,
-            pages,
-            pagesRef,
-            innerRef,
-            navRef,
-            showLabels,
-            dragStyle,
-            infoModalText,
-            currentPage,
-            navItems,
-          };
-        },
-      }).mount("#app");
-    </script>
-  </body>
+</body>
 </html>
