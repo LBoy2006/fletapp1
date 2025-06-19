@@ -55,6 +55,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import { API_BASE } from '../api'
 
 const userId = 1
 
@@ -67,7 +68,7 @@ const showFavOnly = ref(false)
 
 async function loadCategories1() {
   try {
-    const r = await fetch('http://localhost:8000/suppliers/categories1')
+    const r = await fetch(`${API_BASE}/suppliers/categories1`)
     if (r.ok) categories1.value = await r.json()
   } catch (e) { console.error(e) }
 }
@@ -75,7 +76,7 @@ async function loadCategories1() {
 async function loadCategories2() {
   try {
     const params = selectedCat1.value.join(',')
-    const r = await fetch(`http://localhost:8000/suppliers/categories2?categories1=${encodeURIComponent(params)}`)
+    const r = await fetch(`${API_BASE}/suppliers/categories2?categories1=${encodeURIComponent(params)}`)
     if (r.ok) categories2.value = await r.json()
   } catch (e) { console.error(e) }
 }
@@ -85,7 +86,7 @@ async function loadSuppliers() {
     const p1 = selectedCat1.value.join(',')
     const p2 = selectedCat2.value.join(',')
     const fav = showFavOnly.value ? 'true' : 'false'
-    const url = `http://localhost:8000/suppliers?user_id=${userId}&categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}&favorites_only=${fav}`
+    const url = `${API_BASE}/suppliers?user_id=${userId}&categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}&favorites_only=${fav}`
     const r = await fetch(url)
     if (r.ok) suppliers.value = await r.json()
   } catch (e) { console.error(e) }
@@ -105,7 +106,7 @@ function toggleCat2(c) {
 
 async function toggleFavorite(s) {
   try {
-    const r = await fetch(`http://localhost:8000/suppliers/${s.id}/favorite`, {
+    const r = await fetch(`${API_BASE}/suppliers/${s.id}/favorite`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId })
@@ -119,7 +120,7 @@ async function toggleFavorite(s) {
 
 async function openContacts(s) {
   try {
-    const r = await fetch(`http://localhost:8000/suppliers/${s.id}/contacts`)
+    const r = await fetch(`${API_BASE}/suppliers/${s.id}/contacts`)
     if (r.ok) {
       const data = await r.json()
       const lines = [

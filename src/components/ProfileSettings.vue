@@ -36,6 +36,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { userData } from '../state';
+import { API_BASE } from '../api';
 const props = defineProps({ t: Object });
 
 function goBack() {
@@ -51,7 +52,7 @@ const fullscreen = ref(false);
 
 async function loadUser() {
   try {
-    const resp = await fetch('http://localhost:8000/users/1');
+    const resp = await fetch(`${API_BASE}/users/1`);
     if (resp.ok) {
       const data = await resp.json();
       userData.user = data;
@@ -96,7 +97,7 @@ function changeLang(e) {
 
 async function saveLocation() {
   try {
-    await fetch(`http://localhost:8000/users/1`, {
+    await fetch(`${API_BASE}/users/1`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ location: location.value, agent_number: user.value.agent_number })

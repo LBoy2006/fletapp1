@@ -37,6 +37,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { API_BASE } from '../api'
 
 defineProps({ t: Object })
 
@@ -53,7 +54,7 @@ async function loadFinds() {
   loading.value = true
   error.value = false
   try {
-    const r = await fetch('http://localhost:8000/finds')
+    const r = await fetch(`${API_BASE}/finds`)
     if (r.ok) {
       finds.value = await r.json()
     } else {
@@ -69,11 +70,11 @@ async function loadFinds() {
 
 async function openSupplier(id) {
   try {
-    const info = await fetch(`http://localhost:8000/suppliers/${id}`)
+    const info = await fetch(`${API_BASE}/suppliers/${id}`)
     if (info.ok) {
       await info.json()
     }
-    const cont = await fetch(`http://localhost:8000/suppliers/${id}/contacts`)
+    const cont = await fetch(`${API_BASE}/suppliers/${id}/contacts`)
     if (cont.ok) {
       const c = await cont.json()
       const lines = [
