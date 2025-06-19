@@ -7,6 +7,8 @@ class User(Base):
     agent_number = Column(String, unique=True, index=True)
     join_date = Column(Date)
     location = Column(String)
+    telegram_id = Column(Integer, unique=True, index=True)
+    subscription_active = Column(Boolean, default=False)
 
 
 class Affiliate(Base):

@@ -1,4 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException
+import hashlib
+import hmac
+import os
+import json
+import urllib.parse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import date
@@ -32,6 +37,26 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+def verify_telegram(init_data: str) -> dict:
+    bot_token = os.environ.get('BOT_TOKEN', '')
+    if not bot_token:
+        raise HTTPException(status_code=500, detail='BOT_TOKEN not configured')
+    data = urllib.parse.parse_qs(init_data)
+    data = {k: v[0] for k, v in data.items()}
+    hash_value = data.pop('hash', None)
+    if not hash_value:
+        raise HTTPException(status_code=400, detail='hash required')
+    data_check = '\n'.join(f"{k}={data[k]}" for k in sorted(data))
+    secret = hashlib.sha256(bot_token.encode()).digest()
+    h = hmac.new(secret, data_check.encode(), hashlib.sha256).hexdigest()
+    if h != hash_value:
+        raise HTTPException(status_code=403, detail='Invalid hash')
+    user_json = data.get('user')
+    if not user_json:
+        raise HTTPException(status_code=400, detail='user required')
+    return json.loads(user_json)
 
 
 @app.get('/users/{user_id}', response_model=schemas.UserOut)
@@ -162,3 +187,37 @@ def get_supplier(supplier_id: int, db: Session = Depends(get_db)):
 def list_finds(db: Session = Depends(get_db)):
     items = db.query(models.Find).order_by(models.Find.created_at.desc()).all()
     return items
+
+
+@app.post('/auth/telegram', response_model=schemas.AuthResult)
+def auth_telegram(data: schemas.AuthRequest, db: Session = Depends(get_db)):
+    user_data = verify_telegram(data.init_data)
+    telegram_id = user_data.get('id')
+    user = db.query(models.User).filter(models.User.telegram_id == telegram_id).first()
+    if user and user.subscription_active:
+        result = schemas.UserOut.model_validate(user)
+        if user.join_date:
+            result.days_in_club = (date.today() - user.join_date).days
+        return schemas.AuthResult(is_member=True, user=result)
+    return schemas.AuthResult(is_member=False, user=None)
+
+
+@app.post('/subscribe')
+def subscribe(data: schemas.AuthRequest, db: Session = Depends(get_db)):
+    user_data = verify_telegram(data.init_data)
+    telegram_id = user_data.get('id')
+    user = db.query(models.User).filter(models.User.telegram_id == telegram_id).first()
+    if not user:
+        user = models.User(
+            agent_number=f"chn_{telegram_id}",
+            join_date=date.today(),
+            telegram_id=telegram_id,
+            subscription_active=True,
+        )
+        db.add(user)
+    else:
+        user.subscription_active = True
+        if not user.join_date:
+            user.join_date = date.today()
+    db.commit()
+    return {"success": True}
