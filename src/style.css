@@ -129,3 +129,26 @@ nav.show-labels .nav-label {
 .snackbar-slide-leave-active {
   transition: transform 0.3s, opacity 0.3s;
 }
+
+.bottom-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1100;
+}
+
+.bottom-sheet {
+  width: 100%;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.sheet-slide-enter-from,
+.sheet-slide-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
+}
+.sheet-slide-enter-active,
+.sheet-slide-leave-active {
+  transition: transform 0.3s, opacity 0.3s;
+}
