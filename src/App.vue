@@ -1,47 +1,3 @@
-<template>
-  <div class="h-full flex flex-col">
-    <div ref="pagesRef" class="flex-grow relative overflow-hidden" style="touch-action: pan-y">
-      <div ref="innerRef" class="flex h-full transition-transform duration-300" :style="dragStyle">
-        <section
-          v-for="(page, idx) in pageOrder"
-          :key="page"
-          class="page w-full h-full flex-shrink-0 overflow-auto p-4"
-        >
-          <component :is="pages[page]" :t="t" />
-        </section>
-      </div>
-    </div>
-
-    <nav ref="navRef" :class="{ 'show-labels': showLabels }" class="fixed left-0 right-0 flex text-center text-sm transition-colors" :style="{ bottom: navBottom + 'px' }">
-      <button
-        v-for="item in navItems"
-        :key="item"
-        class="nav-btn flex-1 py-5 flex flex-col items-center rounded relative"
-        :class="{ active: item !== 'feed' && currentIndex === pageOrder.indexOf(item) }"
-        @click="onNavClick(item)"
-      >
-        <i :class="pageIcons[item] + ' icon text-xl mb-1'" />
-        <span class="nav-label">{{ t[item] }}</span>
-      </button>
-    </nav>
-
-    <!-- info modal removed -->
-
-    <transition name="sheet-slide">
-      <div
-        v-if="sheetVisible"
-        class="bottom-sheet-overlay flex items-end justify-center"
-        @click.self="hideSheet"
-      >
-        <div class="bottom-sheet p-3 space-y-1" style="background-color: var(--page-bg-color); color: var(--text-color);">
-          <div v-for="(line, idx) in sheetLines" :key="idx">{{ line }}</div>
-          <button class="mt-2 bg-blue-600 text-white px-3 py-1 rounded w-full" @click="hideSheet">{{ t.close }}</button>
-        </div>
-      </div>
-    </transition>
-  </div>
-</template>
-
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import Finds from './components/Finds.vue';
@@ -51,7 +7,6 @@ import Profile from './components/Profile.vue';
 import ProfileSettings from './components/ProfileSettings.vue';
 import { userData } from './state';
 import { translations } from './translations.js';
-
 
 const navItems = ['feed', 'finds', 'suppliers', 'affiliate', 'profile'];
 const pageOrder = ['finds', 'suppliers', 'affiliate', 'profile', 'settings'];
@@ -115,6 +70,44 @@ function onNavClick(item) {
   }
   showPage(item);
 }
+
+// --- Блок авторизации Telegram Mini App ---
+onMounted(() => {
+  // Только при первом запуске приложения
+  if (window.Telegram && window.Telegram.WebApp) {
+    const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
+    if (tgUser) {
+      userData.user = tgUser;
+
+      // Отправляем initData на backend для бесшовной авторизации
+      fetch('https://1chn.api.gptbrainbot.ru/auth/telegram', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          initData: window.Telegram.WebApp.initData
+        })
+      })
+        .then(res => res.json())
+        .then(data => {
+          // Если backend вернёт доп. данные — можно сохранить:
+          // userData.profile = data;
+          // userData.token = data.token;
+        })
+        .catch(err => {
+          console.error('Auth error:', err);
+        });
+    }
+  } else {
+    // Для локальной отладки без Telegram
+    userData.user = {
+      id: 123456,
+      first_name: "Тест",
+      last_name: "Пользователь",
+      username: "test_user"
+    }
+  }
+});
+// --- /Блок авторизации ---
 
 onMounted(() => {
   document.body.classList.toggle('light', (localStorage.getItem('theme') || 'dark') === 'light');

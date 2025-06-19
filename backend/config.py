@@ -16,7 +16,7 @@ class Settings(BaseSettings):
         ],
         env="CORS_ORIGINS",
     )
-
+    TELEGRAM_BOT_TOKEN: str = Field(default="7607301844:AAFhRholdIvi9VaDoVO4ygqRHTSVujbZ6go", env="TELEGRAM_BOT_TOKEN")
     class Config:
         env_file = ".env"
 
