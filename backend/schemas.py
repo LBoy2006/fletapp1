@@ -37,3 +37,28 @@ class AffiliateOut(AffiliateBase):
 
     class Config:
         from_attributes = True
+
+
+class SupplierBase(BaseModel):
+    name: str
+    description: str | None = None
+    photo_url: str | None = None
+    category1: str | None = None
+    category2: str | None = None
+
+
+class SupplierOut(SupplierBase):
+    id: int
+    is_favorite: bool | None = None
+
+    class Config:
+        from_attributes = True
+
+
+class SupplierContacts(BaseModel):
+    contact_link: str | None = None
+    contact_phone: str | None = None
+    contact_password: str | None = None
+
+    class Config:
+        from_attributes = True

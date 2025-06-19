@@ -1,6 +1,6 @@
 from datetime import date
 from .database import engine, SessionLocal
-from .models import User, Affiliate, Base
+from .models import User, Affiliate, Supplier, Base
 
 Base.metadata.create_all(bind=engine)
 
@@ -25,6 +25,31 @@ def seed():
             materials_link='https://drive.google.com/folder'
         )
         db.add(stat)
+        db.commit()
+    if not db.query(Supplier).first():
+        suppliers = [
+            Supplier(
+                name='Store A',
+                description='Надежный поставщик техники',
+                photo_url='https://via.placeholder.com/100',
+                category1='техника',
+                category2='Apple',
+                contact_link='https://example.com',
+                contact_phone='+1 111 111',
+                contact_password='1234'
+            ),
+            Supplier(
+                name='Fashion B',
+                description='Модная одежда',
+                photo_url='https://via.placeholder.com/100',
+                category1='одежда',
+                category2='LV',
+                contact_link='https://example.com',
+                contact_phone='+1 222 222',
+                contact_password='abcd'
+            )
+        ]
+        db.add_all(suppliers)
         db.commit()
     db.close()
 
