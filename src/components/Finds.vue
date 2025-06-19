@@ -32,43 +32,6 @@
       </div>
     </div>
 
-    <transition name="modal-fade">
-      <div
-        v-if="supplierModal"
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10"
-        @click.self="closeSupplier"
-      >
-        <div
-          class="p-4 rounded w-64 select-none"
-          style="background-color: var(--page-bg-color); color: var(--text-color);"
-          @contextmenu.prevent
-          @copy.prevent
-        >
-          <div class="font-semibold mb-1">{{ supplier.name || 'Поставщик' }}</div>
-          <div class="text-sm text-gray-400 mb-2">{{ supplier.description }}</div>
-          <div class="space-y-1 text-sm">
-            <div>
-              <span class="text-gray-400">Ссылка:</span>
-              {{ supplier.contact_link || '—' }}
-            </div>
-            <div>
-              <span class="text-gray-400">Телефон:</span>
-              {{ supplier.contact_phone || '—' }}
-            </div>
-            <div>
-              <span class="text-gray-400">Пароль:</span>
-              {{ supplier.contact_password || '—' }}
-            </div>
-          </div>
-          <button
-            @click="closeSupplier"
-            class="mt-3 px-4 py-2 bg-blue-600 text-white rounded w-full"
-          >
-            Закрыть
-          </button>
-        </div>
-      </div>
-    </transition>
   </div>
 </template>
 
@@ -80,8 +43,6 @@ defineProps({ t: Object })
 const finds = ref([])
 const loading = ref(true)
 const error = ref(false)
-const supplierModal = ref(false)
-const supplier = ref({})
 
 function formatR(val) {
   if (val === undefined || val === null) return '—'
@@ -110,12 +71,11 @@ async function openSupplier(id) {
   try {
     const info = await fetch(`http://localhost:8000/suppliers/${id}`)
     if (info.ok) {
-      supplier.value = await info.json()
+      await info.json()
     }
     const cont = await fetch(`http://localhost:8000/suppliers/${id}/contacts`)
     if (cont.ok) {
       const c = await cont.json()
-      supplier.value = { ...supplier.value, ...c }
       const lines = [
         `Ссылка: ${c.contact_link || '—'}`,
         `Телефон: ${c.contact_phone || '—'}`,
@@ -123,15 +83,9 @@ async function openSupplier(id) {
       ]
       if (window.showSheet) window.showSheet(lines)
     }
-    supplierModal.value = true
   } catch (e) {
     console.error(e)
   }
-}
-
-function closeSupplier() {
-  supplierModal.value = false
-  supplier.value = {}
 }
 
 onMounted(loadFinds)
