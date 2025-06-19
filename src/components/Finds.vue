@@ -116,6 +116,12 @@ async function openSupplier(id) {
     if (cont.ok) {
       const c = await cont.json()
       supplier.value = { ...supplier.value, ...c }
+      const lines = [
+        `Ссылка: ${c.contact_link || '—'}`,
+        `Телефон: ${c.contact_phone || '—'}`,
+        `Пароль: ${c.contact_password || '—'}`
+      ]
+      if (window.showSnackbar) window.showSnackbar(lines)
     }
     supplierModal.value = true
   } catch (e) {

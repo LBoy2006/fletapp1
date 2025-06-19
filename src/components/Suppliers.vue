@@ -50,13 +50,6 @@
       </div>
     </div>
 
-    <transition name="snackbar-slide">
-      <div v-if="contactSnackbar" class="snackbar p-3 rounded shadow-lg text-sm space-y-1" style="background-color: var(--page-bg-color); color: var(--text-color);">
-        <div><span class="text-gray-400">Ссылка:</span> {{ contacts.contact_link || '—' }}</div>
-        <div><span class="text-gray-400">Телефон:</span> {{ contacts.contact_phone || '—' }}</div>
-        <div><span class="text-gray-400">Пароль:</span> {{ contacts.contact_password || '—' }}</div>
-      </div>
-    </transition>
   </div>
 </template>
 
@@ -71,9 +64,6 @@ const selectedCat1 = ref([])
 const selectedCat2 = ref([])
 const suppliers = ref([])
 const showFavOnly = ref(false)
-const contactSnackbar = ref(false)
-const contacts = ref({})
-let snackbarTimer = null
 
 async function loadCategories1() {
   try {
@@ -131,10 +121,13 @@ async function openContacts(s) {
   try {
     const r = await fetch(`http://localhost:8000/suppliers/${s.id}/contacts`)
     if (r.ok) {
-      contacts.value = await r.json()
-      contactSnackbar.value = true
-      clearTimeout(snackbarTimer)
-      snackbarTimer = setTimeout(() => (contactSnackbar.value = false), 3000)
+      const data = await r.json()
+      const lines = [
+        `Ссылка: ${data.contact_link || '—'}`,
+        `Телефон: ${data.contact_phone || '—'}`,
+        `Пароль: ${data.contact_password || '—'}`
+      ]
+      if (window.showSnackbar) window.showSnackbar(lines)
     }
   } catch (e) { console.error(e) }
 }

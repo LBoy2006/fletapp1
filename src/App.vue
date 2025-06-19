@@ -28,8 +28,9 @@
     <!-- info modal removed -->
 
     <transition name="snackbar-slide">
-      <div v-if="feedSnackbar" class="snackbar p-3 rounded shadow-lg" style="background-color: var(--page-bg-color); color: var(--text-color);">
-        {{ t.feedInDev }}
+      <div v-if="snackbarVisible" class="snackbar p-3 rounded shadow-lg text-sm space-y-1" style="background-color: var(--page-bg-color); color: var(--text-color);">
+        <div v-for="(line, idx) in snackbarLines" :key="idx">{{ line }}</div>
+        <button class="mt-2 bg-blue-600 text-white px-3 py-1 rounded w-full" @click="hideSnackbar">{{ t.close }}</button>
       </div>
     </transition>
   </div>
@@ -61,7 +62,8 @@ const pages = { finds: Finds, suppliers: Suppliers, affiliate: Affiliate, profil
 const lang = ref(localStorage.getItem('lang') || 'ru');
 const t = computed(() => translations[lang.value] || translations.ru);
 const currentIndex = ref(pageOrder.indexOf('finds'));
-const feedSnackbar = ref(false);
+const snackbarVisible = ref(false);
+const snackbarLines = ref([]);
 const pagesRef = ref(null);
 const innerRef = ref(null);
 const navRef = ref(null);
@@ -88,11 +90,20 @@ function showPage(page) {
 }
 
 let snackbarTimer = null;
+function showSnackbar(lines) {
+  snackbarLines.value = Array.isArray(lines) ? lines : [lines];
+  snackbarVisible.value = true;
+  clearTimeout(snackbarTimer);
+  snackbarTimer = setTimeout(() => (snackbarVisible.value = false), 3000);
+}
+
+function hideSnackbar() {
+  snackbarVisible.value = false;
+}
+
 function onNavClick(item) {
   if (item === 'feed') {
-    feedSnackbar.value = true;
-    clearTimeout(snackbarTimer);
-    snackbarTimer = setTimeout(() => (feedSnackbar.value = false), 3000);
+    showSnackbar(t.value.feedInDev);
     return;
   }
   showPage(item);
@@ -225,6 +236,8 @@ function applySafeInsets() {
 }
 window.applySafeInsets = applySafeInsets;
 window.showPage = showPage;
+window.showSnackbar = showSnackbar;
+window.hideSnackbar = hideSnackbar;
 
 onMounted(() => {
   if (window.Telegram?.WebApp) {
