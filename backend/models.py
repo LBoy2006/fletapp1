@@ -23,3 +23,23 @@ class Affiliate(Base):
     referral_link = Column(String)
     materials_link = Column(String)
     withdraw_requested = Column(Boolean, default=False)
+
+
+class Supplier(Base):
+    __tablename__ = 'suppliers'
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    description = Column(String)
+    photo_url = Column(String)
+    category1 = Column(String)
+    category2 = Column(String)
+    contact_link = Column(String)
+    contact_phone = Column(String)
+    contact_password = Column(String)
+
+
+class FavoriteSupplier(Base):
+    __tablename__ = 'favorite_suppliers'
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, index=True)
+    supplier_id = Column(Integer, index=True)
