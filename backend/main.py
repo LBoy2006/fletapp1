@@ -24,7 +24,7 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail='User not found')
-    result = schemas.UserOut.from_orm(user)
+    result = schemas.UserOut.model_validate(user)
     if user.join_date:
         result.days_in_club = (date.today() - user.join_date).days
     if result.days_in_club is not None:
@@ -104,7 +104,7 @@ def list_suppliers(user_id: int, categories1: str = '', categories2: str = '', f
         suppliers = [s for s in suppliers if s.id in fav_ids]
     result = []
     for s in suppliers:
-        item = schemas.SupplierOut.from_orm(s)
+        item = schemas.SupplierOut.model_validate(s)
         item.is_favorite = s.id in fav_ids
         result.append(item)
     return result
@@ -115,7 +115,7 @@ def get_supplier_contacts(supplier_id: int, db: Session = Depends(get_db)):
     s = db.query(models.Supplier).filter(models.Supplier.id == supplier_id).first()
     if not s:
         raise HTTPException(status_code=404, detail='Supplier not found')
-    return schemas.SupplierContacts.from_orm(s)
+    return schemas.SupplierContacts.model_validate(s)
 
 
 @app.post('/suppliers/{supplier_id}/favorite')
