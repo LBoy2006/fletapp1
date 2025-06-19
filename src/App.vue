@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <nav ref="navRef" :class="{ 'show-labels': showLabels }" class="fixed bottom-0 left-0 right-0 flex text-center text-sm transition-colors">
+    <nav ref="navRef" :class="{ 'show-labels': showLabels }" class="fixed left-0 right-0 flex text-center text-sm transition-colors" :style="{ bottom: navBottom + 'px' }">
       <button
         v-for="item in navItems"
         :key="item"
@@ -74,6 +74,7 @@ const pagesRef = ref(null);
 const innerRef = ref(null);
 const navRef = ref(null);
 const showLabels = ref(false);
+const navBottom = ref(10);
 const dragOffset = ref(0);
 const isDragging = ref(false);
 let hideTimer = null;
@@ -227,7 +228,10 @@ function applySafeInsets() {
     const isFullscreen = Telegram.WebApp.isFullscreen;
     const safeInset = Telegram.WebApp.contentSafeAreaInset;
     if (safeInset) {
-      document.querySelector('nav').style.bottom = `${safeInset.bottom}px`;
+      const insetBottom = parseInt(safeInset.bottom) || 0;
+      navBottom.value = insetBottom + 10;
+    } else {
+      navBottom.value = 10;
     }
     document.querySelectorAll('.page').forEach(p => {
       if (isFullscreen && safeInset) {
