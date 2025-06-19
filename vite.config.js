@@ -6,7 +6,7 @@ export default defineConfig({
   base: './',
   server: {
     allowedHosts: [
-      '1chn.gptbrainbot.ru'
+      'lboy2006.github.io/fletapp1'
     ],
     // если у тебя уже есть другие опции — просто добавь allowedHosts в server
   },
