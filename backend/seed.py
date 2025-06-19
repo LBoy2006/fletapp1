@@ -1,6 +1,6 @@
 from datetime import date
-from database import engine, SessionLocal
-from models import User, Affiliate, Supplier, Find, Base
+from backend.database import engine, SessionLocal
+from backend.models import User, Affiliate, Supplier, Find, Base
 
 
 Base.metadata.create_all(bind=engine)
