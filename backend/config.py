@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     CORS_ORIGINS: List[str] = Field(
         default_factory=lambda: [
             "https://lboy2006.github.io/fletapp1",
+            "https://lboy2006.github.io"
         ],
         env="CORS_ORIGINS",
     )
