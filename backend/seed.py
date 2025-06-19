@@ -1,6 +1,6 @@
 from datetime import date
 from .database import engine, SessionLocal
-from .models import User, Affiliate, Supplier, Base
+from .models import User, Affiliate, Supplier, Find, Base
 
 Base.metadata.create_all(bind=engine)
 
@@ -50,6 +50,27 @@ def seed():
             )
         ]
         db.add_all(suppliers)
+        db.commit()
+    if not db.query(Find).first():
+        finds = [
+            Find(
+                name='iPhone 15 Pro',
+                description='Флагманский смартфон 2024 года',
+                photo_url='https://via.placeholder.com/300',
+                price=150000,
+                supplier_id=1,
+                created_at=date(2024, 6, 1)
+            ),
+            Find(
+                name='Кроссовки Limited',
+                description='Редкая модель',
+                photo_url='https://via.placeholder.com/300',
+                price=25000,
+                supplier_id=2,
+                created_at=date(2024, 5, 28)
+            )
+        ]
+        db.add_all(finds)
         db.commit()
     db.close()
 
