@@ -12,6 +12,8 @@ router = APIRouter()
 
 def check_telegram_auth(init_data: str, bot_token: str) -> dict:
     data = dict(urllib.parse.parse_qsl(init_data))
+    print(data)
+    print(init_data)
     hash_ = data.pop('hash', None)
     data_check_string = '\n'.join(f"{k}={v}" for k, v in sorted(data.items()))
     secret_key = hashlib.sha256(bot_token.encode()).digest()
@@ -24,6 +26,7 @@ def check_telegram_auth(init_data: str, bot_token: str) -> dict:
 async def telegram_auth(request: Request, db: Session = Depends(get_db)):
     body = await request.json()
     init_data = body.get('initData')
+
     if not init_data:
         raise HTTPException(status_code=400, detail="initData required")
     bot_token = get_settings().TELEGRAM_BOT_TOKEN  # Добавь TELEGRAM_BOT_TOKEN в config
