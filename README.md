@@ -37,3 +37,13 @@ npm run dev
 pip install -r requirements.txt
 uvicorn backend.main:app --reload
 ```
+
+## Миграции базы данных
+Для управления схемой базы используется Alembic. Инициализация выполняется командой
+```bash
+alembic upgrade head
+```
+При изменении моделей создавайте новую миграцию
+```bash
+alembic revision --autogenerate -m "my change"
+```
