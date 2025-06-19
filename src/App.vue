@@ -229,9 +229,9 @@ function applySafeInsets() {
     const safeInset = Telegram.WebApp.contentSafeAreaInset;
     if (safeInset) {
       const insetBottom = parseInt(safeInset.bottom) || 0;
-      navBottom.value = insetBottom + 10;
+      navBottom.value = insetBottom;
     } else {
-      navBottom.value = 10;
+      navBottom.value = 0;
     }
     document.querySelectorAll('.page').forEach(p => {
       if (isFullscreen && safeInset) {
