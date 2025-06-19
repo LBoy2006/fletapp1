@@ -41,6 +41,7 @@ def check_telegram_auth(init_data: str, bot_token: str) -> dict:
 @router.post('/auth/telegram')
 async def telegram_auth(request: Request, db: Session = Depends(get_db)):
     body = await request.json()
+    print('RAW INITDATA:', body.get('initData'))
     init_data = body.get('initData')
 
     if not init_data:
