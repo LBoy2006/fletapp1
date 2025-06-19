@@ -12,19 +12,15 @@ router = APIRouter()
 
 
 def check_telegram_auth(init_data: str, bot_token: str) -> dict:
-    import urllib.parse
-    import hmac
-    import hashlib
-
     data = dict(urllib.parse.parse_qsl(init_data))
     hash_ = data.pop('hash', None)
     data.pop('signature', None)
     data_check_string = '\n'.join(f"{k}={v}" for k, v in sorted(data.items()))
-    # Создаём секретный ключ именно так:
+    # Исправлено!
     secret_key = hmac.new(
-        b'WebAppData',
-        bot_token.encode(),
-        hashlib.sha256
+        key=bot_token.encode(),
+        msg=b'WebAppData',
+        digestmod=hashlib.sha256
     ).digest()
     calculated_hash = hmac.new(
         secret_key,
@@ -39,6 +35,7 @@ def check_telegram_auth(init_data: str, bot_token: str) -> dict:
         print("secret_key (hex):", secret_key.hex())
         raise HTTPException(status_code=403, detail="Invalid Telegram auth data")
     return data
+
 
 
 @router.post('/auth/telegram')
