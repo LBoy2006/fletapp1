@@ -11,10 +11,6 @@ class Settings(BaseSettings):
     DATABASE_URL: str = Field(default="sqlite:///./app.db", env="DATABASE_URL")
     CORS_ORIGINS: List[str] = Field(
         default_factory=lambda: [
-            "http://localhost:5173",
-            "http://127.0.0.1:5173",
-            "https://1chn.gptbrainbot.ru",
-            "http://172.31.27.43:5173",
             "https://lboy2006.github.io/fletapp1",
         ],
         env="CORS_ORIGINS",
