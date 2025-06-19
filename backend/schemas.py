@@ -58,3 +58,15 @@ class SupplierContacts(BaseModel):
     contact_password: str | None = None
 
     model_config = {"from_attributes": True}
+
+
+class FindOut(BaseModel):
+    id: int
+    name: str
+    description: str | None = None
+    photo_url: str | None = None
+    price: int | None = None
+    supplier_id: int | None = None
+    created_at: datetime
+
+    model_config = {"from_attributes": True}

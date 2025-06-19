@@ -133,3 +133,17 @@ def toggle_favorite(supplier_id: int, data: dict, db: Session = Depends(get_db))
         db.add(fav)
         db.commit()
         return {'favorite': True}
+
+
+@app.get('/suppliers/{supplier_id}', response_model=schemas.SupplierOut)
+def get_supplier(supplier_id: int, db: Session = Depends(get_db)):
+    s = db.query(models.Supplier).filter(models.Supplier.id == supplier_id).first()
+    if not s:
+        raise HTTPException(status_code=404, detail='Supplier not found')
+    return schemas.SupplierOut.model_validate(s)
+
+
+@app.get('/finds', response_model=list[schemas.FindOut])
+def list_finds(db: Session = Depends(get_db)):
+    items = db.query(models.Find).order_by(models.Find.created_at.desc()).all()
+    return items

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, Boolean
+from sqlalchemy import Column, Integer, String, Date, Boolean, DateTime
 from .database import Base
 
 class User(Base):
@@ -43,3 +43,14 @@ class FavoriteSupplier(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, index=True)
     supplier_id = Column(Integer, index=True)
+
+
+class Find(Base):
+    __tablename__ = 'finds'
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    description = Column(String)
+    photo_url = Column(String)
+    price = Column(Integer)
+    supplier_id = Column(Integer, index=True)
+    created_at = Column(DateTime)
