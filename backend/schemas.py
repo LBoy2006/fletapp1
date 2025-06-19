@@ -5,6 +5,8 @@ class UserBase(BaseModel):
     agent_number: str
     join_date: date | None = None
     location: str | None = None
+    telegram_id: int | None = None
+    subscription_active: bool | None = None
 
 class UserCreate(UserBase):
     pass
@@ -70,3 +72,12 @@ class FindOut(BaseModel):
     created_at: datetime
 
     model_config = {"from_attributes": True}
+
+
+class AuthRequest(BaseModel):
+    init_data: str
+
+
+class AuthResult(BaseModel):
+    is_member: bool
+    user: UserOut | None = None
