@@ -1,17 +1,7 @@
 <template>
   <div class="relative">
     <button class="absolute top-2 left-2 text-xl" @click="goBack"><i class="fas fa-arrow-left"></i></button>
-    <div class="flex items-center bg-gray-600 p-3 rounded mb-4">
-      <img :src="user.photo_url || 'assets/icon.png'" class="w-12 h-12 rounded-full mr-3" />
-      <div class="flex-1">
-        <div class="font-semibold">{{ user.username || user.first_name || 'User' }}</div>
-        <div class="text-sm">{{ t.points }}: {{ userData.score }}</div>
-        <div class="w-full bg-gray-700 rounded h-2 mt-1">
-          <div class="bg-green-500 h-2 rounded" :style="{ width: progress + '%' }"></div>
-        </div>
-      </div>
-    </div>
-    <button @click="showInfo()" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Инфо</button>
+    <!-- user block and info button removed -->
     <div class="mt-4 space-y-4">
       <div class="flex items-center justify-between w-full">
         <span class="mr-2">{{ t.theme }}</span>
@@ -46,7 +36,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { userData } from '../state';
-const props = defineProps({ t: Object, showInfo: Function });
+const props = defineProps({ t: Object });
 
 function goBack() {
   if (window.showPage) window.showPage('profile');
