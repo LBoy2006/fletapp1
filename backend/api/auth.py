@@ -14,9 +14,8 @@ router = APIRouter()
 def check_telegram_auth(init_data: str, bot_token: str) -> dict:
     data = dict(urllib.parse.parse_qsl(init_data))
     hash_ = data.pop('hash', None)
-    data.pop('signature', None)
+    data.pop('signature', None)  # <-- важно!
     data_check_string = '\n'.join(f"{k}={v}" for k, v in sorted(data.items()))
-    # Исправлено!
     secret_key = hmac.new(
         key=bot_token.encode(),
         msg=b'WebAppData',
@@ -35,6 +34,7 @@ def check_telegram_auth(init_data: str, bot_token: str) -> dict:
         print("secret_key (hex):", secret_key.hex())
         raise HTTPException(status_code=403, detail="Invalid Telegram auth data")
     return data
+
 
 
 
