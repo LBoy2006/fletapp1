@@ -221,7 +221,6 @@ function applySafeInsets() {
     const isFullscreen = Telegram.WebApp.isFullscreen;
     const safeInset = Telegram.WebApp.contentSafeAreaInset;
     if (safeInset) {
-      pagesRef.value.style.paddingBottom = `${safeInset.bottom}px`;
       document.querySelector('nav').style.bottom = `${safeInset.bottom}px`;
     }
     document.querySelectorAll('.page').forEach(p => {
