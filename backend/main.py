@@ -1,27 +1,22 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import date
+
+from .config import get_settings
 
 from . import models, schemas
 from .database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+settings = get_settings()
 
-# CORS settings to allow requests from the frontend during development
-origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://1chn.gptbrainbot.ru",
-    "http://172.31.27.43:5173",
-    "https://lboy2006.github.io/fletapp1"
-]
+app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # временно для разработки
+    allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
