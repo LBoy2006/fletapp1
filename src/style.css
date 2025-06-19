@@ -25,22 +25,65 @@ body {
   overscroll-behavior-y: contain;
 }
 nav {
-  background-color: transparent;
-  border-color: var(--nav-border-color);
-  color: var(--nav-text-color);
-  overflow: visible;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: #1a1a1d; /* глубокий тёмный фон */
+  border-top: 1.5px solid #232329;
+  z-index: 100;
+  padding: 0 0 4px 0;
+  height: 60px;
+  box-sizing: border-box;
 }
+
+.nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+  min-width: 44px;
+  height: 100%;
+  transition: color 0.2s;
+}
+
 .nav-btn .icon {
-  color: blue;
-  transition: transform 0.3s;
+  font-size: 26px;
+  color: #6b7280; /* неактивный — серый */
+  transition: color 0.25s, transform 0.3s;
+  z-index: 1;
 }
+
+/* Акцент для активной кнопки */
 .nav-btn.active .icon {
-  color: var(--active-color);
-  transform: scale(2.4) translateY(-0.3rem);
+  color: #40a9ff; /* активная — голубой/синий */
+  transform: scale(1.25) translateY(-7px);
 }
-.nav-btn.active {
-  color: var(--active-color);
+
+.nav-btn.active::before {
+  content: "";
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 18px;
+  background: #1a1a1d;
+  border-radius: 0 0 30px 30px;
+  box-shadow: 0px -4px 14px 0px rgba(64,169,255,0.09);
+  z-index: 0;
 }
+
 .nav-label {
   position: absolute;
   left: 50%;
