@@ -11,9 +11,6 @@ const Root = {
     const member = ref(false);
 
     onMounted(async () => {
-      // Authentication disabled for now. Always enable member mode.
-      // Uncomment the code below to restore Telegram WebApp authentication.
-      /*
       if (window.Telegram?.WebApp) {
         try {
           const resp = await fetch('http://localhost:8000/auth/telegram', {
@@ -32,8 +29,6 @@ const Root = {
           console.error(e);
         }
       }
-      */
-      member.value = true;
       loading.value = false;
     });
 
