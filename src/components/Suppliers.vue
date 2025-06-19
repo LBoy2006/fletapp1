@@ -50,16 +50,11 @@
       </div>
     </div>
 
-    <transition name="modal-fade">
-      <div v-if="contactModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10" @click.self="closeContacts">
-        <div class="p-4 rounded w-64 select-none" style="background-color: var(--page-bg-color); color: var(--text-color);" @contextmenu.prevent @copy.prevent>
-          <div class="space-y-1 text-sm">
-            <div><span class="text-gray-400">Ссылка:</span> {{ contacts.contact_link || '—' }}</div>
-            <div><span class="text-gray-400">Телефон:</span> {{ contacts.contact_phone || '—' }}</div>
-            <div><span class="text-gray-400">Пароль:</span> {{ contacts.contact_password || '—' }}</div>
-          </div>
-          <button @click="closeContacts" class="mt-3 px-4 py-2 bg-blue-600 text-white rounded w-full">Закрыть</button>
-        </div>
+    <transition name="snackbar-slide">
+      <div v-if="contactSnackbar" class="snackbar p-3 rounded shadow-lg text-sm space-y-1" style="background-color: var(--page-bg-color); color: var(--text-color);">
+        <div><span class="text-gray-400">Ссылка:</span> {{ contacts.contact_link || '—' }}</div>
+        <div><span class="text-gray-400">Телефон:</span> {{ contacts.contact_phone || '—' }}</div>
+        <div><span class="text-gray-400">Пароль:</span> {{ contacts.contact_password || '—' }}</div>
       </div>
     </transition>
   </div>
@@ -76,8 +71,9 @@ const selectedCat1 = ref([])
 const selectedCat2 = ref([])
 const suppliers = ref([])
 const showFavOnly = ref(false)
-const contactModal = ref(false)
+const contactSnackbar = ref(false)
 const contacts = ref({})
+let snackbarTimer = null
 
 async function loadCategories1() {
   try {
@@ -136,14 +132,11 @@ async function openContacts(s) {
     const r = await fetch(`http://localhost:8000/suppliers/${s.id}/contacts`)
     if (r.ok) {
       contacts.value = await r.json()
-      contactModal.value = true
+      contactSnackbar.value = true
+      clearTimeout(snackbarTimer)
+      snackbarTimer = setTimeout(() => (contactSnackbar.value = false), 3000)
     }
   } catch (e) { console.error(e) }
-}
-
-function closeContacts() {
-  contactModal.value = false
-  contacts.value = {}
 }
 
 onMounted(() => {

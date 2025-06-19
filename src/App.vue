@@ -7,7 +7,7 @@
           :key="page"
           class="page w-full h-full flex-shrink-0 overflow-auto p-4"
         >
-          <component :is="pages[page]" :t="t" :show-info="showInfo" />
+          <component :is="pages[page]" :t="t" />
         </section>
       </div>
     </div>
@@ -25,14 +25,7 @@
       </button>
     </nav>
 
-    <transition name="modal-fade">
-      <div v-if="infoModal" id="info-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10" @click.self="infoModal = false">
-        <div class="modal-content p-4 rounded" style="background-color: var(--page-bg-color); color: var(--text-color); min-width:240px;">
-          <p>Это небольшое информационное окно.</p>
-          <button @click="infoModal = false" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">Закрыть</button>
-        </div>
-      </div>
-    </transition>
+    <!-- info modal removed -->
 
     <transition name="snackbar-slide">
       <div v-if="feedSnackbar" class="snackbar p-3 rounded shadow-lg" style="background-color: var(--page-bg-color); color: var(--text-color);">
@@ -68,7 +61,6 @@ const pages = { finds: Finds, suppliers: Suppliers, affiliate: Affiliate, profil
 const lang = ref(localStorage.getItem('lang') || 'ru');
 const t = computed(() => translations[lang.value] || translations.ru);
 const currentIndex = ref(pageOrder.indexOf('finds'));
-const infoModal = ref(false);
 const feedSnackbar = ref(false);
 const pagesRef = ref(null);
 const innerRef = ref(null);
@@ -93,9 +85,6 @@ function showPage(page) {
   dragOffset.value = 0;
   isDragging.value = false;
   revealLabels();
-}
-function showInfo() {
-  infoModal.value = true;
 }
 
 let snackbarTimer = null;
