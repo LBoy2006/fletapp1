@@ -37,7 +37,7 @@ nav {
   border-top: 1.5px solid #232329;
   z-index: 1000;
   padding: 0 0 4px 0;
-  height: 60px;
+  height: 80px;
   box-sizing: border-box;
 }
 
@@ -88,7 +88,7 @@ nav {
 .nav-label {
   position: absolute;
   left: 50%;
-  bottom: 0.25rem;
+  bottom: 0;
   transform: translate(-50%, 100%);
   opacity: 0;
   transition: transform 0.3s, opacity 0.3s;
@@ -121,7 +121,7 @@ nav.show-labels .nav-label {
 .snackbar {
   position: fixed;
   left: 50%;
-  bottom: calc(60px + 1rem);
+  bottom: calc(80px + 1rem);
   transform: translateX(-50%);
   z-index: 1100;
 }
