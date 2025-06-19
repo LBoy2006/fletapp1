@@ -99,20 +99,8 @@ function showInfo() {
 }
 
 let snackbarTimer = null;
-function updateSnackbarPosition() {
-  const nav = navRef.value;
-  const snackbar = document.querySelector(".snackbar");
-  if (nav && snackbar) {
-    const navBottom = parseInt(window.getComputedStyle(nav).bottom) || 0;
-    const navHeight = nav.offsetHeight;
-    const spacing = 16;
-    snackbar.style.bottom = `${navBottom + navHeight + spacing}px`;
-  }
-}
-
 function onNavClick(item) {
   if (item === 'feed') {
-    updateSnackbarPosition();
     feedSnackbar.value = true;
     clearTimeout(snackbarTimer);
     snackbarTimer = setTimeout(() => (feedSnackbar.value = false), 3000);
@@ -245,7 +233,6 @@ function applySafeInsets() {
       }
     });
   }
-  updateSnackbarPosition();
 }
 window.applySafeInsets = applySafeInsets;
 window.showPage = showPage;
@@ -255,8 +242,6 @@ onMounted(() => {
     Telegram.WebApp.ready();
     Telegram.WebApp.disableVerticalSwipes();
     applySafeInsets();
-  } else {
-    updateSnackbarPosition();
   }
   showPage('finds');
 });
