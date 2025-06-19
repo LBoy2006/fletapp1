@@ -8,13 +8,7 @@ def seed():
     db = SessionLocal()
     user = db.query(User).first()
     if not user:
-        user = User(
-            agent_number='chn_098',
-            join_date=date(2024, 1, 1),
-            location='Москва',
-            telegram_id=123,
-            subscription_active=True,
-        )
+        user = User(agent_number='chn_098', join_date=date(2024,1,1), location='Москва')
         db.add(user)
         db.commit()
     if not db.query(Affiliate).filter(Affiliate.user_id == user.id).first():
