@@ -127,7 +127,7 @@ async function openContacts(s) {
         `Телефон: ${data.contact_phone || '—'}`,
         `Пароль: ${data.contact_password || '—'}`
       ]
-      if (window.showSnackbar) window.showSnackbar(lines)
+      if (window.showSheet) window.showSheet(lines)
     }
   } catch (e) { console.error(e) }
 }

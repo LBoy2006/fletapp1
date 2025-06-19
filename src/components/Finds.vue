@@ -121,7 +121,7 @@ async function openSupplier(id) {
         `Телефон: ${c.contact_phone || '—'}`,
         `Пароль: ${c.contact_password || '—'}`
       ]
-      if (window.showSnackbar) window.showSnackbar(lines)
+      if (window.showSheet) window.showSheet(lines)
     }
     supplierModal.value = true
   } catch (e) {
