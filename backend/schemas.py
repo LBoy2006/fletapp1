@@ -14,8 +14,7 @@ class UserOut(UserBase):
     days_in_club: int | None = None
     status: str | None = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 
 class AffiliateBase(BaseModel):
@@ -35,8 +34,7 @@ class AffiliateBase(BaseModel):
 class AffiliateOut(AffiliateBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 
 class SupplierBase(BaseModel):
@@ -51,8 +49,7 @@ class SupplierOut(SupplierBase):
     id: int
     is_favorite: bool | None = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 
 class SupplierContacts(BaseModel):
@@ -60,5 +57,4 @@ class SupplierContacts(BaseModel):
     contact_phone: str | None = None
     contact_password: str | None = None
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
