@@ -10,17 +10,32 @@ from backend.config import get_settings
 
 router = APIRouter()
 
+
 def check_telegram_auth(init_data: str, bot_token: str) -> dict:
     data = dict(urllib.parse.parse_qsl(init_data))
-    print(data)
-    print(init_data)
     hash_ = data.pop('hash', None)
+    data.pop('signature', None)  # На всякий случай, если есть
     data_check_string = '\n'.join(f"{k}={v}" for k, v in sorted(data.items()))
-    secret_key = hashlib.sha256(bot_token.encode()).digest()
-    calculated_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
+
+    # !!! Ключ HMAC для подписи данных мини-апа:
+    secret_key = hmac.new(
+        b'WebAppData',
+        msg=bot_token.encode(),
+        digestmod=hashlib.sha256
+    ).digest()
+
+    calculated_hash = hmac.new(
+        secret_key,
+        data_check_string.encode(),
+        hashlib.sha256
+    ).hexdigest()
     if calculated_hash != hash_:
+        print("Calculated:", calculated_hash)
+        print("Received:", hash_)
+        print("Data check string:", data_check_string)
         raise HTTPException(status_code=403, detail="Invalid Telegram auth data")
     return data
+
 
 @router.post('/auth/telegram')
 async def telegram_auth(request: Request, db: Session = Depends(get_db)):
