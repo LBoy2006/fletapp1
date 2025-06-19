@@ -93,10 +93,15 @@ nav {
   opacity: 0;
   transition: transform 0.3s, opacity 0.3s;
   pointer-events: none;
+  color: #6b7280;
 }
 nav.show-labels .nav-label {
   transform: translate(-50%, 0);
   opacity: 1;
+}
+
+.nav-btn.active .nav-label {
+  color: #40a9ff;
 }
 #info-modal .modal-content {
   background-color: var(--page-bg-color);
