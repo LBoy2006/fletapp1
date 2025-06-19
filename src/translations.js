@@ -22,6 +22,7 @@ export const translations = {
     ,chat: 'Чат'
     ,support: 'Техподдержка'
     ,settings: 'Настройки'
+    ,close: 'Закрыть'
   },
   en: {
     feed: 'Feed',
@@ -46,6 +47,7 @@ export const translations = {
     chat: 'Chat',
     support: 'Support',
     settings: 'Settings'
+    ,close: 'Close'
   }
 };
 
