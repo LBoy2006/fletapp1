@@ -22,23 +22,32 @@ def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400
     :return: dict с распарсенными данными Telegram-пользователя
     :raises: ValueError, если подпись невалидна или токен устарел
     """
-    # Парсим строку запроса
+
+
+
+
+    # 1. Парсим строку
     data = dict(urllib.parse.parse_qsl(init_data))
     hash_ = data.pop('hash', None)
-    data.pop('signature', None)  # Telegram иногда добавляет signature - убираем
+    #data.pop('signature', None)
 
-    # Собираем строку для подписи
+    # 2. Строим строку для подписи
     check_string = '\n'.join(f"{k}={v}" for k, v in sorted(data.items()))
 
-    # Ключ для подписи — по документации Mini App!
+    # 3. Ключ для подписи — HMAC-SHA256(bot_token, "WebAppData")
     secret_key = hmac.new(
-        msg=bot_token.encode('utf-8'),
+        msg=bytes(bot_token, 'utf-8'),
         key=b'WebAppData',
         digestmod=hashlib.sha256
     ).digest()
 
-    # Проверяем подпись
-    expected_hash = hmac.new(secret_key, check_string.encode('utf-8'), hashlib.sha256).hexdigest()
+    # 4. Считаем подпись для строки данных
+    expected_hash = hmac.new(
+        key=secret_key,
+        msg=check_string.encode('utf-8'),
+        digestmod=hashlib.sha256
+    ).hexdigest()
+
     if expected_hash != hash_:
         print('Calculated:', expected_hash)
         print('Received:', hash_)
@@ -47,17 +56,11 @@ def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400
         print('secret_key (hex):', secret_key.hex())
         raise HTTPException(status_code=403, detail="Invalid Telegram WebApp initData signature")
 
-    # Проверяем свежесть данных (24 часа — стандарт Telegram)
-    if 'auth_date' in data:
-        if time.time() - int(data['auth_date']) > max_age_sec:
-            raise ValueError("Telegram WebApp initData expired")
+    # 5. Проверка на актуальность токена
+    if 'auth_date' in data and time.time() - int(data['auth_date']) > 86400:
+        raise HTTPException(status_code=403, detail="InitData is outdated")
 
     return data
-
-
-
-
-
 
 
 @router.post('/auth/telegram')
