@@ -1,9 +1,60 @@
 from __future__ import annotations
 
-from sqlalchemy import select
+import base64
+from datetime import date
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import models
+
+
+def encode_referral(user_id: int) -> str:
+    """Encode user id for referral link."""
+    return base64.urlsafe_b64encode(str(user_id).encode()).decode()
+
+
+def decode_referral(code: str) -> int:
+    """Decode user id from referral code."""
+    return int(base64.urlsafe_b64decode(code.encode()).decode())
+
+
+def generate_referral_link(user_id: int) -> str:
+    code = encode_referral(user_id)
+    return f"https://t.me/club_bot?start={code}"
+
+
+async def create_user(
+    db: AsyncSession,
+    *,
+    user_id: int,
+    agent_number: str,
+    referrer_id: int | None = None,
+) -> models.User:
+    user = models.User(
+        id=user_id,
+        agent_number=agent_number,
+        join_date=date.today(),
+        location="",
+        is_member=False,
+        referrer_id=referrer_id,
+    )
+    db.add(user)
+    await db.commit()
+    await db.refresh(user)
+    return user
+
+
+async def create_affiliate(db: AsyncSession, user_id: int) -> models.Affiliate:
+    result = await db.execute(
+        select(models.MotivationPhrase.text).order_by(func.random()).limit(1)
+    )
+    phrase = result.scalar_one_or_none() or ""
+    link = generate_referral_link(user_id)
+    stat = models.Affiliate(user_id=user_id, motivation=phrase, referral_link=link)
+    db.add(stat)
+    await db.commit()
+    await db.refresh(stat)
+    return stat
 
 
 async def get_user(db: AsyncSession, user_id: int) -> models.User | None:

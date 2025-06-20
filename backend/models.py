@@ -8,6 +8,7 @@ class User(Base):
     join_date = Column(Date)
     location = Column(String)
     is_member = Column(Boolean, default=False)
+    referrer_id = Column(Integer, index=True)
 
 
 class Affiliate(Base):
@@ -24,6 +25,12 @@ class Affiliate(Base):
     referral_link = Column(String)
     materials_link = Column(String)
     withdraw_requested = Column(Boolean, default=False)
+
+
+class MotivationPhrase(Base):
+    __tablename__ = 'motivation_phrases'
+    id = Column(Integer, primary_key=True, index=True)
+    text = Column(String, nullable=False)
 
 
 class Supplier(Base):
