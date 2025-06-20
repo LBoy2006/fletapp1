@@ -23,6 +23,18 @@ def generate_referral_link(user_id: int) -> str:
     return f"https://t.me/club_bot?start={code}"
 
 
+async def generate_agent_number(db: AsyncSession) -> str:
+    """Return next agent number like chn_001, chn_002, ..."""
+    result = await db.execute(select(models.User.agent_number))
+    max_num = 0
+    for agent in result.scalars().all():
+        if agent and agent.startswith("chn_"):
+            part = agent.split("_")[-1]
+            if part.isdigit():
+                max_num = max(max_num, int(part))
+    return f"chn_{max_num + 1:03d}"
+
+
 async def create_user(
     db: AsyncSession,
     *,
