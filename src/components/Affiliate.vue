@@ -76,7 +76,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { API_BASE } from '../api';
-import { userData } from '../state';
 
 const props = defineProps({ t: Object });
 
@@ -94,7 +93,7 @@ const canWithdraw = computed(() => (stats.value.balance || 0) >= 5000);
 
 async function loadData() {
   try {
-    const respUser = await fetch(`${API_BASE}/users/${userData.user.id}`);
+    const respUser = await fetch(`${API_BASE}/users/1`);
     if (respUser.ok) {
       const user = await respUser.json();
       nickname.value = 'Агент ' + (user.agent_number || '—');
@@ -103,7 +102,7 @@ async function loadData() {
     console.error(e);
   }
   try {
-    const resp = await fetch(`${API_BASE}/affiliate/${userData.user.id}`);
+    const resp = await fetch(`${API_BASE}/affiliate/1`);
     if (resp.ok) {
       stats.value = await resp.json();
       withdrawRequested.value = stats.value.withdraw_requested;
@@ -115,7 +114,7 @@ async function loadData() {
 
 async function onWithdraw() {
   try {
-    const resp = await fetch(`${API_BASE}/affiliate/${userData.user.id}/withdraw`, { method: 'POST' });
+    const resp = await fetch(`${API_BASE}/affiliate/1/withdraw`, { method: 'POST' });
     if (resp.ok) {
       const data = await resp.json();
       stats.value = data;
