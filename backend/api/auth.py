@@ -1,5 +1,6 @@
 import hashlib
 import hmac
+import json
 import urllib.parse
 from fastapi import APIRouter, HTTPException, Request, Depends
 from sqlalchemy.orm import Session
@@ -74,10 +75,12 @@ async def telegram_auth(request: Request, db: Session = Depends(get_db)):
     bot_token = get_settings().TELEGRAM_BOT_TOKEN  # Добавь TELEGRAM_BOT_TOKEN в config
 
     user_data = check_telegram_auth(init_data, bot_token)
-    user_id = int(user_data['user'])
-    first_name = user_data.get('user[first_name]', '')
-    last_name = user_data.get('user[last_name]', '')
-    username = user_data.get('user[username]', '')
+    user_json = user_data['user']
+    user_obj = json.loads(user_json)
+    user_id = int(user_obj['id'])
+    first_name = user_obj.get('first_name', '')
+    last_name = user_obj.get('last_name', '')
+    username = user_obj.get('username', '')
 
     # Проверяем/создаём пользователя
     user = db.query(User).filter(User.id == user_id).first()
