@@ -1,6 +1,16 @@
 <template>
-  <div class="space-y-4 p-4">
-    <h2 class="text-2xl font-bold text-center">Товары дня</h2>
+  <div class="finds-container px-3 py-4 space-y-4">
+    <!-- Фильтр и заголовок -->
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-lg font-bold">Finds</span>
+      <span class="text-2xl font-extrabold">1chn</span>
+      <button class="text-purple-400 text-sm font-bold flex items-center gap-1">
+        <span>Filters</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+    </div>
 
     <div v-if="error" class="text-center text-red-500 py-10">
       Не удалось загрузить товары дня. Попробуйте позже.
@@ -9,37 +19,66 @@
     <div v-else-if="!finds.length" class="text-center text-gray-500 py-10">
       Сегодня пока нет новых товаров
     </div>
-
-    <div v-else class="space-y-4">
+    <div v-else class="space-y-3">
       <div
         v-for="f in finds"
         :key="f.id"
-        class="bg-gray-800 p-4 rounded"
+        class="find-card relative bg-[#222227] rounded-2xl px-3 py-3 flex items-center gap-3 shadow-sm"
       >
+        <!-- Статус -->
+        <div v-if="f.badge" class="absolute left-2 top-2 z-10">
+          <span
+            v-if="f.badge === 'NEW'"
+            class="inline-block bg-blue-800 text-xs text-white rounded-lg px-2 py-0.5 font-bold"
+          >NEW</span>
+          <span
+            v-else-if="f.badge === 'HOT'"
+            class="inline-block bg-orange-700 text-xs text-white rounded-lg px-2 py-0.5 font-bold"
+          >🔥</span>
+          <span
+            v-else-if="f.badge === 'GOLD'"
+            class="inline-block bg-yellow-500 text-xs text-black rounded-lg px-2 py-0.5 font-bold"
+          >$</span>
+        </div>
+        <!-- Фото -->
         <img
           :src="f.photo_url"
           alt=""
-          class="w-full h-48 object-cover rounded mb-3"
+          class="w-16 h-16 rounded-xl object-cover bg-[#111]"
         />
-        <div class="font-semibold truncate mb-1">{{ f.name }}</div>
-        <div class="text-lg font-bold mb-2">{{ formatR(f.price) }}</div>
-        <button
-          @click="openSupplier(f.supplier_id)"
-          class="w-full bg-blue-600 text-white py-2 rounded text-sm"
-        >
-          Смотреть у поставщика
-        </button>
+        <!-- Описание -->
+        <div class="flex-1 min-w-0">
+          <div class="font-bold text-base text-white truncate">{{ f.name }}</div>
+          <div class="text-xs text-gray-400 mb-1 truncate">{{ f.desc }}</div>
+          <div class="text-[#6e9fff] text-lg font-extrabold">
+            {{ f.price ? formatR(f.price) : '—' }}
+          </div>
+        </div>
+        <!-- Кнопка и лайк -->
+        <div class="flex flex-col items-end justify-between h-full min-w-[32px] gap-3">
+          <button @click="openSupplier(f.supplier_id)" class="rounded-full p-2 text-white bg-[#353666] hover:bg-[#5567c9]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                d="M9 5l7 7-7 7"/>
+            </svg>
+          </button>
+          <button class="like-btn" @click="toggleFav(f)">
+            <svg v-if="f.fav" class="w-5 h-5" fill="#a5b4fc" viewBox="0 0 20 20">
+              <path d="M3.172 5.172a4 4 0 0 1 5.656 0l.172.172.172-.172a4 4 0 1 1 5.656 5.656L10 17.657l-5.828-5.829a4 4 0 0 1 0-5.656z"/>
+            </svg>
+            <svg v-else class="w-5 h-5" fill="none" stroke="#a5b4fc" stroke-width="1.5" viewBox="0 0 20 20">
+              <path d="M3.172 5.172a4 4 0 0 1 5.656 0l.172.172.172-.172a4 4 0 1 1 5.656 5.656L10 17.657l-5.828-5.829a4 4 0 0 1 0-5.656z"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { API_BASE } from '../api'
-
-defineProps({ t: Object })
 
 const finds = ref([])
 const loading = ref(true)
@@ -56,16 +95,23 @@ async function loadFinds() {
   try {
     const r = await fetch(`${API_BASE}/finds`)
     if (r.ok) {
-      finds.value = await r.json()
+      finds.value = (await r.json()).map(f => ({
+        ...f,
+        fav: false, // инициализация лайка
+        badge: f.badge || null // badge: 'NEW' | 'HOT' | 'GOLD'
+      }))
     } else {
       error.value = true
     }
   } catch (e) {
-    console.error(e)
     error.value = true
   } finally {
     loading.value = false
   }
+}
+
+function toggleFav(f) {
+  f.fav = !f.fav
 }
 
 async function openSupplier(id) {
