@@ -89,7 +89,8 @@ async def telegram_auth(request: Request, db: Session = Depends(get_db)):
             id=user_id,
             agent_number=username,
             join_date=date.today(),
-            location=''
+            location='',
+            is_member=False
         )
         db.add(user)
         db.commit()
@@ -99,5 +100,6 @@ async def telegram_auth(request: Request, db: Session = Depends(get_db)):
         "id": user.id,
         "first_name": first_name,
         "last_name": last_name,
-        "username": username
+        "username": username,
+        "is_member": user.is_member
     }

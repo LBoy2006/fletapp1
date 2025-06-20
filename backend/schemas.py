@@ -13,6 +13,7 @@ class UserOut(UserBase):
     id: int
     days_in_club: int | None = None
     status: str | None = None
+    is_member: bool | None = None
 
     model_config = {"from_attributes": True}
 

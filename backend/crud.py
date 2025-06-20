@@ -22,6 +22,17 @@ def update_user(db: Session, user_id: int, *, location: str | None = None) -> mo
     return user
 
 
+def set_membership(db: Session, user_id: int, value: bool) -> models.User | None:
+    """Set user's membership status."""
+    user = get_user(db, user_id)
+    if not user:
+        return None
+    user.is_member = value
+    db.commit()
+    db.refresh(user)
+    return user
+
+
 def get_affiliate(db: Session, user_id: int) -> models.Affiliate | None:
     return db.query(models.Affiliate).filter(models.Affiliate.user_id == user_id).first()
 

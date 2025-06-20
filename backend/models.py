@@ -7,6 +7,7 @@ class User(Base):
     agent_number = Column(String, unique=True, index=True)
     join_date = Column(Date)
     location = Column(String)
+    is_member = Column(Boolean, default=False)
 
 
 class Affiliate(Base):

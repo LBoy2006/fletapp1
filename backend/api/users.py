@@ -36,3 +36,11 @@ def update_user(user_id: int, data: schemas.UserBase, db: Session = Depends(get_
     if not user:
         raise HTTPException(status_code=404, detail='User not found')
     return read_user(user_id, db)
+
+
+@router.post('/users/{user_id}/pay', response_model=schemas.UserOut)
+def pay_membership(user_id: int, db: Session = Depends(get_db)):
+    user = crud.set_membership(db, user_id, True)
+    if not user:
+        raise HTTPException(status_code=404, detail='User not found')
+    return read_user(user_id, db)
