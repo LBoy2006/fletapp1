@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from backend.main import app
-from backend import models
+from backend import models, crud
 from backend.database import get_db
 
 
@@ -43,15 +43,18 @@ def db_session(client):
 
     async def seed_data():
         async with SessionLocal() as db:
+            phrase = models.MotivationPhrase(text='Join us now!')
+            db.add(phrase)
+            await db.commit()
             user = models.User(agent_number='agent', join_date=date(2024, 1, 1), location='Moscow')
             db.add(user)
             await db.commit()
             await db.refresh(user)
-            affiliate = models.Affiliate(user_id=user.id)
+            await crud.create_affiliate(db, user.id)
             supplier1 = models.Supplier(name='Store A', contact_link='link')
             supplier2 = models.Supplier(name='Store B', contact_link='link')
             find = models.Find(name='Item', supplier_id=1, created_at=datetime.utcnow())
-            db.add_all([affiliate, supplier1, supplier2, find])
+            db.add_all([supplier1, supplier2, find])
             await db.commit()
             client.app.state.user_id = user.id
 

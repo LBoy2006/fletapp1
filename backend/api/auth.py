@@ -5,10 +5,10 @@ import urllib.parse
 from fastapi import APIRouter, HTTPException, Request, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from datetime import date
 from backend.database import get_db
 from backend.models import User
 from backend.config import get_settings
+from backend import crud
 import time
 
 
@@ -87,16 +87,20 @@ async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(User).where(User.id == user_id))
     user = result.scalar_one_or_none()
     if not user:
-        user = User(
-            id=user_id,
+        ref_param = user_data.get('start_param')
+        referrer_id = None
+        if ref_param:
+            try:
+                referrer_id = crud.decode_referral(ref_param)
+            except Exception:
+                referrer_id = None
+        user = await crud.create_user(
+            db,
+            user_id=user_id,
             agent_number=username,
-            join_date=date.today(),
-            location='',
-            is_member=False
+            referrer_id=referrer_id,
         )
-        db.add(user)
-        await db.commit()
-        await db.refresh(user)
+        await crud.create_affiliate(db, user.id)
 
     return {
         "id": user.id,
