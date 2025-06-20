@@ -5,6 +5,7 @@ import Suppliers from './components/Suppliers.vue';
 import Affiliate from './components/Affiliate.vue';
 import Profile from './components/Profile.vue';
 import ProfileSettings from './components/ProfileSettings.vue';
+import Payment from './components/Payment.vue';
 import { userData } from './state';
 import { translations } from './translations.js';
 
@@ -32,6 +33,7 @@ const showLabels = ref(false);
 const navBottom = ref(0);
 const dragOffset = ref(0);
 const isDragging = ref(false);
+const showPayment = ref(false);
 let hideTimer = null;
 
 const dragStyle = computed(() => ({
@@ -71,6 +73,11 @@ function onNavClick(item) {
   showPage(item);
 }
 
+function onPaid() {
+  showPayment.value = false;
+  showPage('finds');
+}
+
 // --- Блок авторизации Telegram Mini App ---
 onMounted(() => {
   // Только при первом запуске приложения
@@ -89,6 +96,10 @@ onMounted(() => {
       })
         .then(res => res.json())
         .then(data => {
+          userData.user.is_member = data.is_member
+          if (!data.is_member) {
+            showPayment.value = true
+          }
           // Если backend вернёт доп. данные — можно сохранить:
           // userData.profile = data;
           // userData.token = data.token;
@@ -103,7 +114,8 @@ onMounted(() => {
       id: 123456,
       first_name: "Тест",
       last_name: "Пользователь",
-      username: "test_user"
+      username: "test_user",
+      is_member: false
     }
   }
 });
@@ -248,6 +260,31 @@ onMounted(() => {
     Telegram.WebApp.disableVerticalSwipes();
     applySafeInsets();
   }
-  showPage('finds');
+  if (!showPayment.value) {
+    showPage('finds');
+  }
 });
 </script>
+<template>
+  <Payment v-if="showPayment" @paid="onPaid" />
+  <div v-else class="h-full flex flex-col">
+    <div ref="pagesRef" class="flex-1 overflow-hidden">
+      <div ref="innerRef" class="flex" :style="dragStyle">
+        <div v-for="p in pageOrder" :key="p" class="page w-full flex-shrink-0 overflow-y-auto">
+          <component :is="pages[p]" :t="t" />
+        </div>
+      </div>
+    </div>
+    <nav ref="navRef" :class="{'show-labels': showLabels}" :style="{ bottom: navBottom + 'px' }">
+      <button v-for="item in navItems" :key="item" class="nav-btn" :class="{ active: pageOrder[currentIndex]===item }" @click="onNavClick(item)">
+        <i :class="['icon', pageIcons[item]]"></i>
+        <span class="nav-label">{{ t[item] }}</span>
+      </button>
+    </nav>
+    <transition name="modal-fade">
+      <div v-if="sheetVisible" class="fixed bottom-20 inset-x-0 mx-4 p-4 bg-gray-800 rounded" @click="hideSheet">
+        <p v-for="l in sheetLines" :key="l">{{ l }}</p>
+      </div>
+    </transition>
+  </div>
+</template>

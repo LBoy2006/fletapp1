@@ -19,3 +19,10 @@ def test_update_user(client, db_session):
     )
     assert response.status_code == 200
     assert response.json()['location'] == 'NY'
+
+
+def test_pay_membership(client, db_session):
+    uid = client.app.state.user_id
+    resp = client.post(f'/users/{uid}/pay')
+    assert resp.status_code == 200
+    assert resp.json()['is_member'] is True
