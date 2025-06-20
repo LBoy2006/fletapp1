@@ -7,42 +7,48 @@ from datetime import date
 from backend.database import get_db
 from backend.models import User
 from backend.config import get_settings
+import time
+
 
 router = APIRouter()
 
 
-def check_telegram_auth(init_data: str, bot_token: str) -> dict:
-    import urllib.parse
-    import hmac
-    import hashlib
-    import time
-
+def check_telegram_webapp_auth(init_data: str, bot_token: str, max_age_sec: int = 86400) -> dict:
+    """
+    Проверка подписи и срока годности initData от Telegram Mini App.
+    :param init_data: строка из window.Telegram.WebApp.initData
+    :param bot_token: токен вашего Telegram-бота (строка)
+    :param max_age_sec: максимальный возраст токена (по умолчанию 24ч)
+    :return: dict с распарсенными данными Telegram-пользователя
+    :raises: ValueError, если подпись невалидна или токен устарел
+    """
+    # Парсим строку запроса
     data = dict(urllib.parse.parse_qsl(init_data))
     hash_ = data.pop('hash', None)
-    data.pop('signature', None)  # На всякий случай
+    data.pop('signature', None)  # Telegram иногда добавляет signature - убираем
+
+    # Собираем строку для подписи
     check_string = '\n'.join(f"{k}={v}" for k, v in sorted(data.items()))
 
-    # Ключ именно так, как в твоём рабочем примере:
+    # Ключ для подписи — по документации Mini App!
     secret_key = hmac.new(
-        msg=bot_token.encode(),
+        msg=bot_token.encode('utf-8'),
         key=b'WebAppData',
         digestmod=hashlib.sha256
     ).digest()
 
+    # Проверяем подпись
     expected_hash = hmac.new(secret_key, check_string.encode('utf-8'), hashlib.sha256).hexdigest()
     if expected_hash != hash_:
-        print('Calculated:', expected_hash)
-        print('Received:', hash_)
-        print('Data check string:', check_string)
-        print('BOT_TOKEN:', bot_token)
-        print('secret_key (hex):', secret_key.hex())
-        raise HTTPException(status_code=403, detail="Invalid Telegram auth data")
+        raise ValueError("Invalid Telegram WebApp initData signature")
 
-    # Время жизни токена (рекомендовано Telegram)
-    if 'auth_date' in data and time.time() - int(data['auth_date']) > 86400:
-        raise HTTPException(status_code=403, detail="InitData is outdated")
+    # Проверяем свежесть данных (24 часа — стандарт Telegram)
+    if 'auth_date' in data:
+        if time.time() - int(data['auth_date']) > max_age_sec:
+            raise ValueError("Telegram WebApp initData expired")
 
     return data
+
 
 
 
