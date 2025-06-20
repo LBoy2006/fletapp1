@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { userData } from '../state';
 import { API_BASE } from '../api';
 const props = defineProps({ t: Object });
@@ -39,6 +39,7 @@ const numDisplay = computed(() => {
 });
 
 async function loadUser() {
+  if (!userData.user.id) return;
   try {
     const resp = await fetch(`${API_BASE}/users/${userData.user.id}`);
     if (resp.ok) {
@@ -56,6 +57,10 @@ function openSettings() {
 }
 
 onMounted(loadUser);
+
+watch(() => userData.user.id, id => {
+  if (id) loadUser();
+});
 </script>
 
 <style scoped>

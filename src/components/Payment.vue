@@ -10,6 +10,7 @@ import { API_BASE } from '../api'
 const emit = defineEmits(['paid'])
 
 async function pay() {
+  if (!userData.user.id) return
   try {
     await fetch(`${API_BASE}/users/${userData.user.id}/pay`, { method: 'POST' })
     userData.user.is_member = true
