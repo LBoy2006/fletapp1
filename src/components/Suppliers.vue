@@ -81,6 +81,7 @@ async function loadCategories2() {
 }
 
 async function loadSuppliers() {
+  if (!userData.user.id) return
   try {
     const p1 = selectedCat1.value.join(',')
     const p2 = selectedCat2.value.join(',')
@@ -137,6 +138,10 @@ onMounted(() => {
   loadCategories1()
   loadCategories2()
   loadSuppliers()
+})
+
+watch(() => userData.user.id, id => {
+  if (id) loadSuppliers()
 })
 
 watch(selectedCat1, () => {

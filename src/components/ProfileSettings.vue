@@ -51,6 +51,7 @@ const lang = ref(localStorage.getItem('lang') || 'ru');
 const fullscreen = ref(false);
 
 async function loadUser() {
+  if (!userData.user.id) return;
   try {
     const resp = await fetch(`${API_BASE}/users/${userData.user.id}`);
     if (resp.ok) {
@@ -68,6 +69,10 @@ async function loadUser() {
 }
 
 onMounted(loadUser);
+
+watch(() => userData.user.id, id => {
+  if (id) loadUser();
+});
 
 function toggleTheme() {
   theme.value = theme.value === 'dark' ? 'light' : 'dark';

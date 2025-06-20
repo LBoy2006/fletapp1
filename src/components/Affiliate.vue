@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { userData } from '../state';
 import { API_BASE } from '../api';
 
@@ -93,6 +93,7 @@ function formatR(val) {
 const canWithdraw = computed(() => (stats.value.balance || 0) >= 5000);
 
 async function loadData() {
+  if (!userData.user.id) return;
   try {
     const respUser = await fetch(`${API_BASE}/users/${userData.user.id}`);
     if (respUser.ok) {
@@ -131,4 +132,8 @@ function copyLink() {
 }
 
 onMounted(loadData);
+
+watch(() => userData.user.id, id => {
+  if (id) loadData();
+});
 </script>
