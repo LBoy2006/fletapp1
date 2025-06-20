@@ -30,7 +30,7 @@ def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400
     # 1. Парсим строку
     data = dict(urllib.parse.parse_qsl(init_data))
     hash_ = data.pop('hash', None)
-    data.pop('signature', None)
+    #data.pop('signature', None)
 
     # 2. Строим строку для подписи
     check_string = '\n'.join(f"{k}={v}" for k, v in sorted(data.items()))
