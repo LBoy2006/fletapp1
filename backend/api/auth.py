@@ -74,7 +74,7 @@ async def telegram_auth(request: Request, db: Session = Depends(get_db)):
     bot_token = get_settings().TELEGRAM_BOT_TOKEN  # Добавь TELEGRAM_BOT_TOKEN в config
 
     user_data = check_telegram_auth(init_data, bot_token)
-    user_id = int(user_data['user[id]'])
+    user_id = int(user_data['user'])
     first_name = user_data.get('user[first_name]', '')
     last_name = user_data.get('user[last_name]', '')
     username = user_data.get('user[username]', '')
@@ -93,7 +93,7 @@ async def telegram_auth(request: Request, db: Session = Depends(get_db)):
         db.refresh(user)
 
     return {
-        "id": user,
+        "id": user.id,
         "first_name": first_name,
         "last_name": last_name,
         "username": username
