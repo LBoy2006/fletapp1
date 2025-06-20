@@ -93,7 +93,7 @@ async def telegram_auth(request: Request, db: Session = Depends(get_db)):
         db.refresh(user)
 
     return {
-        "id": user.id,
+        "id": user,
         "first_name": first_name,
         "last_name": last_name,
         "username": username
