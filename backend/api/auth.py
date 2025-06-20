@@ -15,26 +15,35 @@ def check_telegram_auth(init_data: str, bot_token: str) -> dict:
     import urllib.parse
     import hmac
     import hashlib
+    import time
 
     data = dict(urllib.parse.parse_qsl(init_data))
     hash_ = data.pop('hash', None)
-    data.pop('signature', None)
-    data_check_string = '\n'.join(f"{k}={v}" for k, v in sorted(data.items()))
-    # ВНИМАНИЕ! Вот так:
-    secret_key = hashlib.sha256(bot_token.encode()).digest()
-    calculated_hash = hmac.new(
-        secret_key,
-        data_check_string.encode(),
-        hashlib.sha256
-    ).hexdigest()
-    if calculated_hash != hash_:
-        print("Calculated:", calculated_hash)
-        print("Received:", hash_)
-        print("Data check string:", data_check_string)
-        print("BOT_TOKEN:", bot_token)
-        print("secret_key (hex):", secret_key.hex())
+    data.pop('signature', None)  # На всякий случай
+    check_string = '\n'.join(f"{k}={v}" for k, v in sorted(data.items()))
+
+    # Ключ именно так, как в твоём рабочем примере:
+    secret_key = hmac.new(
+        msg=bot_token.encode(),
+        key=b'WebAppData',
+        digestmod=hashlib.sha256
+    ).digest()
+
+    expected_hash = hmac.new(secret_key, check_string.encode('utf-8'), hashlib.sha256).hexdigest()
+    if expected_hash != hash_:
+        print('Calculated:', expected_hash)
+        print('Received:', hash_)
+        print('Data check string:', check_string)
+        print('BOT_TOKEN:', bot_token)
+        print('secret_key (hex):', secret_key.hex())
         raise HTTPException(status_code=403, detail="Invalid Telegram auth data")
+
+    # Время жизни токена (рекомендовано Telegram)
+    if 'auth_date' in data and time.time() - int(data['auth_date']) > 86400:
+        raise HTTPException(status_code=403, detail="InitData is outdated")
+
     return data
+
 
 
 
