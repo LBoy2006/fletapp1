@@ -1,7 +1,7 @@
 from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import crud, models, schemas
 from ..database import get_db
@@ -10,8 +10,8 @@ router = APIRouter()
 
 
 @router.get('/users/{user_id}', response_model=schemas.UserOut)
-def read_user(user_id: int, db: Session = Depends(get_db)):
-    user = crud.get_user(db, user_id)
+async def read_user(user_id: int, db: AsyncSession = Depends(get_db)):
+    user = await crud.get_user(db, user_id)
     if not user:
         raise HTTPException(status_code=404, detail='User not found')
     result = schemas.UserOut.model_validate(user)
@@ -31,16 +31,17 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.patch('/users/{user_id}', response_model=schemas.UserOut)
-def update_user(user_id: int, data: schemas.UserBase, db: Session = Depends(get_db)):
-    user = crud.update_user(db, user_id, location=data.location)
+async def update_user(user_id: int, data: schemas.UserBase, db: AsyncSession = Depends(get_db)):
+    user = await crud.update_user(db, user_id, location=data.location)
     if not user:
         raise HTTPException(status_code=404, detail='User not found')
-    return read_user(user_id, db)
+    return await read_user(user_id, db)
 
 
 @router.post('/users/{user_id}/pay', response_model=schemas.UserOut)
-def pay_membership(user_id: int, db: Session = Depends(get_db)):
-    user = crud.set_membership(db, user_id, True)
+async def pay_membership(user_id: int, db: AsyncSession = Depends(get_db)):
+    user = await crud.set_membership(db, user_id, True)
     if not user:
         raise HTTPException(status_code=404, detail='User not found')
-    return read_user(user_id, db)
+    return await read_user(user_id, db)
+

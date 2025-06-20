@@ -1,104 +1,115 @@
 from __future__ import annotations
 
-from sqlalchemy.orm import Session
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from . import models
 
 
-def get_user(db: Session, user_id: int) -> models.User | None:
+async def get_user(db: AsyncSession, user_id: int) -> models.User | None:
     """Return user by id or None."""
-    return db.query(models.User).filter(models.User.id == user_id).first()
+    result = await db.execute(select(models.User).where(models.User.id == user_id))
+    return result.scalar_one_or_none()
 
 
-def update_user(db: Session, user_id: int, *, location: str | None = None) -> models.User | None:
+async def update_user(db: AsyncSession, user_id: int, *, location: str | None = None) -> models.User | None:
     """Update user fields and return updated instance or None if not found."""
-    user = get_user(db, user_id)
+    user = await get_user(db, user_id)
     if not user:
         return None
     if location is not None:
         user.location = location
-    db.commit()
-    db.refresh(user)
+    await db.commit()
+    await db.refresh(user)
     return user
 
 
-def set_membership(db: Session, user_id: int, value: bool) -> models.User | None:
+async def set_membership(db: AsyncSession, user_id: int, value: bool) -> models.User | None:
     """Set user's membership status."""
-    user = get_user(db, user_id)
+    user = await get_user(db, user_id)
     if not user:
         return None
     user.is_member = value
-    db.commit()
-    db.refresh(user)
+    await db.commit()
+    await db.refresh(user)
     return user
 
 
-def get_affiliate(db: Session, user_id: int) -> models.Affiliate | None:
-    return db.query(models.Affiliate).filter(models.Affiliate.user_id == user_id).first()
+async def get_affiliate(db: AsyncSession, user_id: int) -> models.Affiliate | None:
+    result = await db.execute(select(models.Affiliate).where(models.Affiliate.user_id == user_id))
+    return result.scalar_one_or_none()
 
 
-def request_withdraw(db: Session, user_id: int) -> models.Affiliate | None:
-    stat = get_affiliate(db, user_id)
+async def request_withdraw(db: AsyncSession, user_id: int) -> models.Affiliate | None:
+    stat = await get_affiliate(db, user_id)
     if not stat:
         return None
     stat.withdraw_requested = True
-    db.commit()
-    db.refresh(stat)
+    await db.commit()
+    await db.refresh(stat)
     return stat
 
 
-def list_categories1(db: Session) -> list[str]:
-    cats = db.query(models.Supplier.category1).distinct().all()
-    return [c[0] for c in cats if c[0]]
+async def list_categories1(db: AsyncSession) -> list[str]:
+    result = await db.execute(select(models.Supplier.category1).distinct())
+    cats = result.scalars().all()
+    return [c for c in cats if c]
 
 
-def list_categories2(db: Session, categories1: list[str] | None = None) -> list[str]:
-    q = db.query(models.Supplier.category2)
+async def list_categories2(db: AsyncSession, categories1: list[str] | None = None) -> list[str]:
+    stmt = select(models.Supplier.category2)
     if categories1:
-        q = q.filter(models.Supplier.category1.in_(categories1))
-    cats = q.distinct().all()
-    return [c[0] for c in cats if c[0]]
+        stmt = stmt.where(models.Supplier.category1.in_(categories1))
+    result = await db.execute(stmt.distinct())
+    cats = result.scalars().all()
+    return [c for c in cats if c]
 
 
-def list_suppliers(
-    db: Session,
+async def list_suppliers(
+    db: AsyncSession,
     categories1: list[str] | None = None,
     categories2: list[str] | None = None,
 ) -> list[models.Supplier]:
-    q = db.query(models.Supplier)
+    stmt = select(models.Supplier)
     if categories1:
-        q = q.filter(models.Supplier.category1.in_(categories1))
+        stmt = stmt.where(models.Supplier.category1.in_(categories1))
     if categories2:
-        q = q.filter(models.Supplier.category2.in_(categories2))
-    return q.all()
+        stmt = stmt.where(models.Supplier.category2.in_(categories2))
+    result = await db.execute(stmt)
+    return result.scalars().all()
 
 
-def get_favorite_supplier_ids(db: Session, user_id: int) -> list[int]:
-    return [
-        r.supplier_id
-        for r in db.query(models.FavoriteSupplier).filter(models.FavoriteSupplier.user_id == user_id)
-    ]
+async def get_favorite_supplier_ids(db: AsyncSession, user_id: int) -> list[int]:
+    result = await db.execute(
+        select(models.FavoriteSupplier.supplier_id).where(models.FavoriteSupplier.user_id == user_id)
+    )
+    return [r for r in result.scalars().all()]
 
 
-def toggle_favorite_supplier(db: Session, user_id: int, supplier_id: int) -> bool:
-    fav = db.query(models.FavoriteSupplier).filter(
-        models.FavoriteSupplier.user_id == user_id,
-        models.FavoriteSupplier.supplier_id == supplier_id,
-    ).first()
+async def toggle_favorite_supplier(db: AsyncSession, user_id: int, supplier_id: int) -> bool:
+    result = await db.execute(
+        select(models.FavoriteSupplier).where(
+            models.FavoriteSupplier.user_id == user_id,
+            models.FavoriteSupplier.supplier_id == supplier_id,
+        )
+    )
+    fav = result.scalar_one_or_none()
     if fav:
-        db.delete(fav)
-        db.commit()
+        await db.delete(fav)
+        await db.commit()
         return False
     else:
         fav = models.FavoriteSupplier(user_id=user_id, supplier_id=supplier_id)
         db.add(fav)
-        db.commit()
+        await db.commit()
         return True
 
 
-def get_supplier(db: Session, supplier_id: int) -> models.Supplier | None:
-    return db.query(models.Supplier).filter(models.Supplier.id == supplier_id).first()
+async def get_supplier(db: AsyncSession, supplier_id: int) -> models.Supplier | None:
+    result = await db.execute(select(models.Supplier).where(models.Supplier.id == supplier_id))
+    return result.scalar_one_or_none()
 
 
-def list_finds(db: Session) -> list[models.Find]:
-    return db.query(models.Find).order_by(models.Find.created_at.desc()).all()
+async def list_finds(db: AsyncSession) -> list[models.Find]:
+    result = await db.execute(select(models.Find).order_by(models.Find.created_at.desc()))
+    return result.scalars().all()

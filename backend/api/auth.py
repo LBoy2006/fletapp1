@@ -3,7 +3,8 @@ import hmac
 import json
 import urllib.parse
 from fastapi import APIRouter, HTTPException, Request, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from datetime import date
 from backend.database import get_db
 from backend.models import User
@@ -65,7 +66,7 @@ def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400
 
 
 @router.post('/auth/telegram')
-async def telegram_auth(request: Request, db: Session = Depends(get_db)):
+async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
     body = await request.json()
     print('RAW INITDATA:', body.get('initData'))
     init_data = body.get('initData')
@@ -83,7 +84,8 @@ async def telegram_auth(request: Request, db: Session = Depends(get_db)):
     username = user_obj.get('username', '')
 
     # Проверяем/создаём пользователя
-    user = db.query(User).filter(User.id == user_id).first()
+    result = await db.execute(select(User).where(User.id == user_id))
+    user = result.scalar_one_or_none()
     if not user:
         user = User(
             id=user_id,
@@ -93,8 +95,8 @@ async def telegram_auth(request: Request, db: Session = Depends(get_db)):
             is_member=False
         )
         db.add(user)
-        db.commit()
-        db.refresh(user)
+        await db.commit()
+        await db.refresh(user)
 
     return {
         "id": user.id,
@@ -103,3 +105,4 @@ async def telegram_auth(request: Request, db: Session = Depends(get_db)):
         "username": username,
         "is_member": user.is_member
     }
+

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from .. import crud, models, schemas
 from ..database import get_db
@@ -8,5 +8,6 @@ router = APIRouter()
 
 
 @router.get('/finds', response_model=list[schemas.FindOut])
-def list_finds(db: Session = Depends(get_db)):
-    return crud.list_finds(db)
+async def list_finds(db: AsyncSession = Depends(get_db)):
+    return await crud.list_finds(db)
+

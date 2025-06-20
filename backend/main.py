@@ -8,7 +8,9 @@ from backend.database import engine
 from backend.api.auth import router as auth_router
 
 
-#models.Base.metadata.create_all(bind=engine)
+# To create tables at startup with the async engine:
+# async with engine.begin() as conn:
+#     await conn.run_sync(models.Base.metadata.create_all)
 
 settings = get_settings()
 
