@@ -55,9 +55,8 @@
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
+import { userData } from '../state'
 import { API_BASE } from '../api'
-
-const userId = 1
 
 const categories1 = ref([])
 const categories2 = ref([])
@@ -86,7 +85,8 @@ async function loadSuppliers() {
     const p1 = selectedCat1.value.join(',')
     const p2 = selectedCat2.value.join(',')
     const fav = showFavOnly.value ? 'true' : 'false'
-    const url = `${API_BASE}/suppliers?user_id=${userId}&categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}&favorites_only=${fav}`
+    const uid = userData.user.id
+    const url = `${API_BASE}/suppliers?user_id=${uid}&categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}&favorites_only=${fav}`
     const r = await fetch(url)
     if (r.ok) suppliers.value = await r.json()
   } catch (e) { console.error(e) }
@@ -109,7 +109,7 @@ async function toggleFavorite(s) {
     const r = await fetch(`${API_BASE}/suppliers/${s.id}/favorite`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ user_id: userId })
+      body: JSON.stringify({ user_id: userData.user.id })
     })
     if (r.ok) {
       const data = await r.json()
