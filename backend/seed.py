@@ -2,8 +2,8 @@ from datetime import date
 import asyncio
 from sqlalchemy import select
 
-from database import engine, SessionLocal
-from models import User, Affiliate, Supplier, Find, Base
+from backend.database import engine, SessionLocal
+from backend.models import User, Affiliate, Supplier, Find, Base
 
 async def create_tables():
     async with engine.begin() as conn:
