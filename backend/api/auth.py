@@ -13,7 +13,7 @@ import time
 router = APIRouter()
 
 
-def check_telegram_webapp_auth(init_data: str, bot_token: str, max_age_sec: int = 86400) -> dict:
+def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400) -> dict:
     """
     Проверка подписи и срока годности initData от Telegram Mini App.
     :param init_data: строка из window.Telegram.WebApp.initData
