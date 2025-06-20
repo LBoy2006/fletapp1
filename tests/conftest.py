@@ -46,7 +46,7 @@ def db_session(client):
             phrase = models.MotivationPhrase(text='Join us now!')
             db.add(phrase)
             await db.commit()
-            user = models.User(agent_number='agent', join_date=date(2024, 1, 1), location='Moscow')
+            user = models.User(id=1000000000000, agent_number='agent', join_date=date(2024, 1, 1), location='Moscow')
             db.add(user)
             await db.commit()
             await db.refresh(user)

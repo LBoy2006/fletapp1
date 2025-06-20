@@ -1,20 +1,20 @@
-from sqlalchemy import Column, Integer, String, Date, Boolean, DateTime
+from sqlalchemy import Column, Integer, BigInteger, String, Date, Boolean, DateTime
 from backend.database import Base
 
 class User(Base):
     __tablename__ = 'users'
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(BigInteger, primary_key=True, index=True)
     agent_number = Column(String, unique=True, index=True)
     join_date = Column(Date)
     location = Column(String)
     is_member = Column(Boolean, default=False)
-    referrer_id = Column(Integer, index=True)
+    referrer_id = Column(BigInteger, index=True)
 
 
 class Affiliate(Base):
     __tablename__ = 'affiliates'
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, index=True)
+    user_id = Column(BigInteger, index=True)
     motivation = Column(String)
     share = Column(Integer)
     invited = Column(Integer)
@@ -49,7 +49,7 @@ class Supplier(Base):
 class FavoriteSupplier(Base):
     __tablename__ = 'favorite_suppliers'
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, index=True)
+    user_id = Column(BigInteger, index=True)
     supplier_id = Column(Integer, index=True)
 
 
