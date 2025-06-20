@@ -8,7 +8,7 @@ from backend.database import engine
 from backend.api.auth import router as auth_router
 
 
-models.Base.metadata.create_all(bind=engine)
+#models.Base.metadata.create_all(bind=engine)
 
 settings = get_settings()
 
