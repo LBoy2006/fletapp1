@@ -157,3 +157,17 @@ nav.show-labels .nav-label {
 .sheet-slide-leave-active {
   transition: transform 0.3s, opacity 0.3s;
 }
+.finds-container {
+  background: var(--page-bg-color);
+  min-height: 100vh;
+}
+.find-card {
+  border: 1.5px solid #242434;
+  box-shadow: 0 2px 12px 0 #18192733;
+}
+.like-btn {
+  transition: transform 0.15s;
+}
+.like-btn:active {
+  transform: scale(1.2);
+}
