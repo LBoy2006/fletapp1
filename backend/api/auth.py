@@ -40,7 +40,12 @@ def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400
     # Проверяем подпись
     expected_hash = hmac.new(secret_key, check_string.encode('utf-8'), hashlib.sha256).hexdigest()
     if expected_hash != hash_:
-        raise ValueError("Invalid Telegram WebApp initData signature")
+        print('Calculated:', expected_hash)
+        print('Received:', hash_)
+        print('Data check string:', check_string)
+        print('BOT_TOKEN:', bot_token)
+        print('secret_key (hex):', secret_key.hex())
+        raise HTTPException(status_code=403, detail="Invalid Telegram WebApp initData signature")
 
     # Проверяем свежесть данных (24 часа — стандарт Telegram)
     if 'auth_date' in data:
