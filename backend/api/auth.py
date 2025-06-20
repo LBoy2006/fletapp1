@@ -94,10 +94,11 @@ async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
                 referrer_id = crud.decode_referral(ref_param)
             except Exception:
                 referrer_id = None
+        agent_number = await crud.generate_agent_number(db)
         user = await crud.create_user(
             db,
             user_id=user_id,
-            agent_number=username,
+            agent_number=agent_number,
             referrer_id=referrer_id,
         )
         await crud.create_affiliate(db, user.id)
@@ -106,7 +107,7 @@ async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
         "id": user.id,
         "first_name": first_name,
         "last_name": last_name,
-        "username": username,
+        "username": user.agent_number,
         "is_member": user.is_member
     }
 
