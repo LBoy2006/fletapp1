@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.orm import declarative_base
 from typing import AsyncGenerator
 
-from .config import get_settings
+from backend.config import get_settings
 
 settings = get_settings()
 DATABASE_URL = settings.DATABASE_URL
