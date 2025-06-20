@@ -40,7 +40,7 @@ const numDisplay = computed(() => {
 
 async function loadUser() {
   try {
-    const resp = await fetch(`${API_BASE}/users/${userData.user.id}`);
+    const resp = await fetch(`${API_BASE}/users/1`);
     if (resp.ok) {
       const data = await resp.json();
       userData.user = data;
