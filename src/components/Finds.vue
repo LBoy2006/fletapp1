@@ -107,6 +107,7 @@ async function loadFinds() {
     error.value = true
   } finally {
     loading.value = false
+        if (window.applySafeInsets) window.applySafeInsets()
   }
 }
 
