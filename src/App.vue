@@ -270,7 +270,7 @@ onMounted(() => {
 </script>
 <template>
   <Payment v-if="showPayment" @paid="onPaid" />
-  <div v-else class="h-full flex flex-col">
+<div v-else class="h-full min-h-screen flex flex-col">
     <div ref="pagesRef" class="flex-1 overflow-hidden">
       <div ref="innerRef" class="flex" :style="dragStyle">
         <div v-for="p in pageOrder" :key="p" class="page w-full flex-shrink-0 overflow-y-auto">
