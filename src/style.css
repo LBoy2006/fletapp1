@@ -159,7 +159,14 @@ nav.show-labels .nav-label {
 }
 .finds-container {
   background: var(--page-bg-color);
-  min-height: 100vh;
+  /*
+   * Using 100vh here makes the container ignore the height of the
+   * scrollable page wrapper. As a result the parent expands beyond
+   * the viewport and the page cannot scroll when the content is
+   * loaded dynamically. Setting the minimum height to 100% ensures
+   * it respects the parent's height and allows scrolling.
+   */
+  min-height: 100%;
 }
 .find-card {
   border: 1.5px solid #242434;
