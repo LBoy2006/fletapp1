@@ -22,7 +22,7 @@ body {
 }
 .page {
   background-color: var(--page-bg-color);
-  overscroll-behavior-y: contain;
+  /*overscroll-behavior-y: contain;*/
 }
 nav {
   position: fixed;
