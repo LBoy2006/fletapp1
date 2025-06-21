@@ -51,12 +51,7 @@ def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400
     ).hexdigest()
 
     if expected_hash != hash_:
-        print('Calculated:', expected_hash)
-        print('Received:', hash_)
-        print('Data check string:', check_string)
-        print('BOT_TOKEN:', bot_token)
-        print('secret_key (hex):', secret_key.hex())
-        raise HTTPException(status_code=403, detail="Invalid Telegram WebApp initData signature")
+             raise HTTPException(status_code=403, detail="Invalid Telegram WebApp initData signature")
 
     # 5. Проверка на актуальность токена
     if 'auth_date' in data and time.time() - int(data['auth_date']) > 86400:
@@ -68,7 +63,6 @@ def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400
 @router.post('/auth/telegram')
 async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
     body = await request.json()
-    print('RAW INITDATA:', body.get('initData'))
     init_data = body.get('initData')
 
     if not init_data:
