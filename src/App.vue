@@ -268,7 +268,7 @@ onMounted(() => {
   <div v-else class="h-full flex flex-col">
     <div ref="pagesRef" class="flex-1 overflow-hidden">
       <div ref="innerRef" class="flex" :style="dragStyle">
-        <div v-for="p in pageOrder" :key="p" class="page w-full h-full flex-shrink-0 overflow-y-auto">
+        <div v-for="p in pageOrder" :key="p" class="page w-full flex-shrink-0 overflow-y-auto">
           <component :is="pages[p]" :t="t" />
         </div>
       </div>
