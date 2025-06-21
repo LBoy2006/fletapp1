@@ -23,7 +23,7 @@ body {
 .page {
   background-color: var(--page-bg-color);
   overscroll-behavior-y: contain;
-  height: 100%;
+  min-height: 100vh; height: auto;
   padding-bottom: 70px;
 }
 nav {
