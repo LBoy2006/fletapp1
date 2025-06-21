@@ -200,7 +200,8 @@ onMounted(() => {
       const diff = cy - sy;
       const atTop = page.scrollTop <= 0;
       const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
-      if ((atTop && diff > 0) || (atBottom && diff < 0)) {
+      const hasScrollable = page.scrollHeight > page.clientHeight;
+      if (hasScrollable && ((atTop && diff > 0) || (atBottom && diff < 0))) {
         e.preventDefault();
         pulling = true;
         page.style.transform = `translateY(${diff / 4}px)`;
