@@ -68,7 +68,7 @@ nav {
 
 /* Акцент для активной кнопки */
 .nav-btn.active .icon {
-  color: #40a9ff; /* активная — голубой/синий */
+  color: var(--active-color); /* активная — зелёный */
   transform: scale(1.25) translateY(-7px);
 }
 
@@ -102,7 +102,7 @@ nav.show-labels .nav-label {
 }
 
 .nav-btn.active .nav-label {
-  color: #40a9ff;
+  color: var(--active-color);
 }
 #info-modal .modal-content {
   background-color: var(--page-bg-color);
