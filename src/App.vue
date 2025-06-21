@@ -182,43 +182,43 @@ onMounted(() => {
   });
 });
 
-// onMounted(() => {
-//   const pagesEls = innerRef.value.querySelectorAll('.page');
-//   pagesEls.forEach(page => {
-//     let sy = null;
-//     let pulling = false;
-//     page.addEventListener('touchstart', e => {
-//       if (e.touches.length !== 1) return;
-//       sy = e.touches[0].clientY;
-//       pulling = false;
-//       page.style.transition = '';
-//     });
-//     page.addEventListener('touchmove', e => {
-//       if (sy === null || isDragging.value) return;
-//       const cy = e.touches[0].clientY;
-//       const diff = cy - sy;
-//       const atTop = page.scrollTop <= 0;
-//       const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
-//       if ((atTop && diff > 0) || (atBottom && diff < 0)) {
-//         e.preventDefault();
-//         pulling = true;
-//         page.style.transform = `translateY(${diff / 4}px)`;
-//       }
-//     });
-//     const reset = () => {
-//       if (!pulling) {
-//         sy = null;
-//         return;
-//       }
-//       page.style.transition = 'transform 0.3s';
-//       page.style.transform = 'translateY(0)';
-//       sy = null;
-//       pulling = false;
-//     };
-//     page.addEventListener('touchend', reset);
-//     page.addEventListener('touchcancel', reset);
-//   });
-// });
+onMounted(() => {
+  const pagesEls = innerRef.value.querySelectorAll('.page');
+  pagesEls.forEach(page => {
+    let sy = null;
+    let pulling = false;
+    page.addEventListener('touchstart', e => {
+      if (e.touches.length !== 1) return;
+      sy = e.touches[0].clientY;
+      pulling = false;
+      page.style.transition = '';
+    });
+    page.addEventListener('touchmove', e => {
+      if (sy === null || isDragging.value) return;
+      const cy = e.touches[0].clientY;
+      const diff = cy - sy;
+      const atTop = page.scrollTop <= 0;
+      const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
+      if ((atTop && diff > 0) || (atBottom && diff < 0)) {
+        e.preventDefault();
+        pulling = true;
+        page.style.transform = `translateY(${diff / 4}px)`;
+      }
+    });
+    const reset = () => {
+      if (!pulling) {
+        sy = null;
+        return;
+      }
+      page.style.transition = 'transform 0.3s';
+      page.style.transform = 'translateY(0)';
+      sy = null;
+      pulling = false;
+    };
+    page.addEventListener('touchend', reset);
+    page.addEventListener('touchcancel', reset);
+  });
+});
 
 function revealLabels() {
   showLabels.value = true;
