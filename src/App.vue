@@ -248,8 +248,12 @@ onMounted(() => {
       </button>
     </nav>
     <transition name="modal-fade">
-      <div v-if="sheetVisible" class="fixed bottom-20 inset-x-0 mx-4 p-4 bg-gray-800 rounded" @click="hideSheet">
-        <p v-for="l in sheetLines" :key="l">{{ l }}</p>
+      <div v-if="sheetVisible" class="bottom-sheet-overlay" @click.self="hideSheet">
+        <transition name="sheet-slide">
+          <div v-if="sheetVisible" class="bottom-sheet mx-4 mb-4 p-4 bg-gray-800" @click.stop>
+            <p v-for="l in sheetLines" :key="l">{{ l }}</p>
+          </div>
+        </transition>
       </div>
     </transition>
   </div>

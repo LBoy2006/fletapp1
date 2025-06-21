@@ -118,26 +118,13 @@ nav.show-labels .nav-label {
 .modal-fade-leave-to {
   opacity: 0;
 }
-.snackbar {
-  position: fixed;
-  left: 50%;
-  bottom: calc(80px + 1rem);
-  transform: translateX(-50%);
-  z-index: 1100;
-}
-.snackbar-slide-enter-from,
-.snackbar-slide-leave-to {
-  opacity: 0;
-  transform: translate(-50%, 100%);
-}
-.snackbar-slide-enter-active,
-.snackbar-slide-leave-active {
-  transition: transform 0.3s, opacity 0.3s;
-}
 
 .bottom-sheet-overlay {
   position: fixed;
   inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   background-color: transparent;
   z-index: 1100;
 }
