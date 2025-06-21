@@ -24,6 +24,7 @@ body {
   background-color: var(--page-bg-color);
   overscroll-behavior-y: contain;
   height: 100%;
+  padding-bottom: 70px;
 }
 nav {
   position: fixed;
