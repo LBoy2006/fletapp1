@@ -31,6 +31,7 @@ const innerRef = ref(null);
 const navRef = ref(null);
 const showLabels = ref(false);
 const navBottom = ref(0);
+const NAV_HEIGHT = 70;
 const dragOffset = ref(0);
 const isDragging = ref(false);
 const showPayment = ref(false);
@@ -232,8 +233,9 @@ function applySafeInsets() {
   if (window.Telegram?.WebApp) {
     const isFullscreen = Telegram.WebApp.isFullscreen;
     const safeInset = Telegram.WebApp.contentSafeAreaInset;
+    let insetBottom = 0;
     if (safeInset) {
-      const insetBottom = parseInt(safeInset.bottom) || 0;
+      insetBottom = parseInt(safeInset.bottom) || 0;
       navBottom.value = insetBottom;
     } else {
       navBottom.value = 0;
@@ -246,6 +248,7 @@ function applySafeInsets() {
       } else {
         p.style.paddingTop = '';
       }
+      p.style.paddingBottom = `${NAV_HEIGHT + insetBottom}px`;
     });
   }
 }
