@@ -232,12 +232,9 @@ function applySafeInsets() {
   if (window.Telegram?.WebApp) {
     const isFullscreen = Telegram.WebApp.isFullscreen;
     const safeInset = Telegram.WebApp.contentSafeAreaInset;
-    if (safeInset) {
-      const insetBottom = parseInt(safeInset.bottom) || 0;
-      navBottom.value = insetBottom;
-    } else {
-      navBottom.value = 0;
-    }
+    const insetBottom = safeInset ? parseInt(safeInset.bottom) || 0 : 0;
+    navBottom.value = insetBottom;
+    const navHeight = navRef.value?.offsetHeight || 70;
     document.querySelectorAll('.page').forEach(p => {
       if (isFullscreen && safeInset) {
         const insetTop = parseInt(safeInset.top) || 0;
@@ -246,6 +243,7 @@ function applySafeInsets() {
       } else {
         p.style.paddingTop = '';
       }
+      p.style.paddingBottom = `${navHeight + insetBottom}px`;
     });
   }
 }

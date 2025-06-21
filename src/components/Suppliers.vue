@@ -91,6 +91,9 @@ async function loadSuppliers() {
     const r = await fetch(url)
     if (r.ok) suppliers.value = await r.json()
   } catch (e) { console.error(e) }
+  finally {
+    if (window.applySafeInsets) window.applySafeInsets()
+  }
 }
 
 function toggleCat1(c) {
