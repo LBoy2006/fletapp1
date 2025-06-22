@@ -291,7 +291,8 @@ function applySafeInsets() {
         // Получаем верхний отступ и добавляем немного пространства (например, чтобы не перекрывал статус-бар)
         const insetTop = parseInt(safeInset.top) || 0;
         const extraOffset = Telegram.WebApp.SafeAreaInset.top;
-        p.style.paddingTop = `${insetTop + extraOffset}px`;
+        const insert = Telegram.WebApp.ContentSafeAreaInset.top;
+        p.style.paddingTop = `${insetTop + extraOffset + insert}px`;
       } else {
         // В остальных случаях убираем верхний отступ
         p.style.paddingTop = '';
