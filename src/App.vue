@@ -322,7 +322,7 @@ onMounted(() => {
   <Payment v-if="showPayment" @paid="onPaid" />
   <div v-else class="min-h-screen flex flex-col">
     <div ref="pagesRef" class="flex-1 overflow-x-hidden">
-      <div ref="innerRef" class="flex" :style="dragStyle">
+      <div ref="innerRef" class="flex h-full" :style="dragStyle">
         <div
           v-for="p in pageOrder"
           :key="p"

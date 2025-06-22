@@ -1,6 +1,6 @@
 <!--Funds.vue-->
 <template>
-  <div class="finds-container h-full flex flex-col ">
+  <div class="finds-container h-full flex flex-col">
     <!-- 🔒 Фиксированная шапка -->
     <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-3 py-4 border-b border-[#2c2c3a]">
       <div class="flex items-center justify-between">
@@ -16,7 +16,7 @@
     </div>
 
     <!-- 🔁 Прокручиваемый контент -->
-    <div class="h-64 overflow-y-auto px-3 pb-24 space-y-4">
+    <div class="flex-1 overflow-y-auto px-3 pb-2 space-y-4">
       <div v-if="error" class="text-center text-red-500 py-10">
         Не удалось загрузить товары дня. Попробуйте позже.
       </div>

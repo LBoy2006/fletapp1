@@ -37,7 +37,7 @@
       </div>
     </div>
 </div>
-    <div class="h-64 overflow-y-auto">
+    <div class="flex-1 overflow-y-auto">
     <div v-if="!suppliers.length" class="text-center text-gray-500 py-10">Нет результатов</div>
     <div v-else class="space-y-4">
       <div v-for="s in suppliers" :key="s.id" class="bg-gray-800 p-4 rounded flex items-center">
