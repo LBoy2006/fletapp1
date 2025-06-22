@@ -168,7 +168,7 @@ nav.show-labels .nav-label {
 }
 .finds-container {
   background: var(--page-bg-color);
-  min-height: 100vh;
+  height: 100%; /* ✅ фикс */
 }
 .find-card {
   border: 1.5px solid #242434;
