@@ -18,13 +18,12 @@ import { API_BASE } from './api';
 
 const navItems = ['feed', 'finds', 'suppliers', 'affiliate', 'profile'];
 const pageOrder = ['finds', 'suppliers', 'affiliate', 'profile', 'settings'];
-const pageIcons = {
-  feed: 'fas fa-rss',
-  finds: 'fas fa-star',
-  suppliers: 'fas fa-truck',
-  affiliate: 'fas fa-handshake',
-  profile: 'fas fa-user'
-};
+const svgModules = import.meta.glob('./icons/*.svg', { as: 'raw', eager: true });
+const pageIcons = {};
+for (const path in svgModules) {
+  const name = path.replace('./icons/', '').replace('.svg', '');
+  pageIcons[name] = svgModules[path];
+}
 
 const pages = { finds: Finds, suppliers: Suppliers, affiliate: Affiliate, profile: Profile, settings: ProfileSettings };
 
@@ -328,7 +327,7 @@ onMounted(() => {
     </div>
     <nav ref="navRef" :class="{'show-labels': showLabels} " :style="{ bottom: navBottom + 'px' }">
       <button v-for="item in navItems" :key="item" class="nav-btn" :class="{ active: pageOrder[currentIndex]===item }" @click="onNavClick(item)">
-        <i :class="['icon', pageIcons[item]]"></i>
+        <span class="icon" v-html="pageIcons[item]"></span>
         <span class="nav-label">{{ t[item] }}</span>
       </button>
     </nav>
