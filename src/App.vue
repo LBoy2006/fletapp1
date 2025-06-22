@@ -81,45 +81,52 @@ function onPaid() {
 
 // --- Блок авторизации Telegram Mini App ---
 onMounted(() => {
-  // Только при первом запуске приложения
-  if (window.Telegram && window.Telegram.WebApp) {
-    const tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
-    if (tgUser) {
-      userData.user = tgUser;
+  let tgUser = null;
+  let initData = null;
 
-      // Отправляем initData на backend для бесшовной авторизации
-      fetch(`${API_BASE}/auth/telegram`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          initData: window.Telegram.WebApp.initData
-        })
-      })
-        .then(res => res.json())
-        .then(data => {
-          userData.user.is_member = data.is_member
-          if (!data.is_member) {
-            showPayment.value = true
-          }
-          // Если backend вернёт доп. данные — можно сохранить:
-          // userData.profile = data;
-          // userData.token = data.token;
-        })
-        .catch(err => {
-          console.error('Auth error:', err);
-        });
-    }
+  if (window.Telegram && window.Telegram.WebApp) {
+    tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
+    initData = window.Telegram.WebApp.initData;
+  }
+
+  // Если Telegram есть и пользователь есть
+  if (tgUser) {
+    userData.user = tgUser;
   } else {
-    // Для локальной отладки без Telegram
-    userData.user = {
+    // Локальная отладка
+    tgUser = {
       id: 123456,
       first_name: "Тест",
       last_name: "Пользователь",
       username: "test_user",
       is_member: false
-    }
+    };
+    initData = 'test_init_data=123'; // Любая строка-заглушка
+    userData.user = tgUser;
   }
+
+  // Отправляем данные на backend
+  fetch(`${API_BASE}/auth/telegram`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      initData,
+      user: tgUser  // <-- добавляем также user, если нужно
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      userData.user.is_member = data.is_member
+      if (!data.is_member) {
+        showPayment.value = true
+      }
+      // userData.token = data.token;
+    })
+    .catch(err => {
+      console.error('Auth error:', err);
+    });
 });
+
 // --- /Блок авторизации ---
 
 onMounted(() => {

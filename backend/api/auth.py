@@ -67,8 +67,35 @@ async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
 
     if not init_data:
         raise HTTPException(status_code=400, detail="initData required")
-    bot_token = get_settings().TELEGRAM_BOT_TOKEN  # Добавь TELEGRAM_BOT_TOKEN в config
 
+    # Попытка взять user напрямую из тела запроса (может быть отладочный)
+    test_user = body.get('user')
+    if test_user:
+        user_id = int(test_user.get('id'))
+        if user_id == 123456:
+            # Просто возвращаем пользователя из БД без валидации
+            result = await db.execute(select(User).where(User.id == user_id))
+            user = result.scalar_one_or_none()
+            if not user:
+                agent_number = await crud.generate_agent_number(db)
+                user = await crud.create_user(
+                    db,
+                    user_id=user_id,
+                    agent_number=agent_number,
+                    referrer_id=None,
+                )
+                await crud.create_affiliate(db, user.id)
+
+            return {
+                "id": user.id,
+                "first_name": test_user.get("first_name", ""),
+                "last_name": test_user.get("last_name", ""),
+                "username": user.agent_number,
+                "is_member": user.is_member
+            }
+
+    # Обычная авторизация
+    bot_token = get_settings().TELEGRAM_BOT_TOKEN
     user_data = check_telegram_auth(init_data, bot_token)
     user_json = user_data['user']
     user_obj = json.loads(user_json)
@@ -77,7 +104,6 @@ async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
     last_name = user_obj.get('last_name', '')
     username = user_obj.get('username', '')
 
-    # Проверяем/создаём пользователя
     result = await db.execute(select(User).where(User.id == user_id))
     user = result.scalar_one_or_none()
     if not user:
@@ -104,4 +130,5 @@ async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
         "username": user.agent_number,
         "is_member": user.is_member
     }
+
 
