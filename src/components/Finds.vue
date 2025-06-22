@@ -1,3 +1,4 @@
+<!--funds.vue-->
 <template>
   <div class="finds-container px-3 py-4 space-y-4">
     <!-- Фильтр и заголовок -->

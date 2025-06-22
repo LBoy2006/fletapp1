@@ -1,4 +1,10 @@
+<!--app.vue-->
+
 <script setup>
+
+
+
+
 import { ref, computed, onMounted } from 'vue';
 import Finds from './components/Finds.vue';
 import Suppliers from './components/Suppliers.vue';
@@ -136,125 +142,141 @@ onMounted(() => {
 let startX = null;
 let startY = null;
 const dragThreshold = 20;
-// onMounted(() => {
-//   const el = pagesRef.value;
-//   const width = () => el.clientWidth;
-//   el.addEventListener('touchstart', e => {
-//     if (e.touches.length === 1) {
-//       startX = e.touches[0].clientX;
-//       startY = e.touches[0].clientY;
-//       isDragging.value = false;
-//     }
-//   });
-//   el.addEventListener('touchmove', e => {
-//     if (startX === null) return;
-//     const deltaX = e.touches[0].clientX - startX;
-//     const deltaY = e.touches[0].clientY - startY;
-//     if (!isDragging.value) {
-//       if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > dragThreshold) {
-//         isDragging.value = true;
-//       } else {
-//         return;
-//       }
-//     }
-//     dragOffset.value = (deltaX / width()) * 100;
-//   });
-//   el.addEventListener('touchend', e => {
-//     if (startX === null) return;
-//     const deltaX = e.changedTouches[0].clientX - startX;
-//     if (isDragging.value && Math.abs(deltaX) > width() / 4) {
-//       if (deltaX < 0 && currentIndex.value < pageOrder.length - 1) {
-//         showPage(pageOrder[currentIndex.value + 1]);
-//       } else if (deltaX > 0 && currentIndex.value > 0) {
-//         showPage(pageOrder[currentIndex.value - 1]);
-//       }
-//     }
-//     dragOffset.value = 0;
-//     isDragging.value = false;
-//     startX = null;
-//     startY = null;
-//   });
-// });
-//
-// onMounted(() => {
-//   const nav = navRef.value;
-//   let sy = null;
-//   nav.addEventListener('touchstart', e => {
-//     if (e.touches.length === 1) sy = e.touches[0].clientY;
-//   });
-//   nav.addEventListener('touchend', e => {
-//     if (sy === null) return;
-//     const dy = e.changedTouches[0].clientY - sy;
-//     if (dy < -30) revealLabels();
-//     sy = null;
-//   });
-// });
-//
-// onMounted(() => {
-//   const pagesEls = innerRef.value.querySelectorAll('.page');
-//   pagesEls.forEach(page => {
-//     let sy = null;
-//     let pulling = false;
-//     page.addEventListener('touchstart', e => {
-//       if (e.touches.length !== 1) return;
-//       sy = e.touches[0].clientY;
-//       pulling = false;
-//       page.style.transition = '';
-//     });
-//     page.addEventListener('touchmove', e => {
-//       if (sy === null || isDragging.value) return;
-//       const cy = e.touches[0].clientY;
-//       const diff = cy - sy;
-//       const atTop = page.scrollTop <= 0;
-//       const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
-//       if ((atTop && diff > 0) || (atBottom && diff < 0)) {
-//         e.preventDefault();
-//         pulling = true;
-//         page.style.transform = `translateY(${diff / 4}px)`;
-//       }
-//     });
-//     const reset = () => {
-//       if (!pulling) {
-//         sy = null;
-//         return;
-//       }
-//       page.style.transition = 'transform 0.3s';
-//       page.style.transform = 'translateY(0)';
-//       sy = null;
-//       pulling = false;
-//     };
-//     page.addEventListener('touchend', reset);
-//     page.addEventListener('touchcancel', reset);
-//   });
-// });
+onMounted(() => {
+  const el = pagesRef.value;
+  const width = () => el.clientWidth;
+  el.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isDragging.value = false;
+    }
+  });
+  el.addEventListener('touchmove', e => {
+    if (startX === null) return;
+    const deltaX = e.touches[0].clientX - startX;
+    const deltaY = e.touches[0].clientY - startY;
+    if (!isDragging.value) {
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > dragThreshold) {
+        isDragging.value = true;
+      } else {
+        return;
+      }
+    }
+    dragOffset.value = (deltaX / width()) * 100;
+  });
+  el.addEventListener('touchend', e => {
+    if (startX === null) return;
+    const deltaX = e.changedTouches[0].clientX - startX;
+    if (isDragging.value && Math.abs(deltaX) > width() / 4) {
+      if (deltaX < 0 && currentIndex.value < pageOrder.length - 1) {
+        showPage(pageOrder[currentIndex.value + 1]);
+      } else if (deltaX > 0 && currentIndex.value > 0) {
+        showPage(pageOrder[currentIndex.value - 1]);
+      }
+    }
+    dragOffset.value = 0;
+    isDragging.value = false;
+    startX = null;
+    startY = null;
+  });
+});
+
+onMounted(() => {
+  const nav = navRef.value;
+  let sy = null;
+  nav.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) sy = e.touches[0].clientY;
+  });
+  nav.addEventListener('touchend', e => {
+    if (sy === null) return;
+    const dy = e.changedTouches[0].clientY - sy;
+    if (dy < -30) revealLabels();
+    sy = null;
+  });
+});
+
+onMounted(() => {
+  const pagesEls = innerRef.value.querySelectorAll('.page');
+  pagesEls.forEach(page => {
+    let sy = null;
+    let pulling = false;
+    page.addEventListener('touchstart', e => {
+      if (e.touches.length !== 1) return;
+      sy = e.touches[0].clientY;
+      pulling = false;
+      page.style.transition = '';
+    });
+    page.addEventListener('touchmove', e => {
+      if (sy === null || isDragging.value) return;
+      const cy = e.touches[0].clientY;
+      const diff = cy - sy;
+      const atTop = page.scrollTop <= 0;
+      const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
+      if ((atTop && diff > 0) || (atBottom && diff < 0)) {
+        e.preventDefault();
+        pulling = true;
+        page.style.transform = `translateY(${diff / 4}px)`;
+      }
+    });
+    const reset = () => {
+      if (!pulling) {
+        sy = null;
+        return;
+      }
+      page.style.transition = 'transform 0.3s';
+      page.style.transform = 'translateY(0)';
+      sy = null;
+      pulling = false;
+    };
+    page.addEventListener('touchend', reset);
+    page.addEventListener('touchcancel', reset);
+  });
+});
 
 function revealLabels() {
+  // Показываем подписи к иконкам в нижней навигации
   showLabels.value = true;
+  // Отменяем предыдущий таймер скрытия подписей, если он ещё активен
   clearTimeout(hideTimer);
+  // Устанавливаем новый таймер: через 5 секунд подписи автоматически скроются
   hideTimer = setTimeout(() => {
     showLabels.value = false;
   }, 5000);
 }
 
+
 function applySafeInsets() {
+  // Проверяем, доступно ли Telegram WebApp API
   if (window.Telegram?.WebApp) {
+    // Проверка, открыт ли WebApp в полноэкранном режиме
     const isFullscreen = Telegram.WebApp.isFullscreen;
+    // Получаем "безопасные отступы" (например, для устройств с вырезами/ноутчами или панелями)
     const safeInset = Telegram.WebApp.contentSafeAreaInset;
+    // Получаем нижний отступ (если есть), иначе 0
     const insetBottom = safeInset ? parseInt(safeInset.bottom) || 0 : 0;
+    // Сохраняем нижний отступ в реактивную переменную (используется для позиционирования нижней навигации)
     navBottom.value = insetBottom;
+    // Устанавливаем высоту нижней навигации (возможно, ты тестировал с завышенным значением — 1000)
     const navHeight = 70;
+    // Проходимся по всем элементам с классом `.page`
     document.querySelectorAll('.page').forEach(p => {
+      // Если полноэкранный режим и есть данные об отступах
       if (isFullscreen && safeInset) {
+        // Получаем верхний отступ и добавляем немного пространства (например, чтобы не перекрывал статус-бар)
         const insetTop = parseInt(safeInset.top) || 0;
         const extraOffset = 20;
         p.style.paddingTop = `${insetTop + extraOffset}px`;
       } else {
+        // В остальных случаях убираем верхний отступ
         p.style.paddingTop = '';
       }
+      // Добавляем нижний отступ, равный высоте навигации + безопасный нижний отступ устройства
       p.style.paddingBottom = `${navHeight + insetBottom}px`;
     });
   }
 }
+
 window.applySafeInsets = applySafeInsets;
 window.showPage = showPage;
 window.showSheet = showSheet;
@@ -273,10 +295,10 @@ onMounted(() => {
 </script>
 <template>
   <Payment v-if="showPayment" @paid="onPaid" />
-  <div v-else class="h-full flex flex-col">
-    <div ref="pagesRef" class="flex-1 overflow-hidden">
+  <div v-else class="min-h-screen flex flex-col">
+    <div ref="pagesRef" class="flex-1 overflow-auto">
       <div ref="innerRef" class="flex" :style="dragStyle">
-        <div v-for="p in pageOrder" :key="p" class="page w-full flex-shrink-0 overflow-y-auto">
+        <div v-for="p in pageOrder" :key="p" class="page w-full flex-shrink-0">
           <component :is="pages[p]" :t="t" />
         </div>
       </div>
