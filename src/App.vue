@@ -18,7 +18,7 @@ import { translations } from './translations.js';
 import { API_BASE } from './api';
 
 const navItems = ['feed', 'suppliers', 'finds', 'affiliate', 'profile'];
-const pageOrder = ['feed', 'finds', 'suppliers', 'affiliate', 'profile', 'settings'];
+const pageOrder = ['feed', 'suppliers', 'finds', 'affiliate', 'profile', 'settings'];
 const svgModules = import.meta.glob('./icons/*.svg', { as: 'raw', eager: true });
 const pageIcons = {};
 for (const path in svgModules) {
