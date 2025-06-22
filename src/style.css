@@ -79,7 +79,9 @@ nav {
 }
 
 .nav-btn .icon {
-  font-size: 26px;
+  width: 26px;
+  height: 26px;
+  display: inline-block;
   color: #6b7280; /* неактивный — серый */
   transition: color 0.25s, transform 0.3s;
   z-index: 1;
