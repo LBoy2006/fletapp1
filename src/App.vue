@@ -275,20 +275,21 @@ function applySafeInsets() {
   if (window.Telegram?.WebApp) {
     const isFullscreen = Telegram.WebApp.isFullscreen;
     const safeInset = Telegram.WebApp.contentSafeAreaInset || {};
+    const insetTop = parseInt(safeInset.top) || 0;
     const insetBottom = parseInt(safeInset.bottom) || 0;
     const navHeight = 70;
 
     navBottom.value = insetBottom;
 
     document.querySelectorAll('.page').forEach(p => {
-      // Добавляем/удаляем класс safe-area
       if (isFullscreen) {
         p.classList.add('safe-area');
+        p.style.paddingTop = `${28 + insetTop}px`;
       } else {
         p.classList.remove('safe-area');
+        p.style.paddingTop = '';
       }
 
-      // Устанавливаем padding-bottom через JS (если нужно)
       p.style.paddingBottom = `${navHeight + insetBottom}px`;
     });
   }
