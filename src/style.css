@@ -67,7 +67,6 @@ nav {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: transparent;
   border: none;
   outline: none;
   cursor: pointer;
@@ -90,19 +89,19 @@ nav {
 /* Акцент для активной кнопки */
 .nav-btn.active .icon {
   color: var(--active-color); /* активная — зелёный */
-  transform: scale(1.25) translateY(-7px);
+  transform: scale(1.25);
 }
 
 .nav-btn.active::before {
   content: "";
   position: absolute;
-  top: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 70px;
-  height: 30px;
-  background: #1a1a1d;
-  border-radius: 60px 60px 0 0;
+  width: 20vw;
+  height: 100%;
+  padding: 0;
+  bottom: -2px;
+  background: #3b366b;
   box-shadow: 0px -8px 14px -2px rgba(64,169,255,0.09);
   z-index: 0;
 }
@@ -110,12 +109,13 @@ nav {
 .nav-label {
   position: absolute;
   left: 50%;
-  bottom: 0;
+  bottom: -1vw;
   transform: translate(-50%, 100%);
   opacity: 0;
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.5s, opacity 0.3s;
   pointer-events: none;
   color: #6b7280;
+
 }
 nav.show-labels .nav-label {
   transform: translate(-50%, 0);

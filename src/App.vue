@@ -7,6 +7,7 @@
 
 import { ref, computed, onMounted } from 'vue';
 import Finds from './components/Finds.vue';
+import Feed from './components/Feed.vue';
 import Suppliers from './components/Suppliers.vue';
 import Affiliate from './components/Affiliate.vue';
 import Profile from './components/Profile.vue';
@@ -17,7 +18,7 @@ import { translations } from './translations.js';
 import { API_BASE } from './api';
 
 const navItems = ['feed', 'suppliers', 'finds', 'affiliate', 'profile'];
-const pageOrder = ['finds', 'suppliers', 'affiliate', 'profile', 'settings'];
+const pageOrder = ['feed', 'finds', 'suppliers', 'affiliate', 'profile', 'settings'];
 const svgModules = import.meta.glob('./icons/*.svg', { as: 'raw', eager: true });
 const pageIcons = {};
 for (const path in svgModules) {
@@ -25,7 +26,7 @@ for (const path in svgModules) {
   pageIcons[name] = svgModules[path];
 }
 
-const pages = { finds: Finds, suppliers: Suppliers, affiliate: Affiliate, profile: Profile, settings: ProfileSettings };
+const pages = { feed: Feed, finds: Finds, suppliers: Suppliers, affiliate: Affiliate, profile: Profile, settings: ProfileSettings };
 
 const lang = ref(localStorage.getItem('lang') || 'ru');
 const t = computed(() => translations[lang.value] || translations.ru);
@@ -72,10 +73,10 @@ function hideSheet() {
 }
 
 function onNavClick(item) {
-  if (item === 'feed') {
-    showSheet(t.value.feedInDev);
-    return;
-  }
+  // if (item === 'feed') {
+  //   showSheet(t.value.feedInDev);
+  //   return;
+  // }
   showPage(item);
 }
 
