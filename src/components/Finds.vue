@@ -1,6 +1,6 @@
 <!--funds.vue-->
 <template>
-  <div class="finds-container relative h-full overflow-hidden flex flex-col">
+  <div class="finds-container h-full flex flex-col">
     <!-- 🔒 Фиксированная шапка -->
     <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-3 py-4 border-b border-[#2c2c3a]">
       <div class="flex items-center justify-between">
