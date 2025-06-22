@@ -139,49 +139,49 @@ onMounted(() => {
   document.body.classList.toggle('light', (localStorage.getItem('theme') || 'dark') === 'light');
 });
 
-// let startX = null;
-// let startY = null;
-// const dragThreshold = 20;
-// onMounted(() => {
-//   const el = pagesRef.value;
-//   const width = () => el.clientWidth;
-//   el.addEventListener('touchstart', e => {
-//     if (e.touches.length === 1) {
-//       startX = e.touches[0].clientX;
-//       startY = e.touches[0].clientY;
-//       isDragging.value = false;
-//     }
-//   });
-//   el.addEventListener('touchmove', e => {
-//     if (startX === null) return;
-//     const deltaX = e.touches[0].clientX - startX;
-//     const deltaY = e.touches[0].clientY - startY;
-//     if (!isDragging.value) {
-//       if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > dragThreshold) {
-//         isDragging.value = true;
-//       } else {
-//         return;
-//       }
-//     }
-//     dragOffset.value = (deltaX / width()) * 100;
-//   });
-//   el.addEventListener('touchend', e => {
-//     if (startX === null) return;
-//     const deltaX = e.changedTouches[0].clientX - startX;
-//     if (isDragging.value && Math.abs(deltaX) > width() / 4) {
-//       if (deltaX < 0 && currentIndex.value < pageOrder.length - 1) {
-//         showPage(pageOrder[currentIndex.value + 1]);
-//       } else if (deltaX > 0 && currentIndex.value > 0) {
-//         showPage(pageOrder[currentIndex.value - 1]);
-//       }
-//     }
-//     dragOffset.value = 0;
-//     isDragging.value = false;
-//     startX = null;
-//     startY = null;
-//   });
-// });
-//
+let startX = null;
+let startY = null;
+const dragThreshold = 20;
+onMounted(() => {
+  const el = pagesRef.value;
+  const width = () => el.clientWidth;
+  el.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isDragging.value = false;
+    }
+  });
+  el.addEventListener('touchmove', e => {
+    if (startX === null) return;
+    const deltaX = e.touches[0].clientX - startX;
+    const deltaY = e.touches[0].clientY - startY;
+    if (!isDragging.value) {
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > dragThreshold) {
+        isDragging.value = true;
+      } else {
+        return;
+      }
+    }
+    dragOffset.value = (deltaX / width()) * 100;
+  });
+  el.addEventListener('touchend', e => {
+    if (startX === null) return;
+    const deltaX = e.changedTouches[0].clientX - startX;
+    if (isDragging.value && Math.abs(deltaX) > width() / 4) {
+      if (deltaX < 0 && currentIndex.value < pageOrder.length - 1) {
+        showPage(pageOrder[currentIndex.value + 1]);
+      } else if (deltaX > 0 && currentIndex.value > 0) {
+        showPage(pageOrder[currentIndex.value - 1]);
+      }
+    }
+    dragOffset.value = 0;
+    isDragging.value = false;
+    startX = null;
+    startY = null;
+  });
+});
+
 // onMounted(() => {
 //   const nav = navRef.value;
 //   let sy = null;
@@ -195,7 +195,7 @@ onMounted(() => {
 //     sy = null;
 //   });
 // });
-//
+
 // onMounted(() => {
 //   const pagesEls = innerRef.value.querySelectorAll('.page');
 //   pagesEls.forEach(page => {
