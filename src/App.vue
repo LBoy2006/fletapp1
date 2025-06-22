@@ -142,9 +142,11 @@ onMounted(() => {
 let startX = null;
 let startY = null;
 const dragThreshold = 20;
+
 onMounted(() => {
   const el = pagesRef.value;
   const width = () => el.clientWidth;
+
   el.addEventListener('touchstart', e => {
     if (e.touches.length === 1) {
       startX = e.touches[0].clientX;
@@ -152,22 +154,43 @@ onMounted(() => {
       isDragging.value = false;
     }
   });
+
   el.addEventListener('touchmove', e => {
-    if (startX === null) return;
-    const deltaX = e.touches[0].clientX - startX;
-    const deltaY = e.touches[0].clientY - startY;
+    if (startX === null || startY === null) return;
+
+    const touch = e.touches[0];
+    const deltaX = touch.clientX - startX;
+    const deltaY = touch.clientY - startY;
+
+    const absX = Math.abs(deltaX);
+    const absY = Math.abs(deltaY);
+
     if (!isDragging.value) {
-      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > dragThreshold) {
+      // ⛔ Прекратить свайп, если жест — вертикальный
+      if (absY > absX) {
+        startX = null;
+        startY = null;
+        return;
+      }
+
+      // ✅ Если горизонтальный свайп достаточно большой — начинаем
+      if (absX > dragThreshold) {
         isDragging.value = true;
       } else {
         return;
       }
     }
+
+    // 🎯 Выполняем свайп
     dragOffset.value = (deltaX / width()) * 100;
-  });
+    e.preventDefault(); // важно для плавности
+  }, { passive: false });
+
   el.addEventListener('touchend', e => {
     if (startX === null) return;
+
     const deltaX = e.changedTouches[0].clientX - startX;
+
     if (isDragging.value && Math.abs(deltaX) > width() / 4) {
       if (deltaX < 0 && currentIndex.value < pageOrder.length - 1) {
         showPage(pageOrder[currentIndex.value + 1]);
@@ -175,12 +198,14 @@ onMounted(() => {
         showPage(pageOrder[currentIndex.value - 1]);
       }
     }
+
     dragOffset.value = 0;
     isDragging.value = false;
     startX = null;
     startY = null;
   });
 });
+
 
 // onMounted(() => {
 //   const nav = navRef.value;

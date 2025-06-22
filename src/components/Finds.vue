@@ -16,7 +16,7 @@
     </div>
 
     <!-- 🔁 Прокручиваемый контент -->
-    <div class="overflow-y-auto flex-1 px-3 pb-24 space-y-4">
+    <div class="h-64 overflow-y-auto px-3 pb-24 space-y-4">
       <div v-if="error" class="text-center text-red-500 py-10">
         Не удалось загрузить товары дня. Попробуйте позже.
       </div>
