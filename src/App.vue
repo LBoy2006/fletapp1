@@ -139,100 +139,100 @@ onMounted(() => {
   document.body.classList.toggle('light', (localStorage.getItem('theme') || 'dark') === 'light');
 });
 
-let startX = null;
-let startY = null;
-const dragThreshold = 20;
-onMounted(() => {
-  const el = pagesRef.value;
-  const width = () => el.clientWidth;
-  el.addEventListener('touchstart', e => {
-    if (e.touches.length === 1) {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
-      isDragging.value = false;
-    }
-  });
-  el.addEventListener('touchmove', e => {
-    if (startX === null) return;
-    const deltaX = e.touches[0].clientX - startX;
-    const deltaY = e.touches[0].clientY - startY;
-    if (!isDragging.value) {
-      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > dragThreshold) {
-        isDragging.value = true;
-      } else {
-        return;
-      }
-    }
-    dragOffset.value = (deltaX / width()) * 100;
-  });
-  el.addEventListener('touchend', e => {
-    if (startX === null) return;
-    const deltaX = e.changedTouches[0].clientX - startX;
-    if (isDragging.value && Math.abs(deltaX) > width() / 4) {
-      if (deltaX < 0 && currentIndex.value < pageOrder.length - 1) {
-        showPage(pageOrder[currentIndex.value + 1]);
-      } else if (deltaX > 0 && currentIndex.value > 0) {
-        showPage(pageOrder[currentIndex.value - 1]);
-      }
-    }
-    dragOffset.value = 0;
-    isDragging.value = false;
-    startX = null;
-    startY = null;
-  });
-});
-
-onMounted(() => {
-  const nav = navRef.value;
-  let sy = null;
-  nav.addEventListener('touchstart', e => {
-    if (e.touches.length === 1) sy = e.touches[0].clientY;
-  });
-  nav.addEventListener('touchend', e => {
-    if (sy === null) return;
-    const dy = e.changedTouches[0].clientY - sy;
-    if (dy < -30) revealLabels();
-    sy = null;
-  });
-});
-
-onMounted(() => {
-  const pagesEls = innerRef.value.querySelectorAll('.page');
-  pagesEls.forEach(page => {
-    let sy = null;
-    let pulling = false;
-    page.addEventListener('touchstart', e => {
-      if (e.touches.length !== 1) return;
-      sy = e.touches[0].clientY;
-      pulling = false;
-      page.style.transition = '';
-    });
-    page.addEventListener('touchmove', e => {
-      if (sy === null || isDragging.value) return;
-      const cy = e.touches[0].clientY;
-      const diff = cy - sy;
-      const atTop = page.scrollTop <= 0;
-      const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
-      if ((atTop && diff > 0) || (atBottom && diff < 0)) {
-        e.preventDefault();
-        pulling = true;
-        page.style.transform = `translateY(${diff / 4}px)`;
-      }
-    });
-    const reset = () => {
-      if (!pulling) {
-        sy = null;
-        return;
-      }
-      page.style.transition = 'transform 0.3s';
-      page.style.transform = 'translateY(0)';
-      sy = null;
-      pulling = false;
-    };
-    page.addEventListener('touchend', reset);
-    page.addEventListener('touchcancel', reset);
-  });
-});
+// let startX = null;
+// let startY = null;
+// const dragThreshold = 20;
+// onMounted(() => {
+//   const el = pagesRef.value;
+//   const width = () => el.clientWidth;
+//   el.addEventListener('touchstart', e => {
+//     if (e.touches.length === 1) {
+//       startX = e.touches[0].clientX;
+//       startY = e.touches[0].clientY;
+//       isDragging.value = false;
+//     }
+//   });
+//   el.addEventListener('touchmove', e => {
+//     if (startX === null) return;
+//     const deltaX = e.touches[0].clientX - startX;
+//     const deltaY = e.touches[0].clientY - startY;
+//     if (!isDragging.value) {
+//       if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > dragThreshold) {
+//         isDragging.value = true;
+//       } else {
+//         return;
+//       }
+//     }
+//     dragOffset.value = (deltaX / width()) * 100;
+//   });
+//   el.addEventListener('touchend', e => {
+//     if (startX === null) return;
+//     const deltaX = e.changedTouches[0].clientX - startX;
+//     if (isDragging.value && Math.abs(deltaX) > width() / 4) {
+//       if (deltaX < 0 && currentIndex.value < pageOrder.length - 1) {
+//         showPage(pageOrder[currentIndex.value + 1]);
+//       } else if (deltaX > 0 && currentIndex.value > 0) {
+//         showPage(pageOrder[currentIndex.value - 1]);
+//       }
+//     }
+//     dragOffset.value = 0;
+//     isDragging.value = false;
+//     startX = null;
+//     startY = null;
+//   });
+// });
+//
+// onMounted(() => {
+//   const nav = navRef.value;
+//   let sy = null;
+//   nav.addEventListener('touchstart', e => {
+//     if (e.touches.length === 1) sy = e.touches[0].clientY;
+//   });
+//   nav.addEventListener('touchend', e => {
+//     if (sy === null) return;
+//     const dy = e.changedTouches[0].clientY - sy;
+//     if (dy < -30) revealLabels();
+//     sy = null;
+//   });
+// });
+//
+// onMounted(() => {
+//   const pagesEls = innerRef.value.querySelectorAll('.page');
+//   pagesEls.forEach(page => {
+//     let sy = null;
+//     let pulling = false;
+//     page.addEventListener('touchstart', e => {
+//       if (e.touches.length !== 1) return;
+//       sy = e.touches[0].clientY;
+//       pulling = false;
+//       page.style.transition = '';
+//     });
+//     page.addEventListener('touchmove', e => {
+//       if (sy === null || isDragging.value) return;
+//       const cy = e.touches[0].clientY;
+//       const diff = cy - sy;
+//       const atTop = page.scrollTop <= 0;
+//       const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
+//       if ((atTop && diff > 0) || (atBottom && diff < 0)) {
+//         e.preventDefault();
+//         pulling = true;
+//         page.style.transform = `translateY(${diff / 4}px)`;
+//       }
+//     });
+//     const reset = () => {
+//       if (!pulling) {
+//         sy = null;
+//         return;
+//       }
+//       page.style.transition = 'transform 0.3s';
+//       page.style.transform = 'translateY(0)';
+//       sy = null;
+//       pulling = false;
+//     };
+//     page.addEventListener('touchend', reset);
+//     page.addEventListener('touchcancel', reset);
+//   });
+// });
 
 function revealLabels() {
   // Показываем подписи к иконкам в нижней навигации
