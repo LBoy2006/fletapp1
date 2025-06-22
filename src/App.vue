@@ -16,7 +16,7 @@ import { userData } from './state';
 import { translations } from './translations.js';
 import { API_BASE } from './api';
 
-const navItems = ['feed', 'finds', 'suppliers', 'affiliate', 'profile'];
+const navItems = ['feed', 'suppliers', 'finds', 'affiliate', 'profile'];
 const pageOrder = ['finds', 'suppliers', 'affiliate', 'profile', 'settings'];
 const svgModules = import.meta.glob('./icons/*.svg', { as: 'raw', eager: true });
 const pageIcons = {};
