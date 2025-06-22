@@ -296,7 +296,7 @@ onMounted(() => {
 <template>
   <Payment v-if="showPayment" @paid="onPaid" />
   <div v-else class="min-h-screen flex flex-col">
-    <div ref="pagesRef" class="flex-1 overflow-auto">
+    <div ref="pagesRef" class="flex-1 overflow-y-hidden">
       <div ref="innerRef" class="flex" :style="dragStyle">
         <div v-for="p in pageOrder" :key="p" class="page w-full flex-shrink-0">
           <component :is="pages[p]" :t="t" />
