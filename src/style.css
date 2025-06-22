@@ -33,6 +33,9 @@ body {
   height: 100%;
   overflow-y: auto;
 }
+.page.no-page-scroll {
+  overflow-y: hidden;
+}
 nav {
   position: fixed;
   bottom: 0;

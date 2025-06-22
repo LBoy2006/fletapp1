@@ -298,7 +298,11 @@ onMounted(() => {
   <div v-else class="min-h-screen flex flex-col">
     <div ref="pagesRef" class="flex-1 overflow-x-hidden">
       <div ref="innerRef" class="flex" :style="dragStyle">
-        <div v-for="p in pageOrder" :key="p" class="page w-full flex-shrink-0">
+        <div
+          v-for="p in pageOrder"
+          :key="p"
+          :class="['page w-full flex-shrink-0', { 'no-page-scroll': ['finds', 'suppliers'].includes(p) }]"
+        >
           <component :is="pages[p]" :t="t" />
         </div>
       </div>
