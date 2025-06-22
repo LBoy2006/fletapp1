@@ -296,14 +296,14 @@ onMounted(() => {
 <template>
   <Payment v-if="showPayment" @paid="onPaid" />
   <div v-else class="min-h-screen flex flex-col">
-    <div ref="pagesRef" class="flex-1 overflow-x-hidden">
+    <div ref="pagesRef" class="flex-1 overflow-hidden">
       <div ref="innerRef" class="flex" :style="dragStyle">
-        <div v-for="p in pageOrder" :key="p" class="page w-full flex-shrink-0">
+        <div v-for="p in pageOrder" :key="p" class="page w-full flex-shrink-0 h-full overflow-y-auto">
           <component :is="pages[p]" :t="t" />
         </div>
       </div>
     </div>
-    <nav ref="navRef" :class="{'show-labels': showLabels}" :style="{ bottom: navBottom + 'px' }">
+    <nav ref="navRef" :class="{'show-labels': showLabels} " :style="{ bottom: navBottom + 'px' }">
       <button v-for="item in navItems" :key="item" class="nav-btn" :class="{ active: pageOrder[currentIndex]===item }" @click="onNavClick(item)">
         <i :class="['icon', pageIcons[item]]"></i>
         <span class="nav-label">{{ t[item] }}</span>
