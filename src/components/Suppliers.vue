@@ -1,5 +1,7 @@
+<!--Suppliers.vue-->
 <template>
-  <div class="space-y-4 p-4">
+  <div class="h-full flex flex-col space-y-4 p-4">
+    <div class="sticky top-0 z-10">
     <h2 class="text-2xl font-bold text-center">Поставщики</h2>
 
     <div class="space-y-3">
@@ -34,7 +36,8 @@
         <label for="favOnly" class="text-sm">Показать только избранное</label>
       </div>
     </div>
-
+</div>
+    <div class="overflow-y-auto flex-1">
     <div v-if="!suppliers.length" class="text-center text-gray-500 py-10">Нет результатов</div>
     <div v-else class="space-y-4">
       <div v-for="s in suppliers" :key="s.id" class="bg-gray-800 p-4 rounded flex items-center">
@@ -49,7 +52,7 @@
         <button @click="openContacts(s)" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">Контакт</button>
       </div>
     </div>
-
+</div>
   </div>
 </template>
 

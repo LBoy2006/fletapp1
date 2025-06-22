@@ -182,57 +182,57 @@ onMounted(() => {
   });
 });
 
-onMounted(() => {
-  const nav = navRef.value;
-  let sy = null;
-  nav.addEventListener('touchstart', e => {
-    if (e.touches.length === 1) sy = e.touches[0].clientY;
-  });
-  nav.addEventListener('touchend', e => {
-    if (sy === null) return;
-    const dy = e.changedTouches[0].clientY - sy;
-    if (dy < -30) revealLabels();
-    sy = null;
-  });
-});
+// onMounted(() => {
+//   const nav = navRef.value;
+//   let sy = null;
+//   nav.addEventListener('touchstart', e => {
+//     if (e.touches.length === 1) sy = e.touches[0].clientY;
+//   });
+//   nav.addEventListener('touchend', e => {
+//     if (sy === null) return;
+//     const dy = e.changedTouches[0].clientY - sy;
+//     if (dy < -30) revealLabels();
+//     sy = null;
+//   });
+// });
 
-onMounted(() => {
-  const pagesEls = innerRef.value.querySelectorAll('.page');
-  pagesEls.forEach(page => {
-    let sy = null;
-    let pulling = false;
-    page.addEventListener('touchstart', e => {
-      if (e.touches.length !== 1) return;
-      sy = e.touches[0].clientY;
-      pulling = false;
-      page.style.transition = '';
-    });
-    page.addEventListener('touchmove', e => {
-      if (sy === null || isDragging.value) return;
-      const cy = e.touches[0].clientY;
-      const diff = cy - sy;
-      const atTop = page.scrollTop <= 0;
-      const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
-      if ((atTop && diff > 0) || (atBottom && diff < 0)) {
-        e.preventDefault();
-        pulling = true;
-        page.style.transform = `translateY(${diff / 4}px)`;
-      }
-    });
-    const reset = () => {
-      if (!pulling) {
-        sy = null;
-        return;
-      }
-      page.style.transition = 'transform 0.3s';
-      page.style.transform = 'translateY(0)';
-      sy = null;
-      pulling = false;
-    };
-    page.addEventListener('touchend', reset);
-    page.addEventListener('touchcancel', reset);
-  });
-});
+// onMounted(() => {
+//   const pagesEls = innerRef.value.querySelectorAll('.page');
+//   pagesEls.forEach(page => {
+//     let sy = null;
+//     let pulling = false;
+//     page.addEventListener('touchstart', e => {
+//       if (e.touches.length !== 1) return;
+//       sy = e.touches[0].clientY;
+//       pulling = false;
+//       page.style.transition = '';
+//     });
+//     page.addEventListener('touchmove', e => {
+//       if (sy === null || isDragging.value) return;
+//       const cy = e.touches[0].clientY;
+//       const diff = cy - sy;
+//       const atTop = page.scrollTop <= 0;
+//       const atBottom = page.scrollTop + page.clientHeight >= page.scrollHeight;
+//       if ((atTop && diff > 0) || (atBottom && diff < 0)) {
+//         e.preventDefault();
+//         pulling = true;
+//         page.style.transform = `translateY(${diff / 4}px)`;
+//       }
+//     });
+//     const reset = () => {
+//       if (!pulling) {
+//         sy = null;
+//         return;
+//       }
+//       page.style.transition = 'transform 0.3s';
+//       page.style.transform = 'translateY(0)';
+//       sy = null;
+//       pulling = false;
+//     };
+//     page.addEventListener('touchend', reset);
+//     page.addEventListener('touchcancel', reset);
+//   });
+// });
 
 function revealLabels() {
   // Показываем подписи к иконкам в нижней навигации
@@ -296,7 +296,7 @@ onMounted(() => {
 <template>
   <Payment v-if="showPayment" @paid="onPaid" />
   <div v-else class="min-h-screen flex flex-col">
-    <div ref="pagesRef" class="flex-1 overflow-auto">
+    <div ref="pagesRef" class="flex-1 overflow-x-hidden">
       <div ref="innerRef" class="flex" :style="dragStyle">
         <div v-for="p in pageOrder" :key="p" class="page w-full flex-shrink-0">
           <component :is="pages[p]" :t="t" />

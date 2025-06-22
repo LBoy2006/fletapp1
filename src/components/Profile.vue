@@ -1,5 +1,5 @@
 <template>
-  <div class="relative p-4 space-y-4">
+  <div class="relative p-4 space-y-4 overflow-hidden">
     <button class="absolute top-2 right-2 text-xl" @click="openSettings">
       <i class="fas fa-cog"></i>
     </button>

@@ -166,10 +166,10 @@ nav.show-labels .nav-label {
 .sheet-slide-leave-active {
   transition: transform 0.3s, opacity 0.3s;
 }
-.finds-container {
-  background: var(--page-bg-color);
-  height: 100%; /* ✅ фикс */
-}
+/*.finds-container {*/
+/*  background: var(--page-bg-color);*/
+/*  height: 100%; !* ✅ фикс *!*/
+/*}*/
 .find-card {
   border: 1.5px solid #242434;
   box-shadow: 0 2px 12px 0 #18192733;
