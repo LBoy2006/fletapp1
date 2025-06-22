@@ -8,6 +8,7 @@ import ProfileSettings from './components/ProfileSettings.vue';
 import Payment from './components/Payment.vue';
 import { userData } from './state';
 import { translations } from './translations.js';
+import { API_BASE } from './api';
 
 const navItems = ['feed', 'finds', 'suppliers', 'affiliate', 'profile'];
 const pageOrder = ['finds', 'suppliers', 'affiliate', 'profile', 'settings'];
@@ -87,7 +88,7 @@ onMounted(() => {
       userData.user = tgUser;
 
       // Отправляем initData на backend для бесшовной авторизации
-      fetch('https://1chn.api.gptbrainbot.ru/auth/telegram', {
+      fetch(`${API_BASE}/auth/telegram`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
