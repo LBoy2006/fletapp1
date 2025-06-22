@@ -272,36 +272,28 @@ function revealLabels() {
 
 
 function applySafeInsets() {
-  // Проверяем, доступно ли Telegram WebApp API
   if (window.Telegram?.WebApp) {
-    // Проверка, открыт ли WebApp в полноэкранном режиме
     const isFullscreen = Telegram.WebApp.isFullscreen;
-    // Получаем "безопасные отступы" (например, для устройств с вырезами/ноутчами или панелями)
-    const safeInset = Telegram.WebApp.contentSafeAreaInset;
-    // Получаем нижний отступ (если есть), иначе 0
-    const insetBottom = safeInset ? parseInt(safeInset.bottom) || 0 : 0;
-    // Сохраняем нижний отступ в реактивную переменную (используется для позиционирования нижней навигации)
-    navBottom.value = insetBottom;
-    // Устанавливаем высоту нижней навигации (возможно, ты тестировал с завышенным значением — 1000)
+    const safeInset = Telegram.WebApp.contentSafeAreaInset || {};
+    const insetBottom = parseInt(safeInset.bottom) || 0;
     const navHeight = 70;
-    // Проходимся по всем элементам с классом `.page`
+
+    navBottom.value = insetBottom;
+
     document.querySelectorAll('.page').forEach(p => {
-      // Если полноэкранный режим и есть данные об отступах
-      if (isFullscreen && safeInset) {
-        // Получаем верхний отступ и добавляем немного пространства (например, чтобы не перекрывал статус-бар)
-        const insetTop = parseInt(safeInset.top) || 0;
-        const extraOffset = Telegram.WebApp.SafeAreaInset.top;
-        const insert = Telegram.WebApp.сontentSafeAreaInset.top;
-        p.style.paddingTop = `${insetTop + extraOffset + insert}px`;
+      // Добавляем/удаляем класс safe-area
+      if (isFullscreen) {
+        p.classList.add('safe-area');
       } else {
-        // В остальных случаях убираем верхний отступ
-        p.style.paddingTop = '';
+        p.classList.remove('safe-area');
       }
-      // Добавляем нижний отступ, равный высоте навигации + безопасный нижний отступ устройства
+
+      // Устанавливаем padding-bottom через JS (если нужно)
       p.style.paddingBottom = `${navHeight + insetBottom}px`;
     });
   }
 }
+
 
 window.applySafeInsets = applySafeInsets;
 window.showPage = showPage;
