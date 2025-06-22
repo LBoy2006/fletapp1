@@ -284,7 +284,7 @@ function applySafeInsets() {
     document.querySelectorAll('.page').forEach(p => {
       if (isFullscreen) {
         p.classList.add('safe-area');
-        p.style.paddingTop = `${28 + insetTop}px`;
+        p.style.paddingTop = `${20 + insetTop}px`;
       } else {
         p.classList.remove('safe-area');
         p.style.paddingTop = '';
