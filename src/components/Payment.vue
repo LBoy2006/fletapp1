@@ -8,12 +8,12 @@
     <div class="modal-overlay fixed inset-0 backdrop-blur-sm flex items-center justify-center z-10">
       <div class="space-y-4 text-center">
         <div class="glitch text-md pb-5" data-text="Запись не найдена">Запись не найдена</div>
-        <p class="text-m pb-5">
+        <p class="text-m pb-5 flicker">
           Доступ к системе закрыт<br />
           Активируйте профиль, чтобы <br />
           начать операцию
         </p>
-        <button @click="pay" class="text-green-500 hover:underline text-md">
+        <button @click="pay" class="glitch-scale text-green-500 hover:underline text-md">
           [ ПОЛУЧИТЬ ДОСТУП ]
         </button>
       </div>
@@ -118,4 +118,37 @@ onMounted(() => {
   60% { top: 0; left: -1px; }
   100% { top: 2px; left: -2px; }
 }
+
+.flicker {
+  animation: flickerAnim 2s infinite;
+}
+
+@keyframes flickerAnim {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 2px #0f0, 0 0 6px #0f0;
+  }
+  20%, 24%, 55% {
+    opacity: 0.3;
+    text-shadow: none;
+  }
+  22% {
+    opacity: 0.6;
+    text-shadow: 0 0 1px #0f0;
+  }
+}
+
+.glitch-scale {
+  animation: glitchFrame 1.8s infinite steps(2, end);
+}
+
+@keyframes glitchFrame {
+  0%   { transform: scale(1) translate(0, 0); opacity: 1; }
+  10%  { transform: scale(1.05) translate(-2px, 1px); opacity: 0.8; }
+  20%  { transform: scale(0.98) translate(3px, -1px); opacity: 1; }
+  30%  { transform: scale(1.02) translate(-1px, 2px); opacity: 0.9; }
+  50%  { transform: scale(1) translate(0, 0); opacity: 1; }
+  100% { transform: scale(1) translate(0, 0); opacity: 1; }
+}
+
 </style>
