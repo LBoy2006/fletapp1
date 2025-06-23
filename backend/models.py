@@ -59,6 +59,8 @@ class Find(Base):
     name = Column(String)
     description = Column(String)
     photo_url = Column(String)
+    category1 = Column(String)
+    category2 = Column(String)
     price = Column(Integer)
     supplier_id = Column(Integer, index=True)
     created_at = Column(DateTime)

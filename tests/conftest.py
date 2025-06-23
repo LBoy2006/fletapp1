@@ -53,8 +53,17 @@ def db_session(client):
             await crud.create_affiliate(db, user.id)
             supplier1 = models.Supplier(name='Store A', contact_link='link')
             supplier2 = models.Supplier(name='Store B', contact_link='link')
-            find = models.Find(name='Item', supplier_id=1, created_at=datetime.utcnow())
-            db.add_all([supplier1, supplier2, find])
+            find1 = models.Find(
+                name='Item 1', supplier_id=1,
+                category1='CatA', category2='BrandX',
+                created_at=datetime.utcnow()
+            )
+            find2 = models.Find(
+                name='Item 2', supplier_id=2,
+                category1='CatB', category2='BrandY',
+                created_at=datetime.utcnow()
+            )
+            db.add_all([supplier1, supplier2, find1, find2])
             await db.commit()
             client.app.state.user_id = user.id
 

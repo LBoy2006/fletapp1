@@ -66,6 +66,8 @@ class FindOut(BaseModel):
     name: str
     description: str | None = None
     photo_url: str | None = None
+    category1: str | None = None
+    category2: str | None = None
     price: int | None = None
     supplier_id: int | None = None
     created_at: datetime
