@@ -236,32 +236,4 @@ watch(selectedCat1, () => {
 watch([selectedCat2, showFavOnly], loadSuppliers, { deep: true })
 </script>
 
-<style scoped>
-.heart-icon {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  transition: fill 0.2s, color 0.2s;
-  stroke-width: 2;
-  stroke: currentColor;
-}
 
-.heart-inactive {
-  color: #4b4b4b;
-  fill: transparent;
-}
-
-.heart-active {
-  color: #9333ea;
-  fill: #9333ea;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

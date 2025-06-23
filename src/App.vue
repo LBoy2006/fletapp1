@@ -19,7 +19,11 @@ import { API_BASE } from './api';
 
 const navItems = ['feed', 'suppliers', 'finds', 'affiliate', 'profile'];
 const pageOrder = ['feed', 'suppliers', 'finds', 'affiliate', 'profile', 'settings'];
-const svgModules = import.meta.glob('./icons/*.svg', { as: 'raw', eager: true });
+const svgModules = import.meta.glob('./icons/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true
+});
 const pageIcons = {};
 for (const path in svgModules) {
   const name = path.replace('./icons/', '').replace('.svg', '');
