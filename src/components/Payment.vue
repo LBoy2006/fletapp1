@@ -126,7 +126,7 @@ onMounted(() => {
 @keyframes flickerAnim {
   0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
     opacity: 1;
-    text-shadow: 0 0 2px #0f0, 0 0 6px #0f0;
+    text-shadow: 0 0 2px #0f0, 0 0 6px #ff2600;
   }
   20%, 24%, 55% {
     opacity: 0.3;
@@ -134,7 +134,7 @@ onMounted(() => {
   }
   22% {
     opacity: 0.6;
-    text-shadow: 0 0 1px #0f0;
+    text-shadow: 0 0 1px #ff5900;
   }
 }
 
@@ -150,5 +150,7 @@ onMounted(() => {
   50%  { transform: scale(1) translate(0, 0); opacity: 1; }
   100% { transform: scale(1) translate(0, 0); opacity: 1; }
 }
+
+
 
 </style>
