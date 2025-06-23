@@ -206,12 +206,8 @@ async function openContacts(s) {
     const r = await fetch(`${API_BASE}/suppliers/${s.id}/contacts`)
     if (r.ok) {
       const data = await r.json()
-      const lines = [
-        `Ссылка: ${data.contact_link || '—'}`,
-        `Телефон: ${data.contact_phone || '—'}`,
-        `Пароль: ${data.contact_password || '—'}`
-      ]
-      if (window.showSheet) window.showSheet(lines)
+      const info = { ...s, ...data }
+      if (window.showSupplierModal) window.showSupplierModal(info)
     }
   } catch (e) {
     console.error(e)

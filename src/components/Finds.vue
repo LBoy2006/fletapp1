@@ -246,19 +246,16 @@ async function toggleFav(f) {
 
 async function openSupplier(id) {
   try {
+    let sData = {}
     const info = await fetch(`${API_BASE}/suppliers/${id}`)
     if (info.ok) {
-      await info.json()
+      sData = await info.json()
     }
     const cont = await fetch(`${API_BASE}/suppliers/${id}/contacts`)
     if (cont.ok) {
       const c = await cont.json()
-      const lines = [
-        `Ссылка: ${c.contact_link || '—'}`,
-        `Телефон: ${c.contact_phone || '—'}`,
-        `Пароль: ${c.contact_password || '—'}`
-      ]
-      if (window.showSheet) window.showSheet(lines)
+      const modalData = { ...sData, ...c }
+      if (window.showSupplierModal) window.showSupplierModal(modalData)
     }
   } catch (e) {
     console.error(e)
