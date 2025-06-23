@@ -1,40 +1,55 @@
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-    <div class="bg-[#232226] rounded-2xl p-5 w-[350px] shadow-xl relative">
-      <button class="absolute top-4 right-4 text-white" @click="emitClose">
-        <svg width="20" height="20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
-      <div class="flex items-start mb-4">
-        <img :src="supplier.photo_url" alt="Supplier" class="w-16 h-16 rounded-full object-cover" />
-        <div class="ml-4 flex-1">
-          <div class="text-xl font-bold text-white">{{ supplier.name }}</div>
-          <div class="text-sm text-gray-400">{{ supplier.suppliers_count || 0 }} Suppliers</div>
+    <div class="bg-[#232226] rounded-2xl w-[350px] px-0 pb-6 pt-0 shadow-xl relative">
+      <!-- Header -->
+      <div class="flex justify-between items-center px-5 pt-5 pb-2">
+        <div class="text-white text-base font-medium">Supplier</div>
+        <button class="text-white" @click="emitClose">
+          <svg width="20" height="20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <!-- Card -->
+      <div class="bg-[#29282C] mx-5 rounded-2xl p-4 pt-3 flex items-start relative mb-4 mt-0">
+        <img :src="supplier.photo_url" alt="Supplier" class="w-16 h-16 rounded-xl object-cover border-2 border-[#232226]" />
+        <div class="ml-3 flex-1">
+          <div class="text-lg font-semibold text-white leading-5">{{ supplier.name }}</div>
+          <div class="text-xs text-gray-400 mb-2">{{ supplier.suppliers_count || 0 }} Suppliers</div>
+          <div class="flex flex-wrap gap-x-2 gap-y-0.5">
+            <span
+              v-for="cat in categories"
+              :key="cat"
+              class="text-xs text-[#7A65FC] font-medium cursor-pointer hover:underline"
+            >{{ cat }}</span>
+          </div>
         </div>
-        <div class="ml-2 text-purple-400">
-          <svg width="24" height="24" fill="none" :class="supplier.is_favorite ? 'heart-active' : 'heart-inactive'">
-            <path d="M12 21s-5-4.35-8-7.35C1.38 11.02 1.52 7.36 4.22 5.78A5.13 5.13 0 0112 7.25a5.13 5.13 0 017.78-1.47c2.7 1.58 2.84 5.24.22 7.87C17 16.65 12 21 12 21z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <button class="ml-2" @click="toggleFavorite">
+          <svg width="24" height="24" fill="none" :class="supplier.is_favorite ? 'text-[#7A65FC]' : 'text-[#565466]'">
+            <path d="M12 21s-5-4.35-8-7.35C1.38 11.02 1.52 7.36 4.22 5.78A5.13 5.13 0 0112 7.25a5.13 5.13 0 017.78-1.47c2.7 1.58 2.84 5.24.22 7.87C17 16.65 12 21 12 21z"
+              :stroke="supplier.is_favorite ? '#7A65FC' : '#565466'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" :fill="supplier.is_favorite ? '#7A65FC' : 'none'" />
           </svg>
+        </button>
+      </div>
+      <!-- Телефон и пароль -->
+      <div class="mx-5 mb-2 rounded-xl overflow-hidden bg-[#18181B] border border-[#2C2B30]">
+        <div class="flex justify-between items-center px-4 py-3 border-b border-[#232226]">
+          <span class="text-sm text-gray-400">Телефон</span>
+          <span class="font-bold text-lg text-white tracking-wide">{{ supplier.contact_phone || '—' }}</span>
+        </div>
+        <div class="flex justify-between items-center px-4 py-3">
+          <span class="text-sm text-gray-400">Пароль</span>
+          <span class="font-bold text-lg text-white tracking-wide">{{ supplier.contact_password || '—' }}</span>
         </div>
       </div>
-      <div class="text-sm text-gray-300 mb-4">{{ supplier.description }}</div>
-      <div class="flex flex-wrap gap-x-2 gap-y-1 mb-4">
-        <span v-for="cat in categories" :key="cat" class="text-xs text-purple-400 hover:underline">{{ cat }}</span>
-      </div>
-      <div class="bg-[#1A1A1E] rounded-lg p-3 mb-4">
-        <div class="flex justify-between items-center text-gray-400 text-sm mb-2">
-          <span>Телефон</span>
-          <span class="font-bold text-lg text-white">{{ supplier.contact_phone || '—' }}</span>
-        </div>
-        <div class="flex justify-between items-center text-gray-400 text-sm">
-          <span>Пароль</span>
-          <span class="font-bold text-lg text-white">{{ supplier.contact_password || '—' }}</span>
-        </div>
-      </div>
-      <button @click="copyLink" class="w-full flex items-center justify-center gap-2 bg-[#18181B] text-white rounded-lg py-2 mb-2">
+      <!-- Кнопки -->
+      <button @click="copyLink"
+        class="mx-5 w-[calc(100%-40px)] flex items-center justify-center gap-2 bg-[#18181B] text-white rounded-lg py-2 font-medium mb-2">
         <svg width="18" height="18" fill="none"><rect x="3" y="6" width="12" height="6" rx="1" stroke="currentColor" stroke-width="2"/><path d="M7 10v2a1 1 0 001 1h2a1 1 0 001-1v-2" stroke="currentColor" stroke-width="2"/></svg>
         Скопировать ссылку
       </button>
-      <a :href="supplier.contact_link || '#'" target="_blank" class="w-full flex items-center justify-center gap-2 bg-[#7A65FC] text-white rounded-lg py-3 font-semibold text-base mt-1">
+      <a
+        :href="supplier.contact_link || '#'"
+        target="_blank"
+        class="mx-5 w-[calc(100%-40px)] flex items-center justify-center gap-2 bg-[#7A65FC] text-white rounded-lg py-3 font-semibold text-base transition-colors duration-150 hover:bg-[#9984f8]">
         <svg width="20" height="20" fill="none"><path d="M9.5 6.5v-2A1.5 1.5 0 0111 3h6a1.5 1.5 0 011.5 1.5v12A1.5 1.5 0 0117 18h-6a1.5 1.5 0 01-1.5-1.5v-2M5 12h11.5m-8-3l-3 3 3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Перейти на сайт
       </a>
@@ -43,25 +58,24 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-
+const emit = defineEmits(['close']);
 const props = defineProps({
-  supplier: { type: Object, required: true }
-})
-const emit = defineEmits(['close', 'copied'])
-
-const categories = computed(() => [props.supplier.category1, props.supplier.category2].filter(Boolean))
-
-function emitClose() {
-  emit('close')
-}
-
-
-function copyLink() {
-  if (props.supplier.contact_link) {
-    navigator.clipboard?.writeText(props.supplier.contact_link)
-    emit('copied')
+  supplier: {
+    type: Object,
+    required: true,
+  },
+  categories: {
+    type: Array,
+    default: () => [],
   }
-}
+});
+const emitClose = () => emit('close');
+const copyLink = () => {
+  if (props.supplier.contact_link) {
+    navigator.clipboard.writeText(props.supplier.contact_link);
+  }
+};
+const toggleFavorite = () => {
+  props.supplier.is_favorite = !props.supplier.is_favorite;
+};
 </script>
-
