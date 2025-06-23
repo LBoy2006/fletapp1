@@ -260,3 +260,12 @@ nav.show-labels .nav-label {
   background-color: #19191B;
   box-shadow: 0 4px 32px rgba(0, 0, 0, 0.6);
 }
+
+.payment-modal {
+  position: relative;
+  width: 320px;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  background-color: #232226;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.6);
+}
