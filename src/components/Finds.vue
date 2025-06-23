@@ -248,8 +248,17 @@ async function openSupplier(id) {
   try {
     const info = await fetch(`${API_BASE}/suppliers/${id}`)
     if (info.ok) {
-      const data = await info.json()
-      if (window.showSupplierModal) window.showSupplierModal(data)
+      await info.json()
+    }
+    const cont = await fetch(`${API_BASE}/suppliers/${id}/contacts`)
+    if (cont.ok) {
+      const c = await cont.json()
+      const lines = [
+        `Ссылка: ${c.contact_link || '—'}`,
+        `Телефон: ${c.contact_phone || '—'}`,
+        `Пароль: ${c.contact_password || '—'}`
+      ]
+      if (window.showSheet) window.showSheet(lines)
     }
   } catch (e) {
     console.error(e)
