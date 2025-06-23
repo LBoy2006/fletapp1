@@ -7,28 +7,22 @@ from ..database import get_db
 router = APIRouter()
 
 
-@router.get('/suppliers/categories1')
-async def get_categories1(db: AsyncSession = Depends(get_db)):
-    return await crud.list_categories1(db)
+@router.get('/suppliers/categories')
+async def get_categories(db: AsyncSession = Depends(get_db)):
+    return await crud.list_categories(db)
 
 
-@router.get('/suppliers/categories2')
-async def get_categories2(categories1: str = '', db: AsyncSession = Depends(get_db)):
-    cats1 = [c.strip() for c in categories1.split(',') if c.strip()]
-    return await crud.list_categories2(db, cats1)
 
 
 @router.get('/suppliers', response_model=list[schemas.SupplierOut])
 async def list_suppliers(
     user_id: int,
-    categories1: str = '',
-    categories2: str = '',
+    categories: str = '',
     favorites_only: bool = False,
     db: AsyncSession = Depends(get_db),
 ):
-    cats1 = [c.strip() for c in categories1.split(',') if c.strip()]
-    cats2 = [c.strip() for c in categories2.split(',') if c.strip()]
-    suppliers = await crud.list_suppliers(db, cats1, cats2)
+    cats = [c.strip() for c in categories.split(',') if c.strip()]
+    suppliers = await crud.list_suppliers(db, cats)
     fav_ids = set(await crud.get_favorite_supplier_ids(db, user_id))
     if favorites_only:
         suppliers = [s for s in suppliers if s.id in fav_ids]

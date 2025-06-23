@@ -6,10 +6,17 @@ def test_list_suppliers(client, db_session):
     assert len(resp.json()) == 2
 
 
+def test_supplier_categories(client, db_session):
+    resp = client.get('/suppliers/categories')
+    assert resp.status_code == 200
+    assert set(resp.json()) == {'CatA', 'CatB'}
+
+
 def test_get_supplier(client, db_session):
     resp = client.get('/suppliers/1')
     assert resp.status_code == 200
     assert resp.json()['id'] == 1
+    assert resp.json()['categories'] == ['CatA', 'CatB']
 
 
 def test_get_supplier_not_found(client, db_session):

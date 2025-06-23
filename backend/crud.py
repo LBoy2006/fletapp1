@@ -113,33 +113,28 @@ async def request_withdraw(db: AsyncSession, user_id: int) -> models.Affiliate |
     return stat
 
 
-async def list_categories1(db: AsyncSession) -> list[str]:
-    result = await db.execute(select(models.Supplier.category1).distinct())
+async def list_categories(db: AsyncSession) -> list[str]:
+    result = await db.execute(select(models.Supplier.categories))
     cats = result.scalars().all()
-    return [c for c in cats if c]
-
-
-async def list_categories2(db: AsyncSession, categories1: list[str] | None = None) -> list[str]:
-    stmt = select(models.Supplier.category2)
-    if categories1:
-        stmt = stmt.where(models.Supplier.category1.in_(categories1))
-    result = await db.execute(stmt.distinct())
-    cats = result.scalars().all()
-    return [c for c in cats if c]
+    unique = set()
+    for c in cats:
+        if c:
+            unique.update(c)
+    return sorted(unique)
 
 
 async def list_suppliers(
     db: AsyncSession,
-    categories1: list[str] | None = None,
-    categories2: list[str] | None = None,
+    categories: list[str] | None = None,
 ) -> list[models.Supplier]:
-    stmt = select(models.Supplier)
-    if categories1:
-        stmt = stmt.where(models.Supplier.category1.in_(categories1))
-    if categories2:
-        stmt = stmt.where(models.Supplier.category2.in_(categories2))
-    result = await db.execute(stmt)
-    return result.scalars().all()
+    result = await db.execute(select(models.Supplier))
+    suppliers = result.scalars().all()
+    if categories:
+        suppliers = [
+            s for s in suppliers
+            if s.categories and any(c in s.categories for c in categories)
+        ]
+    return suppliers
 
 
 async def get_favorite_supplier_ids(db: AsyncSession, user_id: int) -> list[int]:

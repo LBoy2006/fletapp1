@@ -42,8 +42,7 @@ class SupplierBase(BaseModel):
     name: str
     description: str | None = None
     photo_url: str | None = None
-    category1: str | None = None
-    category2: str | None = None
+    categories: list[str] | None = None
 
 
 class SupplierOut(SupplierBase):
