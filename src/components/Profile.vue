@@ -1,25 +1,36 @@
 <template>
-  <div class="relative p-4 space-y-4 overflow-hidden">
-    <button class="absolute top-2 right-2 text-xl" @click="openSettings">
-      <i class="fas fa-cog"></i>
-    </button>
-    <div class="bg-gray-800 p-4 rounded text-center">
-      <div class="avatar mx-auto mb-3">
-        <span class="num">{{ numDisplay }}</span>
+  <div class="h-full flex flex-col space-y-1 p-2">
+    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-3 py-4 border-b border-[#2c2c3a]">
+      <div class="relative flex items-center justify-between">
+        <span class="text-lg font-bold text-white">Profile</span>
+        <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+          <span class="text-2xl font-extrabold text-white">1chn</span>
+          <span class="text-sm text-gray-400">[ван чан]</span>
+        </div>
+        <button class="text-xl z-10" @click="openSettings">
+          <i class="fas fa-cog"></i>
+        </button>
       </div>
-      <div class="font-semibold text-lg">{{ user.agent_number || '—' }}</div>
-      <div>{{ t.daysInClub }}: {{ user.days_in_club ?? '—' }}</div>
-      <div>{{ t.location }}: {{ user.location || '—' }}</div>
-      <div>{{ t.status }}: {{ user.status || '—' }}</div>
     </div>
-    <div class="bg-gray-800 p-4 rounded">
-      <h3 class="text-lg font-bold mb-2">{{ t.aboutClub }}</h3>
-      <p>Клуб единомышленников, где агенты обмениваются опытом и секретами эффективных продаж. Присоединяйся и расширяй свои возможности.</p>
-    </div>
-    <div class="flex justify-around">
-      <a href="https://t.me/secret_channel" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.secretChannel }}</a>
-      <a href="https://t.me/club_chat" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.chat }}</a>
-      <a href="https://t.me/club_support" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.support }}</a>
+    <div class="relative p-4 space-y-4 overflow-hidden flex-1">
+      <div class="bg-gray-800 p-4 rounded text-center">
+        <div class="avatar mx-auto mb-3">
+          <span class="num">{{ numDisplay }}</span>
+        </div>
+        <div class="font-semibold text-lg">{{ user.agent_number || '—' }}</div>
+        <div>{{ t.daysInClub }}: {{ user.days_in_club ?? '—' }}</div>
+        <div>{{ t.location }}: {{ user.location || '—' }}</div>
+        <div>{{ t.status }}: {{ user.status || '—' }}</div>
+      </div>
+      <div class="bg-gray-800 p-4 rounded">
+        <h3 class="text-lg font-bold mb-2">{{ t.aboutClub }}</h3>
+        <p>Клуб единомышленников, где агенты обмениваются опытом и секретами эффективных продаж. Присоединяйся и расширяй свои возможности.</p>
+      </div>
+      <div class="flex justify-around">
+        <a href="https://t.me/secret_channel" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.secretChannel }}</a>
+        <a href="https://t.me/club_chat" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.chat }}</a>
+        <a href="https://t.me/club_support" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.support }}</a>
+      </div>
     </div>
   </div>
 </template>
