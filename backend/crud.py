@@ -168,6 +168,32 @@ async def toggle_favorite_supplier(db: AsyncSession, user_id: int, supplier_id: 
         return True
 
 
+async def get_favorite_find_ids(db: AsyncSession, user_id: int) -> list[int]:
+    result = await db.execute(
+        select(models.FavoriteFind.find_id).where(models.FavoriteFind.user_id == user_id)
+    )
+    return [r for r in result.scalars().all()]
+
+
+async def toggle_favorite_find(db: AsyncSession, user_id: int, find_id: int) -> bool:
+    result = await db.execute(
+        select(models.FavoriteFind).where(
+            models.FavoriteFind.user_id == user_id,
+            models.FavoriteFind.find_id == find_id,
+        )
+    )
+    fav = result.scalar_one_or_none()
+    if fav:
+        await db.delete(fav)
+        await db.commit()
+        return False
+    else:
+        fav = models.FavoriteFind(user_id=user_id, find_id=find_id)
+        db.add(fav)
+        await db.commit()
+        return True
+
+
 async def get_supplier(db: AsyncSession, supplier_id: int) -> models.Supplier | None:
     result = await db.execute(select(models.Supplier).where(models.Supplier.id == supplier_id))
     return result.scalar_one_or_none()

@@ -53,6 +53,13 @@ class FavoriteSupplier(Base):
     supplier_id = Column(Integer, index=True)
 
 
+class FavoriteFind(Base):
+    __tablename__ = 'favorite_finds'
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(BigInteger, index=True)
+    find_id = Column(Integer, index=True)
+
+
 class Find(Base):
     __tablename__ = 'finds'
     id = Column(Integer, primary_key=True, index=True)
