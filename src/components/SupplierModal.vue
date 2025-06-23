@@ -1,8 +1,9 @@
 <template>
-  <div class="modal-overlay">
+  <div class="modal-overlay backdrop-blur-sm ">
+    <div class="absolute bottom-20">
     <div class="supplier-modal">
       <!-- Header -->
-      <div class="flex items-center px-1 pt-5 pb-2 relative">
+      <div class="flex items-center px-1 pt-2 pb-2 relative">
   <!-- Пустой блок для выравнивания -->
   <div class="w-6"></div>
   <div class="flex-1 text-center text-white text-base font-medium">Supplier</div>
@@ -33,7 +34,13 @@
     </div>
     <button class="ml-2" @click="toggleFavorite">
       <svg width="24" height="24" fill="none" :class="supplier.is_favorite ? 'text-[#7A65FC]' : 'text-[#565466]'">
-        <path d="M12 21s-5-4.35-8-7.35C1.38 11.02 1.52 7.36 4.22 5.78A5.13 5.13 0 0112 7.25a5.13 5.13 0 017.78-1.47c2.7 1.58 2.84 5.24.22 7.87C17 16.65 12 21 12 21z"
+        <path d="M12 21s-5-4.35-8-7.35
+        C1.38 11.02 1.52 7.36 4.22 5.78
+        A5.13 5.13 0 0112 7.25
+        a5.13 5.13 0 017.78-1.47
+        c2.7 1.58 2.84 5.24.22 7.87
+        C17 16.65 12 21 12 21
+        z"
           :stroke="supplier.is_favorite ? '#7A65FC' : '#565466'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" :fill="supplier.is_favorite ? '#7A65FC' : 'none'" />
       </svg>
     </button>
@@ -70,6 +77,7 @@
         Перейти на сайт
       </a>
     </div>
+     </div>
   </div>
 </template>
 

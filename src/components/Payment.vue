@@ -1,6 +1,6 @@
 <template>
-  <div class="modal-overlay">
-    <div class="payment-modal p-4 text-center space-y-4">
+  <div class="modal-overlay fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center">
+    <div class="payment-modal p-4 bg-white rounded-lg text-center space-y-4 shadow-lg">
       <p>Вы не являетесь членом клуба 1chn.</p>
       <button
         @click="pay"
@@ -11,6 +11,13 @@
     </div>
   </div>
 </template>
+
+<!--<script setup>-->
+<!--function pay() {-->
+<!--  console.log('Оплата начата');-->
+<!--}-->
+<!--</script>-->
+
 <script setup>
 import { userData } from '../state'
 import { API_BASE } from '../api'

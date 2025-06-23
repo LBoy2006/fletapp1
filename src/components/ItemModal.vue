@@ -1,6 +1,7 @@
 <template>
-  <div class="modal-overlay">
-    <div class="item-modal">
+  <div class="modal-overlay backdrop-blur-sm">
+    <div class="absolute bottom-20">
+    <div class="item-modal ">
       <button class="absolute top-4 right-4 text-[#A4A4A8] hover:text-white" @click="emitClose">
         <svg width="20" height="20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
@@ -55,7 +56,7 @@
         <svg width="20" height="20" fill="none"><path d="M9.5 6.5v-2A1.5 1.5 0 0111 3h6a1.5 1.5 0 011.5 1.5v12A1.5 1.5 0 0117 18h-6a1.5 1.5 0 01-1.5-1.5v-2M5 12h11.5m-8-3l-3 3 3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Перейти по ссылке
       </a>
-    </div>
+    </div></div>
   </div>
 </template>
 
