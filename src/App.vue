@@ -13,6 +13,7 @@ import Affiliate from './components/Affiliate.vue';
 import Profile from './components/Profile.vue';
 import ProfileSettings from './components/ProfileSettings.vue';
 import Payment from './components/Payment.vue';
+import SupplierModal from './components/SupplierModal.vue';
 import { userData } from './state';
 import { translations } from './translations.js';
 import { API_BASE } from './api';
@@ -36,6 +37,8 @@ const t = translations.en;
 const currentIndex = ref(pageOrder.indexOf('finds'));
 const sheetVisible = ref(false);
 const sheetLines = ref([]);
+const supplierModalVisible = ref(false);
+const supplierModalData = ref(null);
 const pagesRef = ref(null);
 const innerRef = ref(null);
 const navRef = ref(null);
@@ -68,6 +71,20 @@ function showSheet(lines) {
 
 function hideSheet() {
   sheetVisible.value = false;
+}
+
+function showSupplierModal(data) {
+  supplierModalData.value = data;
+  supplierModalVisible.value = true;
+}
+
+function hideSupplierModal() {
+  supplierModalVisible.value = false;
+  supplierModalData.value = null;
+}
+
+function onLinkCopied() {
+  showSheet('Link copied');
 }
 
 function onNavClick(item) {
@@ -298,6 +315,8 @@ window.applySafeInsets = applySafeInsets;
 window.showPage = showPage;
 window.showSheet = showSheet;
 window.hideSheet = hideSheet;
+window.showSupplierModal = showSupplierModal;
+window.hideSupplierModal = hideSupplierModal;
 
 onMounted(() => {
   if (window.Telegram?.WebApp) {
@@ -312,6 +331,12 @@ onMounted(() => {
 </script>
 <template>
   <Payment v-if="showPayment" @paid="onPaid" />
+  <SupplierModal
+    v-if="supplierModalVisible"
+    :supplier="supplierModalData"
+    @close="hideSupplierModal"
+    @copied="onLinkCopied"
+  />
   <div v-else class="min-h-screen flex flex-col">
     <div ref="pagesRef" class="flex-1 overflow-x-hidden">
       <div ref="innerRef" class="flex h-full " :style="dragStyle">
