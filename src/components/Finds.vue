@@ -123,7 +123,7 @@
 
           <!-- Кнопки -->
           <div class="flex flex-col items-end justify-between h-full min-w-[32px] gap-3">
-            <button @click="openSupplier(f.supplier_id)" class="rounded-full p-2 text-white bg-[#353666] hover:bg-[#5567c9]">
+            <button @click="openItem(f)" class="rounded-full p-2 text-white bg-[#353666] hover:bg-[#5567c9]">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
               </svg>
@@ -242,6 +242,10 @@ async function toggleFav(f) {
   } catch (e) {
     console.error(e)
   }
+}
+
+function openItem(item) {
+  if (window.showItemModal) window.showItemModal(item)
 }
 
 async function openSupplier(id) {
