@@ -71,5 +71,6 @@ class FindOut(BaseModel):
     price: int | None = None
     supplier_id: int | None = None
     created_at: datetime
+    is_favorite: bool | None = None
 
     model_config = {"from_attributes": True}

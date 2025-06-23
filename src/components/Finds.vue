@@ -146,6 +146,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { userData } from '../state'
 import { API_BASE } from '../api'
 
 const finds = ref([])
@@ -200,18 +201,21 @@ function formatR(val) {
 }
 
 async function loadFinds() {
+  if (!userData.user.id) return
   loading.value = true
   error.value = false
   try {
     const p1 = selectedCat1.value.join(',')
     const p2 = selectedCat2.value.join(',')
-    const url = `${API_BASE}/finds?categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}`
+    const fav = showFavOnly.value ? 'true' : 'false'
+    const uid = userData.user.id
+    const url = `${API_BASE}/finds?user_id=${uid}&categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}&favorites_only=${fav}`
     const r = await fetch(url)
     if (r.ok) {
       finds.value = (await r.json()).map(f => ({
         ...f,
-        fav: false, // инициализация лайка
-        badge: f.badge || null // badge: 'NEW' | 'HOT' | 'GOLD'
+        fav: f.is_favorite || false,
+        badge: f.badge || null
       }))
     } else {
       error.value = true
@@ -224,8 +228,20 @@ async function loadFinds() {
   }
 }
 
-function toggleFav(f) {
-  f.fav = !f.fav
+async function toggleFav(f) {
+  try {
+    const r = await fetch(`${API_BASE}/finds/${f.id}/favorite`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userData.user.id })
+    })
+    if (r.ok) {
+      const data = await r.json()
+      f.fav = data.favorite
+    }
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 async function openSupplier(id) {
@@ -255,10 +271,14 @@ onMounted(() => {
   loadFinds()
 })
 
+watch(() => userData.user.id, id => {
+  if (id) loadFinds()
+})
+
 watch(selectedCat1, () => {
   loadCategories2()
   loadFinds()
 }, { deep: true })
 
-watch(selectedCat2, loadFinds, { deep: true })
+watch([selectedCat2, showFavOnly], loadFinds, { deep: true })
 </script>
