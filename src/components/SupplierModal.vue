@@ -1,6 +1,6 @@
 <template>
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-    <div class="bg-[#232226] rounded-2xl w-[350px] px-0 pb-6 pt-0 shadow-xl relative">
+  <div class="modal-overlay">
+    <div class="supplier-modal">
       <!-- Header -->
       <div class="flex justify-between items-center px-5 pt-5 pb-2">
         <div class="text-white text-base font-medium">Supplier</div>
