@@ -1,18 +1,90 @@
 <!--Funds.vue-->
 <template>
-  <div class="finds-container h-full flex flex-col">
+  <div class="h-full flex flex-col space-y-1 p-2">
     <!-- 🔒 Фиксированная шапка -->
-    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-3 py-4 border-b border-[#2c2c3a]">
-      <div class="flex items-center justify-between">
-        <span class="text-lg font-bold">Finds</span>
-        <span class="text-2xl font-extrabold">1chn</span>
-        <button class="text-purple-400 text-sm font-bold flex items-center gap-1">
-          <span>Filters</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M19 9l-7 7-7-7"/>
+    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] space-y-3 px-3 py-4 border-b border-[#2c2c3a]">
+      <div class="relative flex items-center justify-between">
+        <span class="text-lg font-bold text-white">Finds</span>
+
+        <!-- Центрированный заголовок -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+          <span class="text-2xl font-extrabold text-white">1chn</span>
+          <span class="text-sm text-gray-400">[ван чан]</span>
+        </div>
+
+        <!-- Сердце с счётчиком -->
+        <div class="relative w-6 h-6">
+          <svg
+            @click="showFavOnly = !showFavOnly"
+            class="heart-icon"
+            :class="showFavOnly ? 'heart-active' : 'heart-inactive'"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+              2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+              C13.09 3.81 14.76 3 16.5 3
+              19.58 3 22 5.42 22 8.5
+              c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
           </svg>
+          <span
+            class="absolute -bottom-1 -right-2 bg-black text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center border border-white"
+          >
+            {{ favoritesCount }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Кнопка фильтра -->
+      <div class="mt-3">
+        <button
+          @click="filtersOpen = !filtersOpen"
+          class="w-full bg-purple-700 text-white font-semibold py-1 rounded text-sm"
+        >
+          Filters
+          <span :class="filtersOpen ? 'rotate-180' : ''" class="inline-block transition-transform ml-1">▼</span>
         </button>
       </div>
+
+      <!-- Выпадающие фильтры -->
+      <transition name="fade">
+        <div v-if="filtersOpen" class="px-1 py-3 bg-[var(--page-bg-color)] space-y-3 border-b border-[#2c2c3a]">
+          <div>
+            <div class="text-sm mb-1 text-white">Категория</div>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="c in categories1"
+                :key="c"
+                @click="toggleCat1(c)"
+                :class="[
+                  'px-3 py-1 rounded-full text-sm border',
+                  selectedCat1.includes(c) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
+                ]"
+              >
+                {{ c }}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-sm mb-1 text-white">Бренд</div>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="b in categories2"
+                :key="b"
+                @click="toggleCat2(b)"
+                :class="[
+                  'px-3 py-1 rounded-full text-sm border',
+                  selectedCat2.includes(b) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
+                ]"
+              >
+                {{ b }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </transition>
     </div>
 
     <!-- 🔁 Прокручиваемый контент -->
@@ -21,12 +93,12 @@
         Не удалось загрузить товары дня. Попробуйте позже.
       </div>
       <div v-else-if="loading" class="text-center text-gray-400 py-10">Загрузка...</div>
-      <div v-else-if="!finds.length" class="text-center text-gray-500 py-10">
+      <div v-else-if="!displayedFinds.length" class="text-center text-gray-500 py-10">
         Сегодня пока нет новых товаров
       </div>
       <div v-else class="space-y-3">
         <div
-          v-for="f in finds"
+          v-for="f in displayedFinds"
           :key="f.id"
           class="find-card relative bg-[#222227] rounded-2xl px-3 py-3 flex items-center gap-3 shadow-sm"
         >
@@ -73,12 +145,54 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { API_BASE } from '../api'
 
 const finds = ref([])
 const loading = ref(true)
 const error = ref(false)
+const categories1 = ref([])
+const categories2 = ref([])
+const selectedCat1 = ref([])
+const selectedCat2 = ref([])
+const showFavOnly = ref(false)
+const filtersOpen = ref(false)
+
+const favoritesCount = computed(() => finds.value.filter(f => f.fav).length)
+const displayedFinds = computed(() =>
+  showFavOnly.value ? finds.value.filter(f => f.fav) : finds.value
+)
+
+function toggleCat1(c) {
+  const idx = selectedCat1.value.indexOf(c)
+  if (idx >= 0) selectedCat1.value.splice(idx, 1)
+  else selectedCat1.value.push(c)
+}
+
+function toggleCat2(c) {
+  const idx = selectedCat2.value.indexOf(c)
+  if (idx >= 0) selectedCat2.value.splice(idx, 1)
+  else selectedCat2.value.push(c)
+}
+
+async function loadCategories1() {
+  try {
+    const r = await fetch(`${API_BASE}/finds/categories1`)
+    if (r.ok) categories1.value = await r.json()
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+async function loadCategories2() {
+  try {
+    const params = selectedCat1.value.join(',')
+    const r = await fetch(`${API_BASE}/finds/categories2?categories1=${encodeURIComponent(params)}`)
+    if (r.ok) categories2.value = await r.json()
+  } catch (e) {
+    console.error(e)
+  }
+}
 
 function formatR(val) {
   if (val === undefined || val === null) return '—'
@@ -89,7 +203,10 @@ async function loadFinds() {
   loading.value = true
   error.value = false
   try {
-    const r = await fetch(`${API_BASE}/finds`)
+    const p1 = selectedCat1.value.join(',')
+    const p2 = selectedCat2.value.join(',')
+    const url = `${API_BASE}/finds?categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}`
+    const r = await fetch(url)
     if (r.ok) {
       finds.value = (await r.json()).map(f => ({
         ...f,
@@ -103,7 +220,7 @@ async function loadFinds() {
     error.value = true
   } finally {
     loading.value = false
-        if (window.applySafeInsets) window.applySafeInsets()
+    if (window.applySafeInsets) window.applySafeInsets()
   }
 }
 
@@ -132,5 +249,16 @@ async function openSupplier(id) {
   }
 }
 
-onMounted(loadFinds)
+onMounted(() => {
+  loadCategories1()
+  loadCategories2()
+  loadFinds()
+})
+
+watch(selectedCat1, () => {
+  loadCategories2()
+  loadFinds()
+}, { deep: true })
+
+watch(selectedCat2, loadFinds, { deep: true })
 </script>

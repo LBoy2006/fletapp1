@@ -172,7 +172,30 @@ async def get_supplier(db: AsyncSession, supplier_id: int) -> models.Supplier | 
     result = await db.execute(select(models.Supplier).where(models.Supplier.id == supplier_id))
     return result.scalar_one_or_none()
 
+async def list_find_categories1(db: AsyncSession) -> list[str]:
+    result = await db.execute(select(models.Find.category1).distinct())
+    cats = result.scalars().all()
+    return [c for c in cats if c]
 
-async def list_finds(db: AsyncSession) -> list[models.Find]:
-    result = await db.execute(select(models.Find).order_by(models.Find.created_at.desc()))
+
+async def list_find_categories2(db: AsyncSession, categories1: list[str] | None = None) -> list[str]:
+    stmt = select(models.Find.category2)
+    if categories1:
+        stmt = stmt.where(models.Find.category1.in_(categories1))
+    result = await db.execute(stmt.distinct())
+    cats = result.scalars().all()
+    return [c for c in cats if c]
+
+
+async def list_finds(
+    db: AsyncSession,
+    categories1: list[str] | None = None,
+    categories2: list[str] | None = None,
+) -> list[models.Find]:
+    stmt = select(models.Find).order_by(models.Find.created_at.desc())
+    if categories1:
+        stmt = stmt.where(models.Find.category1.in_(categories1))
+    if categories2:
+        stmt = stmt.where(models.Find.category2.in_(categories2))
+    result = await db.execute(stmt)
     return result.scalars().all()
