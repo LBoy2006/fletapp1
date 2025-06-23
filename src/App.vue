@@ -13,6 +13,7 @@ import Affiliate from './components/Affiliate.vue';
 import Profile from './components/Profile.vue';
 import ProfileSettings from './components/ProfileSettings.vue';
 import Payment from './components/Payment.vue';
+import SupplierModal from './components/SupplierModal.vue';
 import { userData } from './state';
 import { translations } from './translations.js';
 import { API_BASE } from './api';
@@ -36,6 +37,8 @@ const t = translations.en;
 const currentIndex = ref(pageOrder.indexOf('finds'));
 const sheetVisible = ref(false);
 const sheetLines = ref([]);
+const supplierModalVisible = ref(false);
+const supplierModalData = ref(null);
 const pagesRef = ref(null);
 const innerRef = ref(null);
 const navRef = ref(null);
@@ -68,6 +71,15 @@ function showSheet(lines) {
 
 function hideSheet() {
   sheetVisible.value = false;
+}
+
+function showSupplierModal(data) {
+  supplierModalData.value = data;
+  supplierModalVisible.value = true;
+}
+
+function hideSupplierModal() {
+  supplierModalVisible.value = false;
 }
 
 function onNavClick(item) {
@@ -298,6 +310,8 @@ window.applySafeInsets = applySafeInsets;
 window.showPage = showPage;
 window.showSheet = showSheet;
 window.hideSheet = hideSheet;
+window.showSupplierModal = showSupplierModal;
+window.hideSupplierModal = hideSupplierModal;
 
 onMounted(() => {
   if (window.Telegram?.WebApp) {
@@ -334,6 +348,9 @@ onMounted(() => {
       <div v-if="sheetVisible" class="fixed bottom-20 inset-x-0 mx-4 p-4 bg-gray-800 rounded" @click="hideSheet">
         <p v-for="l in sheetLines" :key="l">{{ l }}</p>
       </div>
+    </transition>
+    <transition name="modal-fade">
+      <SupplierModal v-if="supplierModalVisible" :supplier="supplierModalData" @close="hideSupplierModal" />
     </transition>
   </div>
 </template>
