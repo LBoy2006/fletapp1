@@ -203,15 +203,10 @@ async function toggleFavorite(s) {
 
 async function openContacts(s) {
   try {
-    const r = await fetch(`${API_BASE}/suppliers/${s.id}/contacts`)
+    const r = await fetch(`${API_BASE}/suppliers/${s.id}`)
     if (r.ok) {
       const data = await r.json()
-      const lines = [
-        `Ссылка: ${data.contact_link || '—'}`,
-        `Телефон: ${data.contact_phone || '—'}`,
-        `Пароль: ${data.contact_password || '—'}`
-      ]
-      if (window.showSheet) window.showSheet(lines)
+      if (window.showSupplierModal) window.showSupplierModal(data)
     }
   } catch (e) {
     console.error(e)
