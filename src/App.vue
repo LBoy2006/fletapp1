@@ -357,9 +357,7 @@ onMounted(() => {
     Telegram.WebApp.disableVerticalSwipes();
     applySafeInsets();
   }
-  if (!showPayment.value) {
-    showPage('finds');
-  }
+  showPage('finds');
 });
 </script>
 <template>
@@ -377,7 +375,7 @@ onMounted(() => {
     @copied="onLinkCopied"
     @toggle-favorite="onItemToggleFavorite"
   />
-  <div v-else class="min-h-screen flex flex-col">
+  <div class="min-h-screen flex flex-col">
     <div ref="pagesRef" class="flex-1 overflow-x-hidden">
       <div ref="innerRef" class="flex h-full " :style="dragStyle">
         <div
