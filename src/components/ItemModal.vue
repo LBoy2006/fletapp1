@@ -1,6 +1,6 @@
 <template>
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
-    <div class="bg-[#19191B] rounded-2xl px-6 pt-6 pb-4 w-[355px] shadow-[0_4px_32px_0_rgba(0,0,0,0.60)] relative">
+  <div class="modal-overlay">
+    <div class="item-modal">
       <button class="absolute top-4 right-4 text-[#A4A4A8] hover:text-white" @click="emitClose">
         <svg width="20" height="20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
@@ -91,13 +91,3 @@ function toggleFav() {
 }
 </script>
 
-<style scoped>
-.heart-inactive {
-  color: #4b4b4b;
-  fill: transparent;
-}
-.heart-active {
-  color: #9333ea;
-  fill: #9333ea;
-}
-</style>

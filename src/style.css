@@ -230,3 +230,33 @@ nav.show-labels .nav-label {
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome, Safari, Opera */
 }
+
+/* Modal styles extracted from components */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.supplier-modal {
+  position: relative;
+  width: 350px;
+  border-radius: 1rem;
+  padding: 0 0 1.5rem 0;
+  background-color: #232226;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.item-modal {
+  position: relative;
+  width: 355px;
+  border-radius: 1rem;
+  padding: 1.5rem 1.5rem 1rem;
+  background-color: #19191B;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.6);
+}
