@@ -14,6 +14,7 @@ import Profile from './components/Profile.vue';
 import ProfileSettings from './components/ProfileSettings.vue';
 import Payment from './components/Payment.vue';
 import SupplierModal from './components/SupplierModal.vue';
+import ItemModal from './components/ItemModal.vue';
 import { userData } from './state';
 import { translations } from './translations.js';
 import { API_BASE } from './api';
@@ -39,6 +40,8 @@ const sheetVisible = ref(false);
 const sheetLines = ref([]);
 const supplierModalVisible = ref(false);
 const supplierModalData = ref(null);
+const itemModalVisible = ref(false);
+const itemModalData = ref(null);
 const pagesRef = ref(null);
 const innerRef = ref(null);
 const navRef = ref(null);
@@ -81,6 +84,34 @@ function showSupplierModal(data) {
 function hideSupplierModal() {
   supplierModalVisible.value = false;
   supplierModalData.value = null;
+}
+
+function showItemModal(data) {
+  itemModalData.value = data;
+  itemModalVisible.value = true;
+}
+
+function hideItemModal() {
+  itemModalVisible.value = false;
+  itemModalData.value = null;
+}
+
+async function onItemToggleFavorite() {
+  const item = itemModalData.value;
+  if (!item) return;
+  try {
+    const r = await fetch(`${API_BASE}/finds/${item.id}/favorite`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userData.user.id })
+    });
+    if (r.ok) {
+      const data = await r.json();
+      item.fav = data.favorite;
+    }
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 function onLinkCopied() {
@@ -317,6 +348,8 @@ window.showSheet = showSheet;
 window.hideSheet = hideSheet;
 window.showSupplierModal = showSupplierModal;
 window.hideSupplierModal = hideSupplierModal;
+window.showItemModal = showItemModal;
+window.hideItemModal = hideItemModal;
 
 onMounted(() => {
   if (window.Telegram?.WebApp) {
@@ -336,6 +369,13 @@ onMounted(() => {
     :supplier="supplierModalData"
     @close="hideSupplierModal"
     @copied="onLinkCopied"
+  />
+  <ItemModal
+    v-if="itemModalVisible"
+    :item="itemModalData"
+    @close="hideItemModal"
+    @copied="onLinkCopied"
+    @toggle-favorite="onItemToggleFavorite"
   />
   <div v-else class="min-h-screen flex flex-col">
     <div ref="pagesRef" class="flex-1 overflow-x-hidden">
