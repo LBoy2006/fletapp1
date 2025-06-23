@@ -54,32 +54,15 @@
             <div class="text-sm mb-1 text-white">Категория</div>
             <div class="flex flex-wrap gap-2">
               <button
-                v-for="c in categories1"
+                v-for="c in categories"
                 :key="c"
-                @click="toggleCat1(c)"
+                @click="toggleCat(c)"
                 :class="[
                   'px-3 py-1 rounded-full text-sm border',
-                  selectedCat1.includes(c) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
+                  selectedCat.includes(c) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
                 ]"
               >
                 {{ c }}
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <div class="text-sm mb-1 text-white">Бренд</div>
-            <div class="flex flex-wrap gap-2">
-              <button
-                v-for="b in categories2"
-                :key="b"
-                @click="toggleCat2(b)"
-                :class="[
-                  'px-3 py-1 rounded-full text-sm border',
-                  selectedCat2.includes(b) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
-                ]"
-              >
-                {{ b }}
               </button>
             </div>
           </div>
@@ -96,6 +79,9 @@
           <div class="flex-1">
             <div class="font-semibold text-white">{{ s.name }}</div>
             <div class="text-sm text-gray-400">{{ s.description }}</div>
+            <div class="flex flex-wrap gap-1 mt-1">
+              <span v-for="cat in s.categories" :key="cat" class="text-xs text-purple-400">{{ cat }}</span>
+            </div>
           </div>
           <!-- Сердце внутри карточки -->
           <button @click="toggleFavorite(s)" class="relative w-6 h-6 mr-3">
@@ -125,10 +111,8 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { userData } from '../state'
 import { API_BASE } from '../api'
 
-const categories1 = ref([])
-const categories2 = ref([])
-const selectedCat1 = ref([])
-const selectedCat2 = ref([])
+const categories = ref([])
+const selectedCat = ref([])
 const suppliers = ref([])
 const showFavOnly = ref(false)
 const filtersOpen = ref(false)
@@ -137,32 +121,16 @@ const favoritesCount = computed(() =>
   suppliers.value.filter(s => s.is_favorite).length
 )
 
-function toggleCat1(c) {
-  const idx = selectedCat1.value.indexOf(c)
-  if (idx >= 0) selectedCat1.value.splice(idx, 1)
-  else selectedCat1.value.push(c)
+function toggleCat(c) {
+  const idx = selectedCat.value.indexOf(c)
+  if (idx >= 0) selectedCat.value.splice(idx, 1)
+  else selectedCat.value.push(c)
 }
 
-function toggleCat2(c) {
-  const idx = selectedCat2.value.indexOf(c)
-  if (idx >= 0) selectedCat2.value.splice(idx, 1)
-  else selectedCat2.value.push(c)
-}
-
-async function loadCategories1() {
+async function loadCategories() {
   try {
-    const r = await fetch(`${API_BASE}/suppliers/categories1`)
-    if (r.ok) categories1.value = await r.json()
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-async function loadCategories2() {
-  try {
-    const params = selectedCat1.value.join(',')
-    const r = await fetch(`${API_BASE}/suppliers/categories2?categories1=${encodeURIComponent(params)}`)
-    if (r.ok) categories2.value = await r.json()
+    const r = await fetch(`${API_BASE}/suppliers/categories`)
+    if (r.ok) categories.value = await r.json()
   } catch (e) {
     console.error(e)
   }
@@ -171,11 +139,10 @@ async function loadCategories2() {
 async function loadSuppliers() {
   if (!userData.user.id) return
   try {
-    const p1 = selectedCat1.value.join(',')
-    const p2 = selectedCat2.value.join(',')
+    const p1 = selectedCat.value.join(',')
     const fav = showFavOnly.value ? 'true' : 'false'
     const uid = userData.user.id
-    const url = `${API_BASE}/suppliers?user_id=${uid}&categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}&favorites_only=${fav}`
+    const url = `${API_BASE}/suppliers?user_id=${uid}&categories=${encodeURIComponent(p1)}&favorites_only=${fav}`
     const r = await fetch(url)
     if (r.ok) suppliers.value = await r.json()
   } catch (e) {
@@ -215,8 +182,7 @@ async function openContacts(s) {
 }
 
 onMounted(() => {
-  loadCategories1()
-  loadCategories2()
+  loadCategories()
   loadSuppliers()
 })
 
@@ -224,12 +190,7 @@ watch(() => userData.user.id, id => {
   if (id) loadSuppliers()
 })
 
-watch(selectedCat1, () => {
-  loadCategories2()
-  loadSuppliers()
-}, { deep: true })
-
-watch([selectedCat2, showFavOnly], loadSuppliers, { deep: true })
+watch([selectedCat, showFavOnly], loadSuppliers, { deep: true })
 </script>
 
 

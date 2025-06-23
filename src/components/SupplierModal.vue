@@ -24,9 +24,8 @@
       <div class="text-xs text-gray-400 mb-2">{{ supplier.suppliers_count || 0 }} Suppliers</div>
       <div class="text-s absolute font-semibold text-gray-400 leading-4">{{ supplier.description }}</div>
       <div class="flex flex-wrap gap-x-1 gap-y-0.5">
-
         <span
-          v-for="cat in categories"
+          v-for="cat in supplier.categories"
           :key="cat"
           class="text-xs text-[#7A65FC] font-medium cursor-pointer hover:underline"
         >{{ cat }}</span>
@@ -87,10 +86,6 @@ const props = defineProps({
   supplier: {
     type: Object,
     required: true,
-  },
-  categories: {
-    type: Array,
-    default: () => [],
   }
 });
 const emitClose = () => emit('close');

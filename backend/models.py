@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, BigInteger, String, Date, Boolean, DateTime
+from sqlalchemy import Column, Integer, BigInteger, String, Date, Boolean, DateTime, JSON
 from backend.database import Base
 
 class User(Base):
@@ -39,8 +39,7 @@ class Supplier(Base):
     name = Column(String)
     description = Column(String)
     photo_url = Column(String)
-    category1 = Column(String)
-    category2 = Column(String)
+    categories = Column('category1', JSON)
     contact_link = Column(String)
     contact_phone = Column(String)
     contact_password = Column(String)

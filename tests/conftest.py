@@ -51,8 +51,8 @@ def db_session(client):
             await db.commit()
             await db.refresh(user)
             await crud.create_affiliate(db, user.id)
-            supplier1 = models.Supplier(name='Store A', contact_link='link')
-            supplier2 = models.Supplier(name='Store B', contact_link='link')
+            supplier1 = models.Supplier(name='Store A', contact_link='link', categories=['CatA', 'CatB'])
+            supplier2 = models.Supplier(name='Store B', contact_link='link', categories=['CatB'])
             find1 = models.Find(
                 name='Item 1', supplier_id=1,
                 category1='CatA', category2='BrandX',
