@@ -17,13 +17,6 @@
           <div class="w-11 h-6 bg-gray-300 rounded-full transition-colors duration-300 peer-checked:bg-blue-600 before:content-[''] before:absolute before:top-0.5 before:left-0.5 before:w-5 before:h-5 before:bg-white before:border before:border-gray-300 before:rounded-full before:transition-transform before:duration-300 peer-checked:before:translate-x-full"></div>
         </label>
       </div>
-      <div class="flex items-center">
-        <span class="mr-2">{{ t.language }}</span>
-        <select class="border rounded p-1" :value="lang" @change="changeLang">
-          <option value="ru">Русский</option>
-          <option value="en">English</option>
-        </select>
-      </div>
       <div class="flex items-center mt-2">
         <span class="mr-2">{{ t.location }}</span>
         <input v-model="location" class="border rounded p-1 flex-1" />
@@ -47,7 +40,6 @@ const user = ref({});
 const location = ref('');
 const progress = ref(Math.floor(Math.random() * 100));
 const theme = ref(localStorage.getItem('theme') || 'dark');
-const lang = ref(localStorage.getItem('lang') || 'ru');
 const fullscreen = ref(false);
 
 async function loadUser() {
@@ -92,12 +84,6 @@ function toggleFullscreen() {
   setTimeout(() => {
     if (window.applySafeInsets) window.applySafeInsets();
   }, 100);
-}
-
-function changeLang(e) {
-  lang.value = e.target.value;
-  localStorage.setItem('lang', lang.value);
-  window.dispatchEvent(new CustomEvent('langchange', { detail: lang.value }));
 }
 
 async function saveLocation() {

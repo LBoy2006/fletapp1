@@ -28,8 +28,7 @@ for (const path in svgModules) {
 
 const pages = { feed: Feed, finds: Finds, suppliers: Suppliers, affiliate: Affiliate, profile: Profile, settings: ProfileSettings };
 
-const lang = ref(localStorage.getItem('lang') || 'ru');
-const t = computed(() => translations[lang.value] || translations.ru);
+const t = translations.en;
 const currentIndex = ref(pageOrder.indexOf('finds'));
 const sheetVisible = ref(false);
 const sheetLines = ref([]);
@@ -47,11 +46,6 @@ const dragStyle = computed(() => ({
   transform: `translateX(calc(-${currentIndex.value * 100}% + ${dragOffset.value}%))`,
   transition: isDragging.value ? 'none' : ''
 }));
-
-function onLangChange(e) {
-  lang.value = e.detail || e.target.value || 'ru';
-}
-window.addEventListener('langchange', onLangChange);
 
 function showPage(page) {
   currentIndex.value = pageOrder.indexOf(page);
