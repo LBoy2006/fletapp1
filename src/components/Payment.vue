@@ -1,12 +1,12 @@
 <template>
-  <div class="flex items-center justify-center text-center px-4">
+  <div class="flex items-center justify-center text-center">
 
     <!-- Canvas for falling matrix symbols -->
     <canvas class="fixed inset-0 w-full h-full z-10" id="matrix"></canvas>
 
     <!-- Overlay Content -->
     <div class="modal-overlay fixed inset-0 backdrop-blur-sm flex items-center justify-center z-10">
-      <div class="space-y-4 text-center">
+      <div class="space-y-6  text-center pb-20">
         <div class="glitch text-md pb-5" data-text="Запись не найдена">Запись не найдена</div>
         <p class="text-m pb-5 flicker">
           Доступ к системе закрыт<br />

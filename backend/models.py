@@ -39,7 +39,7 @@ class Supplier(Base):
     name = Column(String)
     description = Column(String)
     photo_url = Column(String)
-    categories = Column('category1', JSON)
+    categories = Column(JSON)
     contact_link = Column(String)
     contact_phone = Column(String)
     contact_password = Column(String)
