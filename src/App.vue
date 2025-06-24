@@ -324,7 +324,7 @@ function applySafeInsets() {
     const safeInset = Telegram.WebApp.contentSafeAreaInset || {};
     const insetTop = parseInt(safeInset.top) || 0;
     const insetBottom = parseInt(safeInset.bottom) || 0;
-    const navHeight = 70;
+    const navHeight = 10;
     baseNavBottom.value = insetBottom;
     navBottom.value = insetBottom;
 
