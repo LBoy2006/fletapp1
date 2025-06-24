@@ -345,9 +345,7 @@ function applySafeInsets() {
 function updateNavForKeyboard() {
   const vv = window.visualViewport;
   if (!vv) return;
-  // Высота клавиатуры (если > 0 — клавиатура открыта)
   const keyboardHeight = window.innerHeight - vv.height - vv.offsetTop;
-  // Если клавиатура есть — уводим nav вниз на её высоту
   if (keyboardHeight > 0) {
     navBottom.value = keyboardHeight + baseNavBottom.value;
   } else {
@@ -355,7 +353,23 @@ function updateNavForKeyboard() {
   }
 }
 
+onMounted(() => {
+  if (window.Telegram?.WebApp) {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.disableVerticalSwipes();
+    applySafeInsets();
+    Telegram.WebApp.onEvent('viewportChanged', () => {
+      applySafeInsets();
+      updateNavForKeyboard();
+    });
+  }
 
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateNavForKeyboard);
+  }
+
+  updateNavForKeyboard();
+});
 
 window.applySafeInsets = applySafeInsets;
 window.showPage = showPage;
