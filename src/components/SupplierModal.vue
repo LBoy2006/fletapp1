@@ -22,7 +22,7 @@
               <div class="flex items-center justify-between">
                 <div>
                   <div class="text-lg font-bold text-white leading-5">{{ supplier.name }}</div>
-                  <div class="text-xs text-gray-400 mt-0.5 mb-1">{{ supplier.suppliers_count || 0 }} Suppliers</div>
+                  <div class="text-xs text-gray-400 mt-0.5 mb-1">Избрали {{ supplier.favorites_count || 0 }}</div>
                 </div>
                 <button @click="toggleFavorite">
                   <svg width="24" height="24" fill="none"

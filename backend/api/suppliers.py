@@ -24,12 +24,14 @@ async def list_suppliers(
     cats = [c.strip() for c in categories.split(',') if c.strip()]
     suppliers = await crud.list_suppliers(db, cats)
     fav_ids = set(await crud.get_favorite_supplier_ids(db, user_id))
+    fav_counts = await crud.get_all_favorites_count(db)
     if favorites_only:
         suppliers = [s for s in suppliers if s.id in fav_ids]
     result = []
     for s in suppliers:
         item = schemas.SupplierOut.model_validate(s)
         item.is_favorite = s.id in fav_ids
+        item.favorites_count = fav_counts.get(s.id, 0)
         result.append(item)
     return result
 
@@ -56,5 +58,7 @@ async def get_supplier(supplier_id: int, db: AsyncSession = Depends(get_db)):
     s = await crud.get_supplier(db, supplier_id)
     if not s:
         raise HTTPException(status_code=404, detail='Supplier not found')
-    return schemas.SupplierOut.model_validate(s)
+    item = schemas.SupplierOut.model_validate(s)
+    item.favorites_count = await crud.get_supplier_favorites_count(db, supplier_id)
+    return item
 
