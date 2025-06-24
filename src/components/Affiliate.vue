@@ -149,7 +149,7 @@ import { API_BASE } from '../api'
 const stats = ref({})
 const nickname = ref('')
 const withdrawRequested = ref(false)
-const materialsLink = 'https://drive.google.com/'
+const materialsLink = "https://app.lava.top/products/bee68592-a5ab-49a8-b5e6-f6a576e29255/78fd63a5-1ed5-4f55-900d-b01bf16b6593?paymentParams=CiAgICAgICAgewogICAgICAgICAgImludm9pY2VJZCI6ICI1NjUyMmNjYi1jOGY3LTQ2NzItODU3Yy1jZWZkNTAyOTA2OGEiLAogICAgICAgICAgInBheW1lbnRTZXR0aW5ncyI6IHsiaWQiOiI1NjUyMmNjYi1jOGY3LTQ2NzItODU3Yy1jZWZkNTAyOTA2OGEiLCJ0eXBlIjoiaW52b2ljZSIsInN0YXR1cyI6ImluLXByb2dyZXNzIiwiYW1vdW50X3RvdGFsIjp7ImN1cnJlbmN5IjoiUlVCIiwiYW1vdW50Ijo5OTkwLjB9LCJwcm92aWRlciI6eyJuYW1lIjoiYmFuazEzMSIsInBhcmFtZXRlcnMiOnsicHVibGljX3Rva2VuIjoiMzUwMTEyMGU0NDA5ZGY5Y2I0OWM0OWM1NzUwZTMxMmUwMmE3MzA1MDQ3OGEyNmUyYjI1MjA5OTE2MzQ3YmZhYSIsInN0eWxlc2hlZXQiOiJodHRwczovL3dpZGdldC5iYW5rMTMxLnJ1L3BheW1lbnQtZm9ybS5jc3MiLCJzY3JpcHQiOiJodHRwczovL3dpZGdldC5iYW5rMTMxLnJ1L3BheW1lbnQtZm9ybS5qcyJ9fX0KICAgICAgICB9CiAgICAgIA"
 
 function formatR(val) {
   if (val === undefined || val === null) return '—'
