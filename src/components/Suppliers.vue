@@ -77,34 +77,58 @@
     <div class="flex-1 overflow-y-auto scrollbar-hide">
       <div v-if="!suppliers.length" class="text-center text-gray-500 py-10">Нет результатов</div>
       <div v-else class="space-y-4">
-        <div v-for="s in suppliers" :key="s.id" class="bg-gray-800 p-4 rounded flex items-center">
-          <img :src="s.photo_url" class="w-12 h-12 rounded-full object-cover mr-3" />
-          <div class="flex-1">
-            <div class="font-semibold text-white">{{ s.name }}</div>
-            <div class="text-sm text-gray-400">{{ s.description }}</div>
-            <div class="flex flex-wrap gap-1 mt-1">
-              <span v-for="cat in s.categories" :key="cat" class="text-xs text-purple-400">{{ cat }}</span>
-            </div>
-          </div>
-          <!-- Сердце внутри карточки -->
-          <button @click="toggleFavorite(s)" class="relative w-6 h-6 mr-3">
-            <svg
-              class="heart-icon"
-              :class="s.is_favorite ? 'heart-active' : 'heart-inactive'"
-              viewBox="0 0 24 24"
-            >
-              <path
-                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+  <div
+    v-for="s in suppliers"
+    :key="s.id"
+    class="bg-[#232226] rounded-2xl shadow flex items-center px-4 py-3"
+  >
+    <!-- Аватар -->
+    <img
+      :src="s.photo_url"
+      class="w-14 h-14 rounded-full object-cover border-2 border-[#18181B] shadow mr-4"
+      alt="avatar"
+    />
+    <!-- Контент -->
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center">
+        <div class="font-semibold text-white text-lg leading-tight truncate">{{ s.name }}</div>
+        <button @click="toggleFavorite(s)" class="ml-auto">
+          <svg
+            width="24" height="24" viewBox="0 0 24 24" fill="none"
+            :class="s.is_favorite ? 'text-[#7A65FC]' : 'text-[#4B4B50]'"
+          >
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
                 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
                 C13.09 3.81 14.76 3 16.5 3
                 19.58 3 22 5.42 22 8.5
                 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-              />
-            </svg>
-          </button>
-          <button @click="openContacts(s)" class="bg-blue-600 text-white px-3 py-1 rounded text-sm">Контакт</button>
-        </div>
+              :fill="s.is_favorite ? '#7A65FC' : 'none'"
+              :stroke="s.is_favorite ? '#7A65FC' : '#4B4B50'"
+              stroke-width="2"
+            />
+          </svg>
+        </button>
       </div>
+      <div class="text-xs text-gray-400 mt-0.5">{{ s.suppliers_count }} suppliers</div>
+      <div class="text-sm text-gray-400 mt-1 truncate">{{ s.description }}</div>
+      <div class="flex flex-wrap gap-x-2 gap-y-0.5 mt-2">
+        <span
+          v-for="cat in s.categories"
+          :key="cat"
+          class="text-xs text-[#7A65FC] font-medium cursor-pointer hover:underline"
+        >{{ cat }}</span>
+      </div>
+    </div>
+    <button @click="openContacts(s)" class="ml-4">
+      <svg width="24" height="24" fill="none">
+        <path d="M9 6l6 6-6 6" stroke="#7A65FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+
     </div>
   </div>
 </template>
@@ -195,5 +219,6 @@ watch(() => userData.user.id, id => {
 
 watch([selectedCat, showFavOnly], loadSuppliers, { deep: true })
 </script>
+
 
 
