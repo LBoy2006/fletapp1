@@ -212,11 +212,17 @@ async def list_finds(
     db: AsyncSession,
     categories1: list[str] | None = None,
     categories2: list[str] | None = None,
+    price_min: int | None = None,
+    price_max: int | None = None,
 ) -> list[models.Find]:
     stmt = select(models.Find).order_by(models.Find.created_at.desc())
     if categories1:
         stmt = stmt.where(models.Find.category1.in_(categories1))
     if categories2:
         stmt = stmt.where(models.Find.category2.in_(categories2))
+    if price_min is not None:
+        stmt = stmt.where(models.Find.price >= price_min)
+    if price_max is not None:
+        stmt = stmt.where(models.Find.price <= price_max)
     result = await db.execute(stmt)
     return result.scalars().all()

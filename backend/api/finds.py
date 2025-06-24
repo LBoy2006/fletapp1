@@ -25,11 +25,13 @@ async def list_finds(
     categories1: str = '',
     categories2: str = '',
     favorites_only: bool = False,
+    price_min: int | None = None,
+    price_max: int | None = None,
     db: AsyncSession = Depends(get_db)
 ):
     cats1 = [c.strip() for c in categories1.split(',') if c.strip()]
     cats2 = [c.strip() for c in categories2.split(',') if c.strip()]
-    finds = await crud.list_finds(db, cats1, cats2)
+    finds = await crud.list_finds(db, cats1, cats2, price_min, price_max)
     fav_ids = set()
     if user_id:
         fav_ids = set(await crud.get_favorite_find_ids(db, user_id))

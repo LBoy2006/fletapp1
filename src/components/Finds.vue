@@ -86,6 +86,17 @@
               </button>
             </div>
           </div>
+
+          <div class="flex gap-2 items-end">
+            <div class="flex flex-col">
+              <label class="text-xs text-white">Цена от</label>
+              <input type="number" v-model.number="priceMin" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" />
+            </div>
+            <div class="flex flex-col">
+              <label class="text-xs text-white">до</label>
+              <input type="number" v-model.number="priceMax" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" />
+            </div>
+          </div>
         </div>
       </transition>
     </div>
@@ -113,7 +124,14 @@
           </div>
 
           <!-- Фото -->
-          <img :src="f.photo_url" alt="" class="w-16 h-16 rounded-xl object-cover bg-[#111]" />
+          <div class="relative">
+            <img :src="f.photo_url" alt="" class="w-16 h-16 rounded-xl object-cover bg-[#111]" />
+            <div class="absolute top-0 right-0 flex gap-0.5 text-[13px]">
+              <span v-if="f.is_hot">🔥</span>
+              <span v-if="f.is_new">🆕</span>
+              <span v-if="f.is_high_margin">💰</span>
+            </div>
+          </div>
 
           <!-- Описание -->
           <div class="flex-1 min-w-0">
@@ -161,6 +179,8 @@ const selectedCat1 = ref([])
 const selectedCat2 = ref([])
 const showFavOnly = ref(false)
 const filtersOpen = ref(false)
+const priceMin = ref(null)
+const priceMax = ref(null)
 
 const favoritesCount = computed(() => finds.value.filter(f => f.fav).length)
 const displayedFinds = computed(() =>
@@ -212,7 +232,9 @@ async function loadFinds() {
     const p2 = selectedCat2.value.join(',')
     const fav = showFavOnly.value ? 'true' : 'false'
     const uid = userData.user.id
-    const url = `${API_BASE}/finds?user_id=${uid}&categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}&favorites_only=${fav}`
+    let url = `${API_BASE}/finds?user_id=${uid}&categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}&favorites_only=${fav}`
+    if (priceMin.value !== null) url += `&price_min=${priceMin.value}`
+    if (priceMax.value !== null) url += `&price_max=${priceMax.value}`
     const r = await fetch(url)
     if (r.ok) {
       finds.value = (await r.json()).map(f => ({
@@ -285,4 +307,5 @@ watch(selectedCat1, () => {
 }, { deep: true })
 
 watch([selectedCat2, showFavOnly], loadFinds, { deep: true })
+watch([priceMin, priceMax], loadFinds)
 </script>

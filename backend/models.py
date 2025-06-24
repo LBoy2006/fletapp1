@@ -70,3 +70,6 @@ class Find(Base):
     price = Column(Integer)
     supplier_id = Column(Integer, index=True)
     created_at = Column(DateTime)
+    is_hot = Column(Boolean, default=False)
+    is_new = Column(Boolean, default=False)
+    is_high_margin = Column(Boolean, default=False)
