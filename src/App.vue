@@ -382,19 +382,35 @@ function updateNavForKeyboard() {
     : 0;
 }
 
+
+const navHidden = ref(false);
 onMounted(() => {
   const nav = navRef.value;
 
   window.addEventListener('focusin', (e) => {
     if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+      navHidden.value = true;
       nav.style.transition = 'transform 0.3s ease';
-      nav.style.transform = 'translateY(100%)'; // уезжает вниз
+      nav.style.transform = 'translateY(100%)';
+
+      document.querySelectorAll('.page').forEach(p => {
+        p.style.transition = 'padding-bottom 0.3s ease';
+        p.style.paddingBottom = '0px';
+      });
     }
   });
 
   window.addEventListener('focusout', () => {
+    navHidden.value = false;
     nav.style.transition = 'transform 0.3s ease';
-    nav.style.transform = 'translateY(0)'; // возвращается
+    nav.style.transform = 'translateY(0)';
+
+    const insetBottom = baseNavBottom.value;
+    const navHeight = 90; // точно как в твоём CSS
+    document.querySelectorAll('.page').forEach(p => {
+      p.style.transition = 'padding-bottom 0.3s ease';
+      p.style.paddingBottom = `${navHeight + insetBottom}px`;
+    });
   });
 });
 
