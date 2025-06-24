@@ -193,16 +193,16 @@ async def get_supplier(db: AsyncSession, supplier_id: int) -> models.Supplier | 
     result = await db.execute(select(models.Supplier).where(models.Supplier.id == supplier_id))
     return result.scalar_one_or_none()
 
-async def list_find_categories1(db: AsyncSession) -> list[str]:
-    result = await db.execute(select(models.Find.category1).distinct())
+async def list_find_categories(db: AsyncSession) -> list[str]:
+    result = await db.execute(select(models.Find.category).distinct())
     cats = result.scalars().all()
     return [c for c in cats if c]
 
 
-async def list_find_categories2(db: AsyncSession, categories1: list[str] | None = None) -> list[str]:
-    stmt = select(models.Find.category2)
-    if categories1:
-        stmt = stmt.where(models.Find.category1.in_(categories1))
+async def list_find_brands(db: AsyncSession, categories: list[str] | None = None) -> list[str]:
+    stmt = select(models.Find.brand)
+    if categories:
+        stmt = stmt.where(models.Find.category.in_(categories))
     result = await db.execute(stmt.distinct())
     cats = result.scalars().all()
     return [c for c in cats if c]
@@ -210,16 +210,16 @@ async def list_find_categories2(db: AsyncSession, categories1: list[str] | None 
 
 async def list_finds(
     db: AsyncSession,
-    categories1: list[str] | None = None,
-    categories2: list[str] | None = None,
+    categories: list[str] | None = None,
+    brands: list[str] | None = None,
     price_min: int | None = None,
     price_max: int | None = None,
 ) -> list[models.Find]:
     stmt = select(models.Find).order_by(models.Find.created_at.desc())
-    if categories1:
-        stmt = stmt.where(models.Find.category1.in_(categories1))
-    if categories2:
-        stmt = stmt.where(models.Find.category2.in_(categories2))
+    if categories:
+        stmt = stmt.where(models.Find.category.in_(categories))
+    if brands:
+        stmt = stmt.where(models.Find.brand.in_(brands))
     if price_min is not None:
         stmt = stmt.where(models.Find.price >= price_min)
     if price_max is not None:
