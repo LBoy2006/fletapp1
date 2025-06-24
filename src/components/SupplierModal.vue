@@ -18,7 +18,7 @@
   <!-- Верхняя часть: фото, имя, категории, избранное -->
   <div class="flex items-start relative">
     <img :src="supplier.photo_url" alt="Supplier"
-         class="w-16 h-16 rounded-3xl object-cover border-2 border-[#232226]" />
+         class="w-16 h-16 rounded-full object-cover border-2 border-[#232226]" />
     <div class="ml-3 flex-1">
       <div class="text-lg font-semibold text-white leading-5">{{ supplier.name }}</div>
       <div class="text-xs text-gray-400 mb-2">{{ supplier.suppliers_count || 0 }} Suppliers</div>

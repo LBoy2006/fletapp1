@@ -2,7 +2,7 @@
 <template>
   <div class="h-full flex flex-col space-y-1 p-2">
     <!-- 🔒 Фиксированная шапка -->
-    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] space-y-3 px-3 py-4 border-b border-[#2c2c3a]">
+    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] space-y-3 px-3 py-4 border-b border-[#2c2c3a] relative overflow-visible">
       <div class="relative flex items-center justify-between">
         <span class="text-lg font-bold text-white">Suppliers</span>
 
@@ -49,16 +49,19 @@
 
       <!-- Выпадающие фильтры -->
       <transition name="fade">
-        <div v-if="filtersOpen" class="px-1 py-3 bg-[var(--page-bg-color)] space-y-3 border-b border-[#2c2c3a]">
+        <div
+          v-if="filtersOpen"
+          class="absolute left-0 top-full w-full px-1 py-3 bg-[rgba(16,16,17,0.9)] space-y-3 border-b border-[#2c2c3a] z-20"
+        >
           <div>
-            <div class="text-sm mb-1 text-white">Категория</div>
+            <div class="text-xs mb-1 text-white">Категория</div>
             <div class="flex flex-wrap gap-2">
               <button
                 v-for="c in categories"
                 :key="c"
                 @click="toggleCat(c)"
                 :class="[
-                  'px-3 py-1 rounded-full text-sm border',
+                  'px-3 py-1 rounded-full text-xs border',
                   selectedCat.includes(c) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
                 ]"
               >
