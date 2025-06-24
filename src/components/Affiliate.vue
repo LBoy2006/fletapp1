@@ -20,8 +20,26 @@
           <div class="font-bold text-base text-[#DFDFDF]">{{ nickname || '—' }}</div>
           <div class="text-xs text-[#DFDFDF] opacity-80 mt-1">{{ stats.motivation || '—' }}</div>
         </div>
-        <div class="bg-[#5E56A5] text-white px-4 py-1 rounded-[8px] text-xs font-semibold">
-          Твоя доля: <span class="font-bold">{{ stats.share ?? '—' }}%</span>
+        <div class=" text-white px-4 py-1 text-xs font-semibold">
+
+                    <svg width="128" height="64" viewBox="0 0 256 48" fill="none">
+                      <text x="16" y="40" fill="white"
+      font-size="2em"
+      font-family="sans-serif"
+      font-weight="bold"
+
+      alignment-baseline="middle">
+    Твоя доля {{ stats.share ?? '—' }}%
+  </text>
+  <!-- Задний (нижний) прямоугольник, только часть обводки -->
+  <path d="
+
+ M 20 16 H 184 Q 200 16 200 32 V 72 C 200 72 200 76 192 72
+ L 180 64 C 177.3332 62.6668 176 60 172 60 H 20
+ Q 4 60 4 44 V 32 Q 4 16 20 16 Z
+
+"
+        stroke="#5E56A5" stroke-width="4"  fill="none"/></svg>
         </div>
       </div>
 
@@ -88,11 +106,14 @@
     <div class="bg-[#191919] border border-[#292929] rounded-[10px] px-5 py-3 flex flex-col gap-2">
       <div class="flex items-center gap-2">
         <span class="font-semibold text-[#DFDFDF] text-sm">Твоя реферальная ссылка</span>
-        <button @click="copyLink" class="w-4 h-4 flex items-center justify-center">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="w-4 h-4 text-[#C5C5C5]">
-            <rect x="9" y="9" width="13" height="13" rx="2" />
-            <rect x="3" y="3" width="13" height="13" rx="2" />
-          </svg>
+        <button @click="copyLink" class="w-20 h-20 flex items-center justify-center">
+          <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+  <!-- Задний (нижний) прямоугольник, только часть обводки -->
+  <path d="M 18 42 Q 12 42 12 36 V 18 Q 12 12 18 12 H 36 Q 42 12 42 18 V 36 Q 42 42 36 42 Z M 8 34 H 7 C 6 34 4 33 4 28 V 10 Q 4 4 10 4 H 28 C 33 4 34 6 34 7 V 8"
+    stroke="white" stroke-width="4"  stroke-linejoin="round" fill="none"/>
+
+</svg>
+
         </button>
       </div>
       <input
