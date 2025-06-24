@@ -392,6 +392,19 @@ onMounted(() => {
   updateNavForKeyboard();
   showPage('finds');
 });
+
+onMounted(() => {
+  window.addEventListener('focusin', e => {
+    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+      navRef.value.style.display = 'none';
+    }
+  });
+
+  window.addEventListener('focusout', () => {
+    navRef.value.style.display = '';
+  });
+});
+
 </script>
 <template>
   <Payment v-if="showPayment" @paid="onPaid" />
