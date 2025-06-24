@@ -92,7 +92,19 @@
     <div class="flex-1 min-w-0">
       <div class="flex items-center">
         <div class="font-semibold text-white text-lg leading-tight truncate">{{ s.name }}</div>
-        <button @click="toggleFavorite(s)" class="ml-auto">
+
+      </div>
+      <div class="text-xs text-gray-400 mt-0.5">{{ s.suppliers_count }} suppliers</div>
+      <div class="text-sm text-gray-400 mt-1 truncate">{{ s.description }}</div>
+      <div class="flex flex-wrap gap-x-2 gap-y-0.5 mt-2">
+        <span
+          v-for="cat in s.categories"
+          :key="cat"
+          class="text-xs text-[#7A65FC] font-medium cursor-pointer hover:underline"
+        >[{{ cat }}]</span>
+      </div>
+    </div>
+   <div class="flex flex-col gap-6"> <button @click="toggleFavorite(s)" class="ml-auto">
           <svg
             width="24" height="24" viewBox="0 0 24 24" fill="none"
             :class="s.is_favorite ? 'text-[#7A65FC]' : 'text-[#4B4B50]'"
@@ -109,24 +121,15 @@
             />
           </svg>
         </button>
-      </div>
-      <div class="text-xs text-gray-400 mt-0.5">{{ s.suppliers_count }} suppliers</div>
-      <div class="text-sm text-gray-400 mt-1 truncate">{{ s.description }}</div>
-      <div class="flex flex-wrap gap-x-2 gap-y-0.5 mt-2">
-        <span
-          v-for="cat in s.categories"
-          :key="cat"
-          class="text-xs text-[#7A65FC] font-medium cursor-pointer hover:underline"
-        >{{ cat }}</span>
-      </div>
-    </div>
-    <button @click="openContacts(s)" class="ml-4">
-      <svg width="24" height="24" fill="none">
-        <path d="M9 6l6 6-6 6" stroke="#7A65FC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
+          <button @click="openContacts(s)" class="ml-4">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4B4B50" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+  <line x1="4" y1="12" x2="19" y2="12"/>
+  <polyline points="12 5 19 12 12 19"/>
+</svg>
     </button>
+   </div>
   </div>
-</div>
+      </div>
 
 
     </div>
