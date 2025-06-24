@@ -345,9 +345,16 @@ function applySafeInsets() {
 function updateNavForKeyboard() {
   const vv = window.visualViewport;
   if (!vv) return;
+  // Высота клавиатуры (если > 0 — клавиатура открыта)
   const keyboardHeight = window.innerHeight - vv.height - vv.offsetTop;
-  navBottom.value = baseNavBottom.value - keyboardHeight;
+  // Если клавиатура есть — уводим nav вниз на её высоту
+  if (keyboardHeight > 0) {
+    navBottom.value = keyboardHeight + baseNavBottom.value;
+  } else {
+    navBottom.value = baseNavBottom.value;
+  }
 }
+
 
 
 window.applySafeInsets = applySafeInsets;
