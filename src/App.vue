@@ -12,7 +12,7 @@ import Suppliers from './components/Suppliers.vue';
 import Affiliate from './components/Affiliate.vue';
 import Profile from './components/Profile.vue';
 import ProfileSettings from './components/ProfileSettings.vue';
-import Payment from './components/Payment.vue';
+import NewUser from './components/NewUser.vue';
 import SupplierModal from './components/SupplierModal.vue';
 import ItemModal from './components/ItemModal.vue';
 import { userData } from './state';
@@ -416,7 +416,7 @@ onMounted(() => {
 
 </script>
 <template>
-  <Payment v-if="showPayment" @paid="onPaid" />
+  <NewUser v-if="showPayment" @paid="onPaid" />
   <SupplierModal
     v-if="supplierModalVisible"
     :supplier="supplierModalData"
