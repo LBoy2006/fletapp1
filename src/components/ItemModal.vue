@@ -11,19 +11,16 @@
           alt="Item"
           class="w-[185px] h-[185px] object-contain border border-[#232226] bg-[#232226]"
         />
-        <span
-          v-if="item.is_new"
-          class="absolute top-3 left-3 bg-[#406AFF] text-white text-xs font-semibold px-2 py-0.5 rounded-md shadow-[0_2px_8px_rgba(36,106,255,0.23)]"
-        >NEW</span>
-        <button
-          class="absolute top-3 right-3"
-          @click="toggleFav"
-        >
-          <svg
-            width="28"
-            height="28"
-            fill="none"
-            :class="item.fav ? 'text-[#7A65FC]' : 'text-[#7367D0]'"
+        <div class="absolute top-3 right-3 flex gap-1 text-xl items-center">
+          <span v-if="item.is_hot">🔥</span>
+          <span v-if="item.is_new">🆕</span>
+          <span v-if="item.is_high_margin">💰</span>
+          <button class="ml-1" @click="toggleFav">
+            <svg
+              width="28"
+              height="28"
+              fill="none"
+              :class="item.fav ? 'text-[#7A65FC]' : 'text-[#7367D0]'"
           >
             <path
               d="M14 24s-5.6-4.87-9-8.22C2.07 13.22 2.22 9.29 5.26 7.42A5.77 5.77 0 0114 8.85a5.77 5.77 0 018.74-1.43c3.04 1.87 3.19 5.8.26 8.36C19.6 19.13 14 24 14 24z"
@@ -34,8 +31,8 @@
               :fill="item.fav ? 'currentColor' : 'none'"
             />
           </svg>
-        </button>
-      </div>
+          </button>
+        </div>
       <div class="text-center mb-1">
         <div class="text-xl font-extrabold text-white leading-6">{{ item.name }}</div>
         <div class="text-xs text-[#A4A4A8] mt-1 mb-1 leading-snug">{{ item.desc }}</div>

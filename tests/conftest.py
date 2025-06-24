@@ -56,11 +56,13 @@ def db_session(client):
             find1 = models.Find(
                 name='Item 1', supplier_id=1,
                 category1='CatA', category2='BrandX',
+                price=100,
                 created_at=datetime.utcnow()
             )
             find2 = models.Find(
                 name='Item 2', supplier_id=2,
                 category1='CatB', category2='BrandY',
+                price=200,
                 created_at=datetime.utcnow()
             )
             db.add_all([supplier1, supplier2, find1, find2])
