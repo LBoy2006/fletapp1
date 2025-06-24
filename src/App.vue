@@ -394,7 +394,7 @@ onMounted(() => {
     @copied="onLinkCopied"
     @toggle-favorite="onItemToggleFavorite"
   />
-  <div class="min-h-screen flex flex-col">
+  <div class="min-h-screen flex flex-col overflow-hidden">
     <div ref="pagesRef" class="flex-1 overflow-x-hidden">
       <div ref="innerRef" class="flex h-full " :style="dragStyle">
         <div
