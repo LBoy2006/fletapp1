@@ -57,12 +57,12 @@
             <div class="text-xs mb-1 text-white">Категория</div>
             <div class="flex flex-wrap gap-2">
               <button
-                v-for="c in categories1"
+                v-for="c in categories"
                 :key="c"
-                @click="toggleCat1(c)"
+                @click="toggleCategory(c)"
                 :class="[
                   'px-3 py-1 rounded-full text-xs border',
-                  selectedCat1.includes(c) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
+                  selectedCategories.includes(c) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
                 ]"
               >
                 {{ c }}
@@ -74,12 +74,12 @@
             <div class="text-xs mb-1 text-white">Бренд</div>
             <div class="flex flex-wrap gap-2">
               <button
-                v-for="b in categories2"
+                v-for="b in brands"
                 :key="b"
-                @click="toggleCat2(b)"
+                @click="toggleBrand(b)"
                 :class="[
                   'px-3 py-1 rounded-full text-xs border',
-                  selectedCat2.includes(b) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
+                  selectedBrands.includes(b) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
                 ]"
               >
                 {{ b }}
@@ -173,10 +173,10 @@ import { API_BASE } from '../api'
 const finds = ref([])
 const loading = ref(true)
 const error = ref(false)
-const categories1 = ref([])
-const categories2 = ref([])
-const selectedCat1 = ref([])
-const selectedCat2 = ref([])
+const categories = ref([])
+const brands = ref([])
+const selectedCategories = ref([])
+const selectedBrands = ref([])
 const showFavOnly = ref(false)
 const filtersOpen = ref(false)
 const priceMin = ref(null)
@@ -187,32 +187,32 @@ const displayedFinds = computed(() =>
   showFavOnly.value ? finds.value.filter(f => f.fav) : finds.value
 )
 
-function toggleCat1(c) {
-  const idx = selectedCat1.value.indexOf(c)
-  if (idx >= 0) selectedCat1.value.splice(idx, 1)
-  else selectedCat1.value.push(c)
+function toggleCategory(c) {
+  const idx = selectedCategories.value.indexOf(c)
+  if (idx >= 0) selectedCategories.value.splice(idx, 1)
+  else selectedCategories.value.push(c)
 }
 
-function toggleCat2(c) {
-  const idx = selectedCat2.value.indexOf(c)
-  if (idx >= 0) selectedCat2.value.splice(idx, 1)
-  else selectedCat2.value.push(c)
+function toggleBrand(c) {
+  const idx = selectedBrands.value.indexOf(c)
+  if (idx >= 0) selectedBrands.value.splice(idx, 1)
+  else selectedBrands.value.push(c)
 }
 
-async function loadCategories1() {
+async function loadCategories() {
   try {
-    const r = await fetch(`${API_BASE}/finds/categories1`)
-    if (r.ok) categories1.value = await r.json()
+    const r = await fetch(`${API_BASE}/finds/categories`)
+    if (r.ok) categories.value = await r.json()
   } catch (e) {
     console.error(e)
   }
 }
 
-async function loadCategories2() {
+async function loadBrands() {
   try {
-    const params = selectedCat1.value.join(',')
-    const r = await fetch(`${API_BASE}/finds/categories2?categories1=${encodeURIComponent(params)}`)
-    if (r.ok) categories2.value = await r.json()
+    const params = selectedCategories.value.join(',')
+    const r = await fetch(`${API_BASE}/finds/brands?categories=${encodeURIComponent(params)}`)
+    if (r.ok) brands.value = await r.json()
   } catch (e) {
     console.error(e)
   }
@@ -228,11 +228,11 @@ async function loadFinds() {
   loading.value = true
   error.value = false
   try {
-    const p1 = selectedCat1.value.join(',')
-    const p2 = selectedCat2.value.join(',')
+    const p1 = selectedCategories.value.join(',')
+    const p2 = selectedBrands.value.join(',')
     const fav = showFavOnly.value ? 'true' : 'false'
     const uid = userData.user.id
-    let url = `${API_BASE}/finds?user_id=${uid}&categories1=${encodeURIComponent(p1)}&categories2=${encodeURIComponent(p2)}&favorites_only=${fav}`
+    let url = `${API_BASE}/finds?user_id=${uid}&categories=${encodeURIComponent(p1)}&brands=${encodeURIComponent(p2)}&favorites_only=${fav}`
     if (priceMin.value !== null) url += `&price_min=${priceMin.value}`
     if (priceMax.value !== null) url += `&price_max=${priceMax.value}`
     const r = await fetch(url)
@@ -292,8 +292,8 @@ async function openSupplier(id) {
 }
 
 onMounted(() => {
-  loadCategories1()
-  loadCategories2()
+  loadCategories()
+  loadBrands()
   loadFinds()
 })
 
@@ -301,11 +301,11 @@ watch(() => userData.user.id, id => {
   if (id) loadFinds()
 })
 
-watch(selectedCat1, () => {
-  loadCategories2()
+watch(selectedCategories, () => {
+  loadBrands()
   loadFinds()
 }, { deep: true })
 
-watch([selectedCat2, showFavOnly], loadFinds, { deep: true })
+watch([selectedBrands, showFavOnly], loadFinds, { deep: true })
 watch([priceMin, priceMax], loadFinds)
 </script>
