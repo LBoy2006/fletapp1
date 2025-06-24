@@ -324,7 +324,7 @@ function applySafeInsets() {
     const safeInset = Telegram.WebApp.contentSafeAreaInset || {};
     const insetTop = parseInt(safeInset.top) || 0;
     const insetBottom = parseInt(safeInset.bottom) || 0;
-    const navHeight = 10;
+    const navHeight = 90;
     baseNavBottom.value = insetBottom;
     navBottom.value = insetBottom;
 
@@ -391,7 +391,7 @@ onMounted(() => {
     if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
       navHidden.value = true;
       nav.style.transition = 'transform 0.3s ease';
-      nav.style.transform = 'translateY(100%)';
+      nav.style.transform = 'translateY(200%)';
 
       document.querySelectorAll('.page').forEach(p => {
         p.style.transition = 'padding-bottom 0.3s ease';
