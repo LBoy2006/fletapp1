@@ -8,30 +8,30 @@ from ..database import get_db
 router = APIRouter()
 
 
-@router.get('/finds/categories1')
-async def get_categories1(db: AsyncSession = Depends(get_db)):
-    return await crud.list_find_categories1(db)
+@router.get('/finds/categories')
+async def get_categories(db: AsyncSession = Depends(get_db)):
+    return await crud.list_find_categories(db)
 
 
-@router.get('/finds/categories2')
-async def get_categories2(categories1: str = '', db: AsyncSession = Depends(get_db)):
-    cats1 = [c.strip() for c in categories1.split(',') if c.strip()]
-    return await crud.list_find_categories2(db, cats1)
+@router.get('/finds/brands')
+async def get_brands(categories: str = '', db: AsyncSession = Depends(get_db)):
+    cats = [c.strip() for c in categories.split(',') if c.strip()]
+    return await crud.list_find_brands(db, cats)
 
 
 @router.get('/finds', response_model=list[schemas.FindOut])
 async def list_finds(
     user_id: int | None = None,
-    categories1: str = '',
-    categories2: str = '',
+    categories: str = '',
+    brands: str = '',
     favorites_only: bool = False,
     price_min: int | None = None,
     price_max: int | None = None,
     db: AsyncSession = Depends(get_db)
 ):
-    cats1 = [c.strip() for c in categories1.split(',') if c.strip()]
-    cats2 = [c.strip() for c in categories2.split(',') if c.strip()]
-    finds = await crud.list_finds(db, cats1, cats2, price_min, price_max)
+    cats = [c.strip() for c in categories.split(',') if c.strip()]
+    brands_list = [c.strip() for c in brands.split(',') if c.strip()]
+    finds = await crud.list_finds(db, cats, brands_list, price_min, price_max)
     fav_ids = set()
     if user_id:
         fav_ids = set(await crud.get_favorite_find_ids(db, user_id))

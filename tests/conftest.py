@@ -54,14 +54,16 @@ def db_session(client):
             supplier1 = models.Supplier(name='Store A', contact_link='link', categories=['CatA', 'CatB'])
             supplier2 = models.Supplier(name='Store B', contact_link='link', categories=['CatB'])
             find1 = models.Find(
-                name='Item 1', supplier_id=1,
-                category1='CatA', category2='BrandX',
+                name='Item 1',
+                product_url='http://example.com/item1',
+                category='CatA', brand='BrandX',
                 price=100,
                 created_at=datetime.utcnow()
             )
             find2 = models.Find(
-                name='Item 2', supplier_id=2,
-                category1='CatB', category2='BrandY',
+                name='Item 2',
+                product_url='http://example.com/item2',
+                category='CatB', brand='BrandY',
                 price=200,
                 created_at=datetime.utcnow()
             )
