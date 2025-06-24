@@ -342,16 +342,7 @@ function applySafeInsets() {
   }
 }
 
-function updateNavForKeyboard() {
-  const vv = window.visualViewport;
-  if (!vv) return;
-  const keyboardHeight = window.innerHeight - vv.height - vv.offsetTop;
-  if (keyboardHeight > 0) {
-    navBottom.value = keyboardHeight + baseNavBottom.value;
-  } else {
-    navBottom.value = baseNavBottom.value;
-  }
-}
+
 
 onMounted(() => {
   if (window.Telegram?.WebApp) {
@@ -379,6 +370,17 @@ window.showSupplierModal = showSupplierModal;
 window.hideSupplierModal = hideSupplierModal;
 window.showItemModal = showItemModal;
 window.hideItemModal = hideItemModal;
+
+function updateNavForKeyboard() {
+  const viewport = window.visualViewport;
+  if (!viewport) return;
+
+  const keyboardHeight = window.innerHeight - viewport.height - viewport.offsetTop;
+
+  navBottom.value = keyboardHeight > 0
+    ? keyboardHeight
+    : 0;
+}
 
 
 </script>
