@@ -380,30 +380,6 @@ window.hideSupplierModal = hideSupplierModal;
 window.showItemModal = showItemModal;
 window.hideItemModal = hideItemModal;
 
-onMounted(() => {
-  if (window.Telegram?.WebApp) {
-    Telegram.WebApp.ready();
-    Telegram.WebApp.disableVerticalSwipes();
-    applySafeInsets();
-  }
-  if (window.visualViewport) {
-    window.visualViewport.addEventListener('resize', updateNavForKeyboard);
-  }
-  updateNavForKeyboard();
-  showPage('finds');
-});
-
-onMounted(() => {
-  window.addEventListener('focusin', e => {
-    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
-      navRef.value.style.display = 'none';
-    }
-  });
-
-  window.addEventListener('focusout', () => {
-    navRef.value.style.display = '';
-  });
-});
 
 </script>
 <template>
