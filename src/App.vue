@@ -47,6 +47,7 @@ const innerRef = ref(null);
 const navRef = ref(null);
 const showLabels = ref(false);
 const navBottom = ref(0);
+const baseNavBottom = ref(0);
 const dragOffset = ref(0);
 const isDragging = ref(false);
 const showPayment = ref(false);
@@ -324,7 +325,7 @@ function applySafeInsets() {
     const insetTop = parseInt(safeInset.top) || 0;
     const insetBottom = parseInt(safeInset.bottom) || 0;
     const navHeight = 70;
-
+    baseNavBottom.value = insetBottom;
     navBottom.value = insetBottom;
 
     document.querySelectorAll('.page').forEach(p => {
@@ -339,6 +340,13 @@ function applySafeInsets() {
       p.style.paddingBottom = `${navHeight + insetBottom}px`;
     });
   }
+}
+
+function updateNavForKeyboard() {
+  const vv = window.visualViewport;
+  if (!vv) return;
+  const keyboardHeight = window.innerHeight - vv.height - vv.offsetTop;
+  navBottom.value = baseNavBottom.value - keyboardHeight;
 }
 
 
@@ -357,6 +365,10 @@ onMounted(() => {
     Telegram.WebApp.disableVerticalSwipes();
     applySafeInsets();
   }
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', updateNavForKeyboard);
+  }
+  updateNavForKeyboard();
   showPage('finds');
 });
 </script>
