@@ -382,6 +382,21 @@ function updateNavForKeyboard() {
     : 0;
 }
 
+onMounted(() => {
+  const nav = navRef.value;
+
+  window.addEventListener('focusin', (e) => {
+    if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) {
+      nav.style.transition = 'transform 0.3s ease';
+      nav.style.transform = 'translateY(100%)'; // уезжает вниз
+    }
+  });
+
+  window.addEventListener('focusout', () => {
+    nav.style.transition = 'transform 0.3s ease';
+    nav.style.transform = 'translateY(0)'; // возвращается
+  });
+});
 
 </script>
 <template>
