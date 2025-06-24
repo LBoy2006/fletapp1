@@ -50,7 +50,7 @@ const navBottom = ref(0);
 const baseNavBottom = ref(0);
 const dragOffset = ref(0);
 const isDragging = ref(false);
-const showPayment = ref(false);
+const showNewUser = ref(false);
 let hideTimer = null;
 
 const dragStyle = computed(() => ({
@@ -128,7 +128,7 @@ function onNavClick(item) {
 }
 
 function onPaid() {
-  showPayment.value = false;
+  showNewUser.value = false;
   showPage('finds');
 }
 
@@ -171,7 +171,7 @@ onMounted(() => {
     .then(data => {
       userData.user.is_member = data.is_member
       if (!data.is_member) {
-        showPayment.value = true
+        showNewUser.value = true
       }
       // userData.token = data.token;
     })
@@ -416,7 +416,7 @@ onMounted(() => {
 
 </script>
 <template>
-  <NewUser v-if="showPayment" @paid="onPaid" />
+  <NewUser v-if="showNewUser" @paid="onPaid" />
   <SupplierModal
     v-if="supplierModalVisible"
     :supplier="supplierModalData"
