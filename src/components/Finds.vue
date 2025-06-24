@@ -51,50 +51,52 @@
       <transition name="fade">
         <div
           v-if="filtersOpen"
-          class="absolute left-0 top-full w-full px-1 py-3 bg-[rgba(16,16,17,0.9)] space-y-3 border-b border-[#2c2c3a] z-20"
+          class="absolute left-0 top-full w-full px-1 py-3 bg-[rgba(16,16,17,0.9)] space-y-3 border-b border-[#2c2c3a] z-20 max-h-[50vh] overflow-y-auto scrollbar-hide"
         >
-          <div>
-            <div class="text-xs mb-1 text-white">Категория</div>
-            <div class="flex flex-wrap gap-2">
-              <button
-                v-for="c in categories"
-                :key="c"
-                @click="toggleCategory(c)"
-                :class="[
-                  'px-3 py-1 rounded-full text-xs border',
-                  selectedCategories.includes(c) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
-                ]"
-              >
-                {{ c }}
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <div class="text-xs mb-1 text-white">Бренд</div>
-            <div class="flex flex-wrap gap-2">
-              <button
-                v-for="b in brands"
-                :key="b"
-                @click="toggleBrand(b)"
-                :class="[
-                  'px-3 py-1 rounded-full text-xs border',
-                  selectedBrands.includes(b) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
-                ]"
-              >
-                {{ b }}
-              </button>
-            </div>
-          </div>
-
           <div class="flex gap-2 items-end">
-            <div class="flex flex-col">
+            <div class="flex flex-col flex-1">
               <label class="text-xs text-white">Цена от</label>
               <input type="number" v-model.number="priceMin" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" />
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-col flex-1">
               <label class="text-xs text-white">до</label>
               <input type="number" v-model.number="priceMax" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" />
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            <div class="flex-1">
+              <div class="text-xs mb-1 text-white text-center">Категория</div>
+              <div class="flex flex-wrap justify-center gap-2">
+                <button
+                  v-for="c in categories"
+                  :key="c"
+                  @click="toggleCategory(c)"
+                  :class="[
+                    'px-3 py-1 rounded-full text-xs border',
+                    selectedCategories.includes(c) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
+                  ]"
+                >
+                  {{ c }}
+                </button>
+              </div>
+            </div>
+
+            <div class="flex-1">
+              <div class="text-xs mb-1 text-white text-center">Бренд</div>
+              <div class="flex flex-wrap justify-center gap-2">
+                <button
+                  v-for="b in brands"
+                  :key="b"
+                  @click="toggleBrand(b)"
+                  :class="[
+                    'px-3 py-1 rounded-full text-xs border',
+                    selectedBrands.includes(b) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
+                  ]"
+                >
+                  {{ b }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
