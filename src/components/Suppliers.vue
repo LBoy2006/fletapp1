@@ -94,7 +94,7 @@
         <div class="font-semibold text-white text-lg leading-tight truncate">{{ s.name }}</div>
 
       </div>
-      <div class="text-xs text-gray-400 mt-0.5">{{ s.suppliers_count }} suppliers</div>
+      <div class="text-xs text-gray-400 mt-0.5">Избрали {{ s.favorites_count || 0 }}</div>
       <div class="text-sm text-gray-400 mt-1 truncate">{{ s.description }}</div>
       <div class="flex flex-wrap gap-x-2 gap-y-0.5 mt-2">
         <span
@@ -192,6 +192,11 @@ async function toggleFavorite(s) {
     if (r.ok) {
       const data = await r.json()
       s.is_favorite = data.favorite
+      if (data.favorite) {
+        s.favorites_count = (s.favorites_count || 0) + 1
+      } else {
+        s.favorites_count = Math.max(0, (s.favorites_count || 1) - 1)
+      }
     }
   } catch (e) {
     console.error(e)

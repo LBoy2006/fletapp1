@@ -144,6 +144,25 @@ async def get_favorite_supplier_ids(db: AsyncSession, user_id: int) -> list[int]
     return [r for r in result.scalars().all()]
 
 
+async def get_supplier_favorites_count(db: AsyncSession, supplier_id: int) -> int:
+    result = await db.execute(
+        select(func.count(models.FavoriteSupplier.id)).where(
+            models.FavoriteSupplier.supplier_id == supplier_id
+        )
+    )
+    return result.scalar_one()
+
+
+async def get_all_favorites_count(db: AsyncSession) -> dict[int, int]:
+    result = await db.execute(
+        select(
+            models.FavoriteSupplier.supplier_id,
+            func.count(models.FavoriteSupplier.id)
+        ).group_by(models.FavoriteSupplier.supplier_id)
+    )
+    return {sid: cnt for sid, cnt in result.all()}
+
+
 async def toggle_favorite_supplier(db: AsyncSession, user_id: int, supplier_id: int) -> bool:
     result = await db.execute(
         select(models.FavoriteSupplier).where(

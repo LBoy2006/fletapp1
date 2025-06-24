@@ -48,6 +48,7 @@ class SupplierBase(BaseModel):
 class SupplierOut(SupplierBase):
     id: int
     is_favorite: bool | None = None
+    favorites_count: int | None = None
 
     model_config = {"from_attributes": True}
 
