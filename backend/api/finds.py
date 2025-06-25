@@ -22,16 +22,10 @@ async def get_brands(categories: str = '', db: AsyncSession = Depends(get_db)):
 @router.get('/finds', response_model=list[schemas.FindOut])
 async def list_finds(
     user_id: int | None = None,
-    categories: str = '',
-    brands: str = '',
     favorites_only: bool = False,
-    price_min: int | None = None,
-    price_max: int | None = None,
     db: AsyncSession = Depends(get_db)
 ):
-    cats = [c.strip() for c in categories.split(',') if c.strip()]
-    brands_list = [c.strip() for c in brands.split(',') if c.strip()]
-    finds = await crud.list_finds(db, cats, brands_list, price_min, price_max)
+    finds = await crud.list_finds(db)
     fav_ids = set()
     fav_counts = await crud.get_all_find_favorites_count(db)
     if user_id:
