@@ -223,23 +223,26 @@ function toggleBrand(c) {
   else selectedBrands.value.push(c)
 }
 
-async function loadCategories() {
-  try {
-    const r = await fetch(`${API_BASE}/finds/categories`)
-    if (r.ok) categories.value = await r.json()
-  } catch (e) {
-    console.error(e)
-  }
+function updateCategories() {
+  const set = new Set()
+  finds.value.forEach(f => {
+    if (f.category) set.add(f.category)
+  })
+  categories.value = Array.from(set)
 }
 
-async function loadBrands() {
-  try {
-    const params = selectedCategories.value.join(',')
-    const r = await fetch(`${API_BASE}/finds/brands?categories=${encodeURIComponent(params)}`)
-    if (r.ok) brands.value = await r.json()
-  } catch (e) {
-    console.error(e)
-  }
+function updateBrands() {
+  const set = new Set()
+  finds.value.forEach(f => {
+    if (
+      (!selectedCategories.value.length ||
+        selectedCategories.value.includes(f.category)) &&
+      f.brand
+    ) {
+      set.add(f.brand)
+    }
+  })
+  brands.value = Array.from(set)
 }
 
 function formatR(val) {
@@ -261,6 +264,8 @@ async function loadFinds() {
         fav: f.is_favorite || false,
         badge: f.badge || null
       }))
+      updateCategories()
+      updateBrands()
     } else {
       error.value = true
     }
@@ -316,8 +321,6 @@ async function openSupplier(id) {
 }
 
 onMounted(() => {
-  loadCategories()
-  loadBrands()
   loadFinds()
 })
 
@@ -326,6 +329,6 @@ watch(() => userData.user.id, id => {
 })
 
 watch(selectedCategories, () => {
-  loadBrands()
+  updateBrands()
 }, { deep: true })
 </script>
