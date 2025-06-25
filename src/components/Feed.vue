@@ -2,14 +2,14 @@
 <template>
   <div class="h-full p-0 flex flex-col space-y-1 p-2">
     <!-- 🔒 Фиксированная шапка -->
-    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-3 py-4 border-b border-[#2c2c3a]">
-      <div class="relative flex items-center justify-between">
+    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 pb-0 relative overflow-visible">
+      <div class="relative flex items-center justify-between px-3">
         <!-- Слева -->
-        <span class="text-lg font-bold z-10">Feed</span>
+        <span class="text-lg font-bold text-white">Feed</span>
 
         <!-- Центрированный блок -->
         <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-          <span class="text-2xl font-dela">1chn</span>
+          <span class="text-2xl font-dela text-white">1chn</span>
           <span class="text-sm text-gray-400">[ван чан]</span>
         </div>
       </div>

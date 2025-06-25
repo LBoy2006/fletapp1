@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col space-y-1 p-2">
-    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-3 py-4 border-b border-[#2c2c3a]">
-      <div class="relative flex items-center justify-between">
+    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 pb-0 relative overflow-visible">
+      <div class="relative flex items-center justify-between px-3">
         <span class="text-lg font-bold text-white">Profile</span>
         <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
           <span class="text-2xl font-dela text-white">1chn</span>
