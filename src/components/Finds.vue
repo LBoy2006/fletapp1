@@ -132,8 +132,11 @@
 
           <!-- Описание -->
           <div class="flex-1 min-w-0 pl-2 h-full flex flex-col justify-between">
+            <div>
             <div class="text-gray-400 text-lg font-bold leading-tight truncate">{{ f.name }}</div>
-            <div class="text-sm text-gray-400 mt-1 truncate ">{{ f.desc }}</div>
+            <div class="text-xs text-gray-400 mt-0.5">В избранном {{ f.favorites_count || 0 }}</div>
+  </div>
+            <div class="text-sm text-gray-400 mt-1 truncate ">{{ f.description }}</div>
             <div class="flex flex-wrap gap-x-2 gap-y-0.5 mt-2 text-2xl text-[#5E56A5] font-sans font-bold">
               {{ f.price ? formatR(f.price) : '—' }}
             </div>
