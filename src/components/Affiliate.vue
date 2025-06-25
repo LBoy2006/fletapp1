@@ -14,6 +14,7 @@
       </div>
     </div>
     <!-- Карточка профиля -->
+     <div class="flex-1 overflow-y-auto scrollbar-hide font-sans">
     <div class="card-base px-5 py-4">
       <div class="flex justify-between items-center">
         <div>
@@ -130,6 +131,7 @@
 
 
   </div>
+   </div>
 </template>
 
 <script setup>
