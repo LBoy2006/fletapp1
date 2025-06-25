@@ -51,7 +51,7 @@
      <transition name="fade">
   <div
     v-if="filtersOpen"
-    class="absolute left-0 w-full px-3 py-3 bg-[rgba(16,16,17,0.9)] space-y-3 border-b border-t border-[#2c2c3a] z-20 max-h-[50vh] overflow-y-auto scrollbar-hide"
+    class="absolute left-0 w-full px-3 py-3 bg-[rgba(16,16,17,0.9)] space-y-3 border-b border-[#2c2c3a] z-20 max-h-[50vh] overflow-y-auto scrollbar-hide"
   >
     <!-- Цена -->
     <div class="flex gap-2">
