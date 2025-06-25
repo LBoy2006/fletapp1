@@ -103,41 +103,34 @@
     </div>
 
     <!-- Ссылка и копирование -->
-    <div class="card-base px-5 py-3 flex flex-col gap-2">
-      <div class="flex items-center gap-2">
-        <span class="font-semibold text-[#DFDFDF] text-sm">Твоя реферальная ссылка</span>
-        <button @click="copyLink" class="w-20 h-20 flex items-center justify-center">
-          <svg width="24" height="24" viewBox="0 0 64 64" fill="none">
+       <button
+          @click="copyLink"
+          class="card-base py-2 flex mt-4 h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
+        >
+            <svg width="24" height="24" viewBox="-5 -5 64 64" fill="none">
   <!-- Задний (нижний) прямоугольник, только часть обводки -->
   <path d="M 18 42 Q 12 42 12 36 V 18 Q 12 12 18 12 H 36 Q 42 12 42 18 V 36 Q 42 42 36 42 Z M 8 34 H 7 C 6 34 4 33 4 28 V 10 Q 4 4 10 4 H 28 C 33 4 34 6 34 7 V 8"
     stroke="white" stroke-width="4"  stroke-linejoin="round" fill="none"/>
 
 </svg>
-
+          Твоя реферальная ссылка
         </button>
-      </div>
-      <input
-        readonly
-        :value="stats.referral_link || '—'"
-        class="bg-[#232323] rounded px-2 py-1 w-full text-xs text-[#DFDFDF] select-all"
-        @focus="copyLink"
-      />
-    </div>
+    <a
 
+          :href="stats.materials_link || materialsLink"
+          target="_blank"
+          class="rounded-xl bg-[var(--button-color)] w-full h-10 mt-2 flex flex-1 items-center justify-center gap-2 text-white py-3 text-base shadow transition"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" >
+            <path d="
+            M 15 2 H 21 Q 22 2 22 3 V 8 M 11 13 L 21 3 M 11 4 H 7 Q 4 4 4 7 V 17 Q 4 20 7 20 H 17 Q 20 20 20 17 V 13
+"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Перейти на сайт
+        </a>
     <!-- Рекламные материалы -->
-    <div class="card-base px-5 py-3">
-      <div class="flex items-center gap-2">
-        <svg fill="currentColor" class="w-4 h-4 text-[#8B81F5]">
-          <circle cx="8" cy="8" r="8"/>
-        </svg>
-        <span class="font-semibold text-[#DFDFDF] text-sm">Рекламные материалы</span>
-      </div>
-      <a
-        :href="stats.materials_link || materialsLink"
-        target="_blank"
-        class="block mt-2 text-blue-400 underline text-sm"
-      >Открыть на Google Drive</a>
-    </div>
+
   </div>
 </template>
 

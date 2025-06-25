@@ -6,7 +6,7 @@
       <div class="bg-[var(--page-bg-color)] w-full  rounded-2xl shadow-2xl pt-0 pb-5 px-3 overflow-hidden mx-0">
         <!-- Header -->
         <div class="flex items-center justify-between px-5 pt-4 pb-3">
-          <span class="text-base text-white font-medium w-1/3 text-left"></span>
+          <span class="text-base text-white font-medium w-1/3 text-left"> </span>
           <span class="text-base text-white font-medium w-1/3 text-center">Item</span>
           <button class="w-1/3 flex justify-end" @click="emitClose">
             <svg width="22" height="22" fill="none">
@@ -15,52 +15,72 @@
           </button>
         </div>
         <!-- Card контент -->
-        <div class="card-base w-full shadow-lg p-2 pt-4">
+<div class="card-base w-full bg-[#1C1B1F] rounded-xl p-4 pb-6 relative justify-center">
 
 
-          <div class="relative flex justify-center mb-5">
-        <img
-          :src="item.photo_url"
-          alt="Item"
-          class="w-[185px] h-[185px] object-contain border border-[#232226] bg-[#232226] rounded-xl shadow-lg"
-        />
-        <div class="absolute top-3 right-3 flex gap-1 text-xl items-center">
-          <span v-if="item.is_hot">🔥</span>
-          <span v-if="item.is_new">🆕</span>
-          <span v-if="item.is_high_margin">💰</span>
-          <button class="ml-1" @click="toggleFav">
-            <svg
-              width="28"
-              height="28"
-              fill="none"
-              :class="item.fav ? 'text-[#7A65FC]' : 'text-[#7367D0]'"
-            >
-              <path
-                d="M14 24s-5.6-4.87-9-8.22C2.07 13.22 2.22 9.29 5.26 7.42A5.77 5.77 0 0114 8.85a5.77 5.77 0 018.74-1.43c3.04 1.87 3.19 5.8.26 8.36C19.6 19.13 14 24 14 24z"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                :fill="item.fav ? 'currentColor' : 'none'"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
+<div class="relative flex justify-center mb-4">
+  <div class="relative w-48 h-48 rounded-2xl overflow-hidden">
 
-      <div class="text-center mb-2">
-        <div class="text-xl font-extrabold text-white leading-6">{{ item.name }}</div>
-        <div class="text-xs text-[#A4A4A8] mt-1 mb-1 leading-snug">{{ item.description }}</div>
-      </div>
+    <!-- Само изображение -->
+    <img
+      :src="item.photo_url"
+      alt="Item"
+      class="w-full h-full object-cover z-0 relative"
+    />
 
-      <div class="text-center text-2xl font-extrabold text-[#7A65FC] mb-4">{{ priceText }}</div>
+    <!-- Виньетка эффект -->
+<div class="absolute inset-0 z-10 pointer-events-none rounded-xl"
+     style="
+       background: radial-gradient(circle, rgba(0,0,0,0.1) 20%, rgba(0,0,0,0.9) 100%);
+     ">
+</div>
+
+    <!-- Бейджи (на изображении, сверху слева) -->
+    <div class="absolute top-2 left-2 flex flex-col items-start z-20">
+      <span
+        v-if="item.is_new"
+        class="text-[16px] px-1 py-0.5"
+      >🆕</span>
+      <span
+        v-if="item.is_hot"
+        class="text-[16px] px-1 py-0.5"
+      >🔥</span>
+      <span
+        v-if="item.is_high_margin"
+        class="text-[16px] px-1 py-0.5"
+      >💰</span>
+    </div>
+  </div>
 
 
-        </div>
+  <!-- Иконка избранного (сердце) -->
+  <div class="absolute right-3">
+   <button  @click="toggleFav">
+                  <svg width="24" height="24" fill="none"
+                       :class="item.fav ? 'text-[#7A65FC]' : 'text-[#565466]'">
+                    <path d="M12 21s-5-4.35-8-7.35C1.38 11.02 1.52 7.36 4.22 5.78A5.13 5.13 0 0112 7.25a5.13 5.13 0 017.78-1.47c2.7 1.58 2.84 5.24.22 7.87C17 16.65 12 21 12 21z"
+                          :stroke="item.fav ? '#5E56A5' : '#4B4B50'" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round"
+                          :fill="item.fav ? '#5E56A5' : 'none'" />
+                  </svg>
+                </button>
+  </div>
+</div>
+  <!-- Название и описание -->
+  <div class="text-center mb-3">
+    <div class="text-xl font-bold text-white leading-tight">{{ item.name }}</div>
+    <div class="text-base text-[#A4A4A8] leading-snug mt-1">
+      {{ item.description }}
+    </div>
+  </div>
+
+  <!-- Цена -->
+  <div class="text-center text-2xl font-bold text-[#7A65FC]">{{ priceText }}</div>
+</div>
         <!-- Кнопки -->
         <button
           @click="copyLink"
-          class="card-base py-2 flex mt-4 h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white font-medium transition hover:bg-[#232226]"
+          class="card-base py-2 flex mt-4 h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white  transition hover:bg-[#232226]"
         >
             <svg width="24" height="24" viewBox="-5 -5 64 64" fill="none">
   <!-- Задний (нижний) прямоугольник, только часть обводки -->
@@ -75,7 +95,7 @@
 
           :href="item.link || '#'"
           target="_blank"
-          class="rounded-xl bg-[var(--button-color)] w-full h-10 mt-2 flex flex-1 items-center justify-center gap-2 text-white py-3 font-bold text-base shadow transition"
+          class="rounded-xl bg-[var(--button-color)] w-full h-10 mt-2 flex flex-1 items-center justify-center gap-2 text-white py-3  text-base shadow transition"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" >
             <path d="

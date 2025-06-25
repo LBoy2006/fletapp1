@@ -14,7 +14,7 @@
           </button>
         </div>
         <!-- Card контент -->
-        <div class="card-base w-full shadow-lg p-2 pt-4">
+        <div class="card-base w-full shadow-lg p-4 pt-4">
           <div class="flex relative">
             <div class="flex flex-row pb-5">
               <img :src="supplier.photo_url" alt="Supplier"
@@ -27,18 +27,18 @@
                   <div class="text-xs text-gray-400 mt-0.5 mb-1">Избрали {{ supplier.favorites_count || 0 }}</div>
                 <!-- Описание -->
               <div class="text-xs text-gray-400 mt-1 mb-2 leading-4">{{ supplier.description }}</div>
-                  <div>
+                  <!-- Категории -->
+                 <div>
                   <div class="flex flex-wrap gap-x-2 gap-y-0.5 mt-2">
                 <span
                   v-for="cat in supplier.categories"
                   :key="cat"
                   class="text-xs text-[#5E56A5] font-sans font-bold cursor-pointer hover:underline"
                 >{{ cat }}</span></div>
-              </div>
+               </div>
 
-
-              <!-- Категории -->
               </div>
+              <!-- Иконка избранного (сердце) -->
               <div class="absolute right-3">
               <button  @click="toggleFavorite">
                   <svg width="24" height="24" fill="none"
@@ -71,7 +71,7 @@
         <!-- Кнопки -->
         <button
           @click="copyLink"
-          class="card-base py-2 flex mt-4 h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white font-medium transition hover:bg-[#232226]"
+          class="card-base py-2 flex mt-4 h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
         >
             <svg width="24" height="24" viewBox="-5 -5 64 64" fill="none">
   <!-- Задний (нижний) прямоугольник, только часть обводки -->
@@ -86,7 +86,7 @@
 
           :href="supplier.contact_link || '#'"
           target="_blank"
-          class="rounded-xl bg-[var(--button-color)] w-full h-10 mt-2 flex flex-1 items-center justify-center gap-2 text-white py-3 font-bold text-base shadow transition"
+          class="rounded-xl bg-[var(--button-color)] w-full h-10 mt-2 flex flex-1 items-center justify-center gap-2 text-white py-3 text-base shadow transition"
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" >
             <path d="
