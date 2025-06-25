@@ -45,17 +45,43 @@
       </div>
 
       <!-- Баланс и метрики -->
-      <div class="flex justify-between items-center mt-4 bg-blue-200" >
-        <div class="flex items-center gap-2">
-          <span class="font-semibold text-[13px] bg-gradient-to-r from-yellow-200 via-yellow-100 to-yellow-200 bg-clip-text text-transparent">₽</span>
-          <span class="font-bold text-sm text-[#DFDFDF]">{{ formatR(stats.earned) }}</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="font-semibold text-[13px] bg-gradient-to-r from-yellow-200 via-yellow-100 to-yellow-200 bg-clip-text text-transparent">₽</span>
-          <span class="font-bold text-sm text-[#DFDFDF]">{{ formatR(stats.payments_sum) }}</span>
-        </div>
+<!--      <div class="flex justify-between items-center mt-4 bg-blue-200" >-->
+<!--        <div class="flex items-center gap-2">-->
+<!--          <span class="font-semibold text-[13px] bg-gradient-to-r from-yellow-200 via-yellow-100 to-yellow-200 bg-clip-text text-transparent">₽</span>-->
+<!--          <span class="font-bold text-sm text-[#DFDFDF]">{{ formatR(stats.earned) }}</span>-->
+<!--        </div>-->
+<!--        <div class="flex items-center gap-2">-->
+<!--          <span class="font-semibold text-[13px] bg-gradient-to-r from-yellow-200 via-yellow-100 to-yellow-200 bg-clip-text text-transparent">₽</span>-->
+<!--          <span class="font-bold text-sm text-[#DFDFDF]">{{ formatR(stats.payments_sum) }}</span>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      прогресбар -->
+      <div class="mt-4 bg-[#1f1f1f] rounded-xl px-1 py-1">
+  <div class="relative flex justify-between items-center h-10 w-full rounded-lg overflow-hidden">
+    <!-- Прогресс -->
+    <div
+      class="absolute left-0 top-0 h-full bg-[#7B6EF6] transition-all duration-300 rounded-lg"
+      :style="{ width: progressPercent + '%' }"
+    ></div>
+
+    <!-- Текущая сумма -->
+    <div class="flex items-center gap-1 z-10 pl-2">
+      <div class="bg-[#7B6EF6] text-white text-sm font-bold px-3 py-1 rounded-lg flex items-center gap-1">
+        <span>₽</span> {{ formatR(stats.earned) }}
       </div>
     </div>
+
+    <!-- Целевой уровень -->
+    <div class="flex items-center gap-1 z-10 pr-2">
+      <div class="bg-[#2b2b2b] text-white text-sm font-bold px-3 py-1 rounded-lg flex items-center gap-1">
+        <span>₽</span> {{ formatR(nextLevel) }}
+      </div>
+    </div>
+  </div>
+</div>
+    </div>
+
+
 
     <!-- Детальная статистика -->
     <div class="card-base px-5 py-5 space-y-3">
@@ -144,11 +170,32 @@ const nickname = ref('')
 const withdrawRequested = ref(false)
 const materialsLink = "https://app.lava.top/products/bee68592-a5ab-49a8-b5e6-f6a576e29255/78fd63a5-1ed5-4f55-900d-b01bf16b6593?paymentParams=CiAgICAgICAgewogICAgICAgICAgImludm9pY2VJZCI6ICI1NjUyMmNjYi1jOGY3LTQ2NzItODU3Yy1jZWZkNTAyOTA2OGEiLAogICAgICAgICAgInBheW1lbnRTZXR0aW5ncyI6IHsiaWQiOiI1NjUyMmNjYi1jOGY3LTQ2NzItODU3Yy1jZWZkNTAyOTA2OGEiLCJ0eXBlIjoiaW52b2ljZSIsInN0YXR1cyI6ImluLXByb2dyZXNzIiwiYW1vdW50X3RvdGFsIjp7ImN1cnJlbmN5IjoiUlVCIiwiYW1vdW50Ijo5OTkwLjB9LCJwcm92aWRlciI6eyJuYW1lIjoiYmFuazEzMSIsInBhcmFtZXRlcnMiOnsicHVibGljX3Rva2VuIjoiMzUwMTEyMGU0NDA5ZGY5Y2I0OWM0OWM1NzUwZTMxMmUwMmE3MzA1MDQ3OGEyNmUyYjI1MjA5OTE2MzQ3YmZhYSIsInN0eWxlc2hlZXQiOiJodHRwczovL3dpZGdldC5iYW5rMTMxLnJ1L3BheW1lbnQtZm9ybS5jc3MiLCJzY3JpcHQiOiJodHRwczovL3dpZGdldC5iYW5rMTMxLnJ1L3BheW1lbnQtZm9ybS5qcyJ9fX0KICAgICAgICB9CiAgICAgIA"
 
-function formatR(val) {
-  if (val === undefined || val === null) return '—'
-  return new Intl.NumberFormat('ru-RU').format(val) + ' ₽'
+
+
+const levels = [1000, 2000, 5000, 10000, 15000, 25000, 35000, 50000, 80000, 100000]
+
+const nextLevel = computed(() => {
+  return levels.find(level => level > (stats.value.earned || 0)) || levels[levels.length - 1]
+})
+
+const progressPercent = computed(() => {
+  const earned = stats.value.earned || 0
+  const prev = [...levels].reverse().find(level => level <= earned) || 0
+  const next = nextLevel.value
+  const progress = (earned - prev) / (next - prev)
+  return Math.min(Math.max(progress * 100, 0), 100).toFixed(1)
+})
+
+const formatR = (value) => {
+  if (value == null) return '—'
+  return value.toLocaleString('ru-RU') + '₽'
 }
-const canWithdraw = computed(() => (stats.value.balance || 0) >= 15000)
+
+// function formatR(val) {
+//   if (val === undefined || val === null) return '—'
+//   return new Intl.NumberFormat('ru-RU').format(val) + ' ₽'
+// }
+const canWithdraw = computed(() => (stats.value.balance || 0) >= 5000)
 
 async function loadData() {
   if (!userData.user.id) return
