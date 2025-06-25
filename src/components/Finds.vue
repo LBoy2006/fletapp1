@@ -2,7 +2,7 @@
 <template>
   <div class="h-full flex flex-col space-y-1 p-2">
     <!-- 🔒 Фиксированная шапка -->
-    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 pb-0 relative overflow-visible space-y-3">
+    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 -pb-0 -mb-2 relative overflow-visible space-y-3">
       <div class="relative flex items-center justify-between px-3">
         <span class="text-lg font-bold text-white">Finds</span>
 
@@ -37,7 +37,7 @@
       </div>
 
       <!-- Кнопка фильтра -->
-      <div class="mt-3 py-2">
+      <div class="mt-3 pt-2">
         <button
           @click="filtersOpen = !filtersOpen"
           class="w-full bg-[#3B366B] text-white py-1 rounded-xl text-sm"
@@ -51,16 +51,16 @@
      <transition name="fade">
   <div
     v-if="filtersOpen"
-    class="absolute left-0 top-full w-full px-1 py-3 bg-[rgba(16,16,17,0.9)] space-y-3 border-b border-[#2c2c3a] z-20 max-h-[50vh] overflow-y-auto scrollbar-hide"
+    class="absolute left-0 w-full px-3 py-3 bg-[rgba(16,16,17,0.9)] space-y-3 border-b border-t border-[#2c2c3a] z-20 max-h-[50vh] overflow-y-auto scrollbar-hide"
   >
     <!-- Цена -->
     <div class="flex gap-2">
       <div class="flex flex-col flex-1">
         <label class="text-xs text-white">Цена от</label>
-        <input type="number" v-model.number="priceMinInput" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" /></div>
+        <input type="number" v-model.number="priceMinInput" class="bg-gray-700 rounded-full text-white text-xs px-2 py-1 rounded" /></div>
       <div class="flex flex-col flex-1">
         <label class="text-xs text-white">до</label>
-        <input type="number" v-model.number="priceMaxInput" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" />
+        <input type="number" v-model.number="priceMaxInput" class="bg-gray-700 rounded-full text-white text-xs px-2 py-1 rounded" />
       </div>
     </div>
 
@@ -73,7 +73,7 @@
           :key="c"
           @click="toggleCategory(c)"
           :class="[
-            'px-3 py-1 rounded-full text-xs border border-[0.5px] border-[#424242]',
+            'px-3 py-0.5 rounded-full text-xs border border-[0.5px] border-[#424242]',
             selectedCategories.includes(c) ? 'bg-[#5E56A5] text-white' : 'bg-[#191919] text-gray-500'
           ]"
         >
@@ -91,7 +91,7 @@
           :key="b"
           @click="toggleBrand(b)"
           :class="[
-            'px-3 py-1 rounded-full text-xs border border-[0.5px] border-[#424242]',
+            'px-3 py-0.5 rounded-full text-xs border border-[0.5px] border-[#424242]',
             selectedBrands.includes(b) ? 'bg-[#5E56A5] text-white' : 'bg-[#191919] text-gray-500'
           ]"
         >
@@ -105,7 +105,7 @@
     </div>
 
     <!-- 🔁 Прокручиваемый контент -->
-    <div class="flex-1 overflow-y-auto scrollbar-hide font-sans">
+    <div class="flex-1 pt-1 overflow-y-auto scrollbar-hide font-sans">
       <div v-if="error" class="text-center text-red-500 py-10">
         Не удалось загрузить товары дня. Попробуйте позже.
       </div>
