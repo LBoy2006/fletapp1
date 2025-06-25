@@ -1,8 +1,17 @@
 <template>
-  <div class="relative">
-    <button class="absolute top-2 left-2 text-xl" @click="goBack"><i class="fas fa-arrow-left"></i></button>
-    <!-- user block and info button removed -->
-    <div class="mt-4 space-y-4">
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="w-full px-1 mx-1 absolute bottom-32">
+      <div class="bg-[var(--page-bg-color)] w-full rounded-2xl shadow-2xl pt-0 pb-5 px-3 overflow-hidden mx-0">
+        <div class="flex items-center justify-between px-5 pt-4 pb-3">
+          <span class="text-base text-white font-medium w-1/3 text-left"> </span>
+          <span class="text-base text-white font-medium w-1/3 text-center">{{ t.settings }}</span>
+          <button class="w-1/3 flex justify-end" @click="emitClose">
+            <svg width="22" height="22" fill="none">
+              <path d="M5 5l12 12M17 5L5 17" stroke="white" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+        <div class="mt-4 space-y-4 px-2">
       <div class="flex items-center justify-between w-full">
         <span class="mr-2">{{ t.theme }}</span>
         <label class="relative inline-flex items-center cursor-pointer ml-auto">
@@ -24,6 +33,8 @@
        </div><div class="flex items-center mt-2">
          <iframe title="lava.top" style="border: none" width="350" height="60" src="https://app.lava.top/gpt_brainbot?subscriptionOfferId=78fd63a5-1ed5-4f55-900d-b01bf16b6593"></iframe>
       </div>
+</div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,9 +44,10 @@ import { ref, onMounted, watch } from 'vue';
 import { userData } from '../state';
 import { API_BASE } from '../api';
 const props = defineProps({ t: Object });
+const emit = defineEmits(['close']);
 
-function goBack() {
-  if (window.showPage) window.showPage('profile');
+function emitClose() {
+  emit('close');
 }
 
 const user = ref({});

@@ -64,7 +64,7 @@ async function loadUser() {
 }
 
 function openSettings() {
-  if (window.showPage) window.showPage('settings');
+  if (window.showSettingsModal) window.showSettingsModal();
 }
 
 onMounted(loadUser);
