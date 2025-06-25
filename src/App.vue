@@ -16,6 +16,7 @@ import NewUserProfile from './components/NewUserProfile.vue';
 import SupplierModal from './components/SupplierModal.vue';
 import ItemModal from './components/ItemModal.vue';
 import ProfileSettings from './components/ProfileSettings.vue';
+import MembershipModal from './components/MembershipModal.vue';
 import { userData } from './state';
 import { translations } from './translations.js';
 import { API_BASE } from './api';
@@ -44,6 +45,7 @@ const supplierModalData = ref(null);
 const itemModalVisible = ref(false);
 const itemModalData = ref(null);
 const settingsModalVisible = ref(false);
+const membershipModalVisible = ref(false);
 const pagesRef = ref(null);
 const innerRef = ref(null);
 const navRef = ref(null);
@@ -108,6 +110,14 @@ function showSettingsModal() {
 
 function hideSettingsModal() {
   settingsModalVisible.value = false;
+}
+
+function showMembershipModal() {
+  membershipModalVisible.value = true;
+}
+
+function hideMembershipModal() {
+  membershipModalVisible.value = false;
 }
 
 async function onItemToggleFavorite() {
@@ -421,6 +431,8 @@ window.showItemModal = showItemModal;
 window.hideItemModal = hideItemModal;
 window.showSettingsModal = showSettingsModal;
 window.hideSettingsModal = hideSettingsModal;
+window.showMembershipModal = showMembershipModal;
+window.hideMembershipModal = hideMembershipModal;
 
 function updateNavForKeyboard() {
   const viewport = window.visualViewport;
@@ -487,6 +499,10 @@ onMounted(() => {
     @close="hideItemModal"
     @copied="onLinkCopied"
     @toggle-favorite="onItemToggleFavorite"
+  />
+  <MembershipModal
+    v-if="membershipModalVisible"
+    @close="hideMembershipModal"
   />
   <div class="min-h-screen flex flex-col overflow-hidden">
     <div ref="pagesRef" class="flex-1 overflow-x-hidden">
