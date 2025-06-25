@@ -97,17 +97,17 @@
           Перейти на сайт
         </a>
       </div>
+</div>
+<!--         <transition name="fade">-->
+<!--  <div-->
+<!--    v-if="copied"-->
+<!--    class="fixed top-36 mt-2 text-center text-sm text-white py-1 px-3 shadow-sm"-->
+<!--  >-->
+<!--    Скопировано!-->
+<!--  </div>-->
+<!--</transition>-->
 
-    </div>     <transition name="fade">
-  <div
-    v-if="copied"
-    class="fixed top-36 mt-2 text-center text-sm text-white py-1 px-3 shadow-sm"
-  >
-    Скопировано!
-  </div>
-</transition></div>
-
-
+</div>
 </template>
 
 
@@ -127,11 +127,13 @@ const copied = ref(false);
 
 const emitClose = () => emit('close');
 
+
+
 const copyLink = async () => {
   if (props.supplier.contact_link) {
     await navigator.clipboard.writeText(props.supplier.contact_link);
-    copied.value = true;
-    setTimeout(() => copied.value = false, 1500); // скрыть через 1.5 сек
+    // copied.value = true;
+    // setTimeout(() => copied.value = false, 1500); // скрыть через 1.5 сек
   }
 };
 
