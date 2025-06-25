@@ -54,14 +54,20 @@
     class="absolute left-0 top-full w-full px-1 py-3 bg-[rgba(16,16,17,0.9)] space-y-3 border-b border-[#2c2c3a] z-20 max-h-[50vh] overflow-y-auto scrollbar-hide"
   >
     <!-- Цена -->
-    <div class="flex gap-2">
-      <div class="flex flex-col flex-1">
-        <label class="text-xs text-white">Цена от</label>
-        <input type="number" v-model.number="priceMin" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" /></div>
-      <div class="flex flex-col flex-1">
-        <label class="text-xs text-white">до</label>
-        <input type="number" v-model.number="priceMax" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" />
+    <div>
+      <div class="text-xs text-white text-center mb-1">
+        {{ formatR(priceRange[0]) }} — {{ formatR(priceRange[1]) }}
       </div>
+      <VueSlider
+        v-model="priceRange"
+        :min="minPrice"
+        :max="maxPrice"
+        :lazy="true"
+        :dot-size="16"
+        :enable-cross="false"
+        :tooltip="'none'"
+        class="px-2"
+      />
     </div>
 
     <!-- Категории -->
@@ -175,6 +181,8 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
 import { userData } from '../state'
 import { API_BASE } from '../api'
 
@@ -187,8 +195,10 @@ const selectedCategories = ref([])
 const selectedBrands = ref([])
 const showFavOnly = ref(false)
 const filtersOpen = ref(false)
-const priceMin = ref(null)
-const priceMax = ref(null)
+const minPrice = ref(0)
+const maxPrice = ref(0)
+const priceRange = ref([0, 0])
+const debouncedRange = ref([0, 0])
 
 const favoritesCount = computed(() => finds.value.filter(f => f.fav).length)
 const displayedFinds = computed(() => {
@@ -202,11 +212,11 @@ const displayedFinds = computed(() => {
   if (selectedBrands.value.length) {
     items = items.filter(f => selectedBrands.value.includes(f.brand))
   }
-  if (priceMin.value !== null) {
-    items = items.filter(f => f.price >= priceMin.value)
+  if (debouncedRange.value[0] !== null) {
+    items = items.filter(f => f.price >= debouncedRange.value[0])
   }
-  if (priceMax.value !== null) {
-    items = items.filter(f => f.price <= priceMax.value)
+  if (debouncedRange.value[1] !== null) {
+    items = items.filter(f => f.price <= debouncedRange.value[1])
   }
   return items
 })
@@ -264,6 +274,15 @@ async function loadFinds() {
         fav: f.is_favorite || false,
         badge: f.badge || null
       }))
+      const prices = finds.value
+        .map(f => f.price)
+        .filter(p => typeof p === 'number')
+      if (prices.length) {
+        minPrice.value = Math.min(...prices)
+        maxPrice.value = Math.max(...prices)
+        priceRange.value = [minPrice.value, maxPrice.value]
+        debouncedRange.value = priceRange.value.slice()
+      }
       updateCategories()
       updateBrands()
     } else {
@@ -327,6 +346,14 @@ onMounted(() => {
 watch(() => userData.user.id, id => {
   if (id) loadFinds()
 })
+
+let rangeTimer = null
+watch(priceRange, (val) => {
+  clearTimeout(rangeTimer)
+  rangeTimer = setTimeout(() => {
+    debouncedRange.value = val.slice()
+  }, 300)
+}, { deep: true })
 
 watch(selectedCategories, () => {
   updateBrands()
