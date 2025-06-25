@@ -2,7 +2,7 @@
 <template>
   <div class="h-full p-0 flex flex-col space-y-1 p-2">
     <!-- 🔒 Фиксированная шапка -->
-    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 pb-0 relative overflow-visible">
+    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 pb-5 relative overflow-visible">
       <div class="relative flex items-center justify-between px-3">
         <!-- Слева -->
         <span class="text-lg font-bold text-white">Feed</span>

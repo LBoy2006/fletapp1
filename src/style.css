@@ -8,6 +8,7 @@
   --nav-border-color: #2a2a2b;
   --nav-text-color: #5e5e5f;
   --active-color: #fdfdfe;
+  --button-color: #5E56A5;
 }
 html, body, #app {
   height: 100%;
