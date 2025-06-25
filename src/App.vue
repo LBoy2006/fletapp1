@@ -111,6 +111,11 @@ async function onItemToggleFavorite() {
     if (r.ok) {
       const data = await r.json();
       item.fav = data.favorite;
+      if (data.favorite) {
+        item.favorites_count = (item.favorites_count || 0) + 1;
+      } else {
+        item.favorites_count = Math.max(0, (item.favorites_count || 1) - 1);
+      }
     }
   } catch (e) {
     console.error(e);

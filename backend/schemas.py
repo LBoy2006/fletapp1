@@ -72,6 +72,7 @@ class FindOut(BaseModel):
     price: int | None = None
     created_at: datetime
     is_favorite: bool | None = None
+    favorites_count: int | None = None
     is_hot: bool | None = None
     is_new: bool | None = None
     is_high_margin: bool | None = None

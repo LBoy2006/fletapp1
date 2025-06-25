@@ -271,6 +271,11 @@ async function toggleFav(f) {
     if (r.ok) {
       const data = await r.json()
       f.fav = data.favorite
+      if (data.favorite) {
+        f.favorites_count = (f.favorites_count || 0) + 1
+      } else {
+        f.favorites_count = Math.max(0, (f.favorites_count || 1) - 1)
+      }
     }
   } catch (e) {
     console.error(e)
