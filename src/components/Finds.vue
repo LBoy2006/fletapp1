@@ -36,8 +36,8 @@
         </div>
       </div>
 
-      <!-- Кнопка фильтра -->
-      <div class="mt-3 pt-2">
+      <!-- Кнопка фильтра и фильтры -->
+      <div class="mt-3 pt-2 relative" ref="filtersArea">
         <button
           @click="filtersOpen = !filtersOpen"
           class="w-full bg-[#3B366B] text-white py-1 rounded-xl text-sm"
@@ -45,14 +45,13 @@
           Filters
           <span :class="filtersOpen ? 'rotate-180' : ''" class="inline-block transition-transform ml-1">▼</span>
         </button>
-      </div>
 
-      <!-- Выпадающие фильтры -->
-     <transition name="fade">
-  <div
-    v-if="filtersOpen"
-    class="absolute left-0 w-full px-3 py-3 bg-[rgba(16,16,17,0.9)] space-y-3 border-b border-[#2c2c3a] z-20 max-h-[50vh] overflow-y-auto scrollbar-hide"
-  >
+        <!-- Выпадающие фильтры -->
+        <transition name="fade">
+          <div
+            v-if="filtersOpen"
+            class="absolute left-0 w-full px-3 py-3 bg-[rgba(16,16,17,0.9)] space-y-3 border-b border-[#2c2c3a] z-20 max-h-[50vh] overflow-y-auto scrollbar-hide"
+          >
     <!-- Цена -->
     <div class="flex gap-2">
       <div class="flex flex-col flex-1">
@@ -174,7 +173,7 @@
 
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch, onBeforeUnmount } from 'vue'
 import { userData } from '../state'
 import { API_BASE } from '../api'
 
@@ -187,6 +186,13 @@ const selectedCategories = ref([])
 const selectedBrands = ref([])
 const showFavOnly = ref(false)
 const filtersOpen = ref(false)
+const filtersArea = ref(null)
+
+function handleClickOutside(e) {
+  if (filtersOpen.value && filtersArea.value && !filtersArea.value.contains(e.target)) {
+    filtersOpen.value = false
+  }
+}
 // Raw values from inputs
 const priceMinInput = ref(null)
 const priceMaxInput = ref(null)
@@ -348,6 +354,11 @@ async function openSupplier(id) {
 
 onMounted(() => {
   loadFinds()
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 
 watch(() => userData.user.id, id => {
