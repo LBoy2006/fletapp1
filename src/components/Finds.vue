@@ -191,9 +191,25 @@ const priceMin = ref(null)
 const priceMax = ref(null)
 
 const favoritesCount = computed(() => finds.value.filter(f => f.fav).length)
-const displayedFinds = computed(() =>
-  showFavOnly.value ? finds.value.filter(f => f.fav) : finds.value
-)
+const displayedFinds = computed(() => {
+  let items = finds.value
+  if (showFavOnly.value) {
+    items = items.filter(f => f.fav)
+  }
+  if (selectedCategories.value.length) {
+    items = items.filter(f => selectedCategories.value.includes(f.category))
+  }
+  if (selectedBrands.value.length) {
+    items = items.filter(f => selectedBrands.value.includes(f.brand))
+  }
+  if (priceMin.value !== null) {
+    items = items.filter(f => f.price >= priceMin.value)
+  }
+  if (priceMax.value !== null) {
+    items = items.filter(f => f.price <= priceMax.value)
+  }
+  return items
+})
 
 function toggleCategory(c) {
   const idx = selectedCategories.value.indexOf(c)
@@ -236,13 +252,8 @@ async function loadFinds() {
   loading.value = true
   error.value = false
   try {
-    const p1 = selectedCategories.value.join(',')
-    const p2 = selectedBrands.value.join(',')
-    const fav = showFavOnly.value ? 'true' : 'false'
     const uid = userData.user.id
-    let url = `${API_BASE}/finds?user_id=${uid}&categories=${encodeURIComponent(p1)}&brands=${encodeURIComponent(p2)}&favorites_only=${fav}`
-    if (priceMin.value !== null) url += `&price_min=${priceMin.value}`
-    if (priceMax.value !== null) url += `&price_max=${priceMax.value}`
+    const url = `${API_BASE}/finds?user_id=${uid}`
     const r = await fetch(url)
     if (r.ok) {
       finds.value = (await r.json()).map(f => ({
@@ -316,9 +327,5 @@ watch(() => userData.user.id, id => {
 
 watch(selectedCategories, () => {
   loadBrands()
-  loadFinds()
 }, { deep: true })
-
-watch([selectedBrands, showFavOnly], loadFinds, { deep: true })
-watch([priceMin, priceMax], loadFinds)
 </script>

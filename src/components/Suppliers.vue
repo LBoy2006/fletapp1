@@ -75,10 +75,10 @@
 
     <!-- 📦 Список поставщиков -->
     <div class="flex-1 overflow-y-auto scrollbar-hide font-sans">
-      <div v-if="!suppliers.length" class="text-center text-gray-500 py-10">Нет результатов</div>
+      <div v-if="!displayedSuppliers.length" class="text-center text-gray-500 py-10">Нет результатов</div>
       <div v-else class="space-y-2">
   <div
-    v-for="s in suppliers"
+    v-for="s in displayedSuppliers"
     :key="s.id"
     class="card-items  card-base flex m-0 items-center pl-1 pr-3 py-1"
   >
@@ -156,6 +156,16 @@ const filtersOpen = ref(false)
 const favoritesCount = computed(() =>
   suppliers.value.filter(s => s.is_favorite).length
 )
+const displayedSuppliers = computed(() => {
+  let items = suppliers.value
+  if (selectedCat.value.length) {
+    items = items.filter(s => s.categories.some(c => selectedCat.value.includes(c)))
+  }
+  if (showFavOnly.value) {
+    items = items.filter(s => s.is_favorite)
+  }
+  return items
+})
 
 function toggleCat(c) {
   const idx = selectedCat.value.indexOf(c)
@@ -175,10 +185,8 @@ async function loadCategories() {
 async function loadSuppliers() {
   if (!userData.user.id) return
   try {
-    const p1 = selectedCat.value.join(',')
-    const fav = showFavOnly.value ? 'true' : 'false'
     const uid = userData.user.id
-    const url = `${API_BASE}/suppliers?user_id=${uid}&categories=${encodeURIComponent(p1)}&favorites_only=${fav}`
+    const url = `${API_BASE}/suppliers?user_id=${uid}`
     const r = await fetch(url)
     if (r.ok) suppliers.value = await r.json()
   } catch (e) {
@@ -231,7 +239,7 @@ watch(() => userData.user.id, id => {
   if (id) loadSuppliers()
 })
 
-watch([selectedCat, showFavOnly], loadSuppliers, { deep: true })
+
 </script>
 
 
