@@ -245,3 +245,29 @@ async def list_finds(
     stmt = select(models.Find).order_by(models.Find.created_at.desc())
     result = await db.execute(stmt)
     return result.scalars().all()
+
+
+async def create_payment(
+    db: AsyncSession,
+    *,
+    user_id: int,
+    months: int,
+    amount: int,
+    currency: str,
+    invoice_id: str,
+    status: str,
+    payment_url: str,
+) -> models.Payment:
+    payment = models.Payment(
+        user_id=user_id,
+        months=months,
+        amount=amount,
+        currency=currency,
+        invoice_id=invoice_id,
+        status=status,
+        payment_url=payment_url,
+    )
+    db.add(payment)
+    await db.commit()
+    await db.refresh(payment)
+    return payment
