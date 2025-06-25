@@ -8,6 +8,7 @@
 import { ref, computed, onMounted } from 'vue';
 import Finds from './components/Finds.vue';
 import Feed from './components/Feed.vue';
+import FeedOverlay from './components/FeedOverlay.vue';
 import Suppliers from './components/Suppliers.vue';
 import Affiliate from './components/Affiliate.vue';
 import Profile from './components/Profile.vue';
@@ -44,6 +45,7 @@ const supplierModalData = ref(null);
 const itemModalVisible = ref(false);
 const itemModalData = ref(null);
 const settingsModalVisible = ref(false);
+const feedOverlayVisible = ref(false);
 const pagesRef = ref(null);
 const innerRef = ref(null);
 const navRef = ref(null);
@@ -110,6 +112,14 @@ function hideSettingsModal() {
   settingsModalVisible.value = false;
 }
 
+function showFeedOverlay() {
+  feedOverlayVisible.value = true;
+}
+
+function hideFeedOverlay() {
+  feedOverlayVisible.value = false;
+}
+
 async function onItemToggleFavorite() {
   const item = itemModalData.value;
   if (!item) return;
@@ -161,10 +171,10 @@ function onLinkCopied() {
 }
 
 function onNavClick(item) {
-  // if (item === 'feed') {
-  //   showSheet(t.value.feedInDev);
-  //   return;
-  // }
+  if (item === 'feed') {
+    showFeedOverlay();
+    return;
+  }
   if (item === 'profile' && !userData.user.is_member) {
     showNewUserProfile.value = true;
   }
@@ -421,6 +431,8 @@ window.showItemModal = showItemModal;
 window.hideItemModal = hideItemModal;
 window.showSettingsModal = showSettingsModal;
 window.hideSettingsModal = hideSettingsModal;
+window.showFeedOverlay = showFeedOverlay;
+window.hideFeedOverlay = hideFeedOverlay;
 
 function updateNavForKeyboard() {
   const viewport = window.visualViewport;
@@ -487,6 +499,10 @@ onMounted(() => {
     @close="hideItemModal"
     @copied="onLinkCopied"
     @toggle-favorite="onItemToggleFavorite"
+  />
+  <FeedOverlay
+    v-if="feedOverlayVisible"
+    @close="hideFeedOverlay"
   />
   <div class="min-h-screen flex flex-col overflow-hidden">
     <div ref="pagesRef" class="flex-1 overflow-x-hidden">
