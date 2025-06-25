@@ -115,15 +115,13 @@
 <script setup>
 import { ref } from 'vue';
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'copied', 'toggle-favorite']);
 const props = defineProps({
   supplier: {
     type: Object,
     required: true,
   }
 });
-
-const copied = ref(false);
 
 const emitClose = () => emit('close');
 
@@ -132,13 +130,12 @@ const emitClose = () => emit('close');
 const copyLink = async () => {
   if (props.supplier.contact_link) {
     await navigator.clipboard.writeText(props.supplier.contact_link);
-    // copied.value = true;
-    // setTimeout(() => copied.value = false, 1500); // скрыть через 1.5 сек
+    emit('copied');
   }
 };
 
 const toggleFavorite = () => {
-  props.supplier.is_favorite = !props.supplier.is_favorite;
+  emit('toggle-favorite');
 };
 
 </script>
