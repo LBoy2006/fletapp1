@@ -41,10 +41,16 @@ body {
 
 /* Общий стиль карточек, как на странице поставщиков */
 .card-base {
+
   background-color: #191919;
-  border: 1px solid #424242;
+  border: 0.5px solid #424242;
   border-radius: 0.75rem;
 }
+.card-items {
+  height: 7rem;
+  margin: 0;
+}
+
 .safe-area {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-top);
@@ -196,12 +202,8 @@ nav.show-labels .nav-label {
 /*  background: var(--page-bg-color);*/
 /*  height: 100%; !* ✅ фикс *!*/
 /*}*/
-.find-card {
-  background-color: #191919;
-  border: 1px solid #424242;
-  border-radius: 0.75rem;
-  box-shadow: 0 2px 12px 0 #18192733;
-}
+
+
 .like-btn {
   transition: transform 0.15s;
 }
@@ -223,8 +225,8 @@ nav.show-labels .nav-label {
 }
 
 .heart-active {
-  color: #9333ea;
-  fill: #9333ea;
+  color: #5E56A5;
+  fill: #5E56A5;
 }
 .fade-enter-active,
 .fade-leave-active {

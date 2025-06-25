@@ -105,7 +105,7 @@
     </div>
 
     <!-- 🔁 Прокручиваемый контент -->
-    <div class="flex-1 overflow-y-auto px-3 pb-2 space-y-4 scrollbar-hide">
+    <div class="flex-1 overflow-y-auto scrollbar-hide font-sans">
       <div v-if="error" class="text-center text-red-500 py-10">
         Не удалось загрузить товары дня. Попробуйте позже.
       </div>
@@ -113,51 +113,53 @@
       <div v-else-if="!displayedFinds.length" class="text-center text-gray-500 py-10">
         Сегодня пока нет новых товаров
       </div>
-      <div v-else class="space-y-3">
+      <div v-else class="space-y-2">
         <div
           v-for="f in displayedFinds"
           :key="f.id"
-          class="find-card card-base relative px-3 py-3 flex items-center gap-3 shadow-sm"
+          class="card-items  card-base flex m-0 items-center pl-1 pr-3 py-1"
         >
-          <!-- Статус -->
-          <div v-if="f.badge" class="absolute left-2 top-2 z-10">
-            <span v-if="f.badge === 'NEW'" class="inline-block bg-blue-800 text-xs text-white rounded-lg px-2 py-0.5 font-bold">NEW</span>
-            <span v-else-if="f.badge === 'HOT'" class="inline-block bg-orange-700 text-xs text-white rounded-lg px-2 py-0.5 font-bold">🔥</span>
-            <span v-else-if="f.badge === 'GOLD'" class="inline-block bg-yellow-500 text-xs text-black rounded-lg px-2 py-0.5 font-bold">$</span>
-          </div>
 
           <!-- Фото -->
           <div class="relative">
-            <img :src="f.photo_url" alt="" class="w-16 h-16 rounded-xl object-cover bg-[#111]" />
-            <div class="absolute top-0 right-0 flex gap-0.5 text-[13px]">
+            <img :src="f.photo_url" alt="" class="w-24 h-24 rounded-xl object-cover border border border-[0.5px] border-[#424242] m-0 mr-2 " />
+            <div class="absolute -top-1 -left-1 flex -gap-1 text-[20px] mx-0">
               <span v-if="f.is_hot">🔥</span>
-              <span v-if="f.is_new">🆕</span>
+              <span v-if="f.is_new" >🆕</span>
               <span v-if="f.is_high_margin">💰</span>
             </div>
           </div>
 
           <!-- Описание -->
-          <div class="flex-1 min-w-0">
-            <div class="font-bold text-base text-white truncate">{{ f.name }}</div>
-            <div class="text-xs text-gray-400 mb-1 truncate">{{ f.desc }}</div>
-            <div class="text-[#6e9fff] text-lg font-extrabold">
+          <div class="flex-1 min-w-0 pl-2 h-full flex flex-col justify-between">
+            <div class="text-gray-400 text-lg font-bold leading-tight truncate">{{ f.name }}</div>
+            <div class="text-sm text-gray-400 mt-1 truncate ">{{ f.desc }}</div>
+            <div class="flex flex-wrap gap-x-2 gap-y-0.5 mt-2 text-2xl text-[#5E56A5] font-sans font-bold">
               {{ f.price ? formatR(f.price) : '—' }}
             </div>
           </div>
 
           <!-- Кнопки -->
-          <div class="flex flex-col items-end justify-between h-full min-w-[32px] gap-3">
-            <button @click="openItem(f)" class="rounded-full p-2 text-white bg-[#353666] hover:bg-[#5567c9]">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
+          <div class="flex flex-col gap-10">
+            <button class="ml-auto" @click="toggleFav(f)">
+              <svg
+            width="24" height="24" viewBox="0 0 24 24" fill="none"
+            :class="f.fav ? 'text-[#7A65FC]' : 'text-[#4B4B50]'"
+          >  <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09
+                C13.09 3.81 14.76 3 16.5 3
+                19.58 3 22 5.42 22 8.5
+                c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              :fill="f.fav ? '#5E56A5' : 'none'"
+              :stroke="f.fav ? '#5E56A5' : '#4B4B50'"
+              stroke-width="2"
+            /> </svg>
             </button>
-            <button class="like-btn" @click="toggleFav(f)">
-              <svg v-if="f.fav" class="w-5 h-5" fill="#a5b4fc" viewBox="0 0 20 20">
-                <path d="M3.172 5.172a4 4 0 0 1 5.656 0l.172.172.172-.172a4 4 0 1 1 5.656 5.656L10 17.657l-5.828-5.829a4 4 0 0 1 0-5.656z" />
-              </svg>
-              <svg v-else class="w-5 h-5" fill="none" stroke="#a5b4fc" stroke-width="1.5" viewBox="0 0 20 20">
-                <path d="M3.172 5.172a4 4 0 0 1 5.656 0l.172.172.172-.172a4 4 0 1 1 5.656 5.656L10 17.657l-5.828-5.829a4 4 0 0 1 0-5.656z" />
+            <button @click="openItem(f)" class="ml-4">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4B4B50" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="12" x2="19" y2="12"/>
+  <polyline points="12 5 19 12 12 19"/>
               </svg>
             </button>
           </div>

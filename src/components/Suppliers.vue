@@ -80,7 +80,7 @@
   <div
     v-for="s in suppliers"
     :key="s.id"
-    class="h-30 m-0 bg-[#191919] rounded-xl flex m-0 border border-[0.5px] border-[#424242] items-center pl-1 pr-3 py-1"
+    class="card-items  card-base flex m-0 items-center pl-1 pr-3 py-1"
   >
     <!-- Аватар -->
     <img
@@ -109,7 +109,8 @@
   </div>
 </div>
 
-   <div class="flex flex-col gap-10"> <button @click="toggleFavorite(s)" class="ml-auto">
+   <div class="flex flex-col gap-10">
+     <button @click="toggleFavorite(s)" class="ml-auto">
           <svg
             width="24" height="24" viewBox="0 0 24 24" fill="none"
             :class="s.is_favorite ? 'text-[#7A65FC]' : 'text-[#4B4B50]'"
