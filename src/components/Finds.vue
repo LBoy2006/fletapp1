@@ -45,7 +45,7 @@
           Filters
           <span :class="filtersOpen ? 'rotate-180' : ''" class="inline-block transition-transform ml-1">▼</span>
         </button>
-
+      </div>
         <!-- Выпадающие фильтры -->
         <transition name="fade">
           <div
