@@ -122,6 +122,29 @@ async function onItemToggleFavorite() {
   }
 }
 
+async function onSupplierToggleFavorite() {
+  const supplier = supplierModalData.value;
+  if (!supplier) return;
+  try {
+    const r = await fetch(`${API_BASE}/suppliers/${supplier.id}/favorite`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userData.user.id })
+    });
+    if (r.ok) {
+      const data = await r.json();
+      supplier.is_favorite = data.favorite;
+      if (data.favorite) {
+        supplier.favorites_count = (supplier.favorites_count || 0) + 1;
+      } else {
+        supplier.favorites_count = Math.max(0, (supplier.favorites_count || 1) - 1);
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 function onLinkCopied() {
   showSheet('Link copied');
 }
@@ -429,6 +452,7 @@ onMounted(() => {
     :supplier="supplierModalData"
     @close="hideSupplierModal"
     @copied="onLinkCopied"
+    @toggle-favorite="onSupplierToggleFavorite"
   />
   <ItemModal
     v-if="itemModalVisible"

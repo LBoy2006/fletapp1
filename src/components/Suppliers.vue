@@ -222,8 +222,8 @@ async function openContacts(s) {
     const r = await fetch(`${API_BASE}/suppliers/${s.id}/contacts`)
     if (r.ok) {
       const data = await r.json()
-      const info = { ...s, ...data }
-      if (window.showSupplierModal) window.showSupplierModal(info)
+      Object.assign(s, data)
+      if (window.showSupplierModal) window.showSupplierModal(s)
     }
   } catch (e) {
     console.error(e)
