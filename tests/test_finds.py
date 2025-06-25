@@ -7,18 +7,6 @@ def test_list_finds(client, db_session):
     assert all('favorites_count' in f for f in data)
     assert all(f['favorites_count'] == 0 for f in data)
 
-    resp = client.get('/finds', params={'categories': 'CatA'})
-    assert resp.status_code == 200
-    assert len(resp.json()) == 1
-
-    resp = client.get('/finds', params={'brands': 'BrandY'})
-    assert resp.status_code == 200
-    assert len(resp.json()) == 1
-
-    resp = client.get('/finds', params={'price_min': 150})
-    assert resp.status_code == 200
-    assert len(resp.json()) == 1
-    assert resp.json()[0]['name'] == 'Item 2'
 
 
 def test_find_categories(client, db_session):

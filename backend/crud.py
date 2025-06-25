@@ -125,16 +125,9 @@ async def list_categories(db: AsyncSession) -> list[str]:
 
 async def list_suppliers(
     db: AsyncSession,
-    categories: list[str] | None = None,
 ) -> list[models.Supplier]:
     result = await db.execute(select(models.Supplier))
-    suppliers = result.scalars().all()
-    if categories:
-        suppliers = [
-            s for s in suppliers
-            if s.categories and any(c in s.categories for c in categories)
-        ]
-    return suppliers
+    return result.scalars().all()
 
 
 async def get_favorite_supplier_ids(db: AsyncSession, user_id: int) -> list[int]:
@@ -248,19 +241,7 @@ async def list_find_brands(db: AsyncSession, categories: list[str] | None = None
 
 async def list_finds(
     db: AsyncSession,
-    categories: list[str] | None = None,
-    brands: list[str] | None = None,
-    price_min: int | None = None,
-    price_max: int | None = None,
 ) -> list[models.Find]:
     stmt = select(models.Find).order_by(models.Find.created_at.desc())
-    if categories:
-        stmt = stmt.where(models.Find.category.in_(categories))
-    if brands:
-        stmt = stmt.where(models.Find.brand.in_(brands))
-    if price_min is not None:
-        stmt = stmt.where(models.Find.price >= price_min)
-    if price_max is not None:
-        stmt = stmt.where(models.Find.price <= price_max)
     result = await db.execute(stmt)
     return result.scalars().all()

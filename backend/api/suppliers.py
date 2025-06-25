@@ -17,12 +17,10 @@ async def get_categories(db: AsyncSession = Depends(get_db)):
 @router.get('/suppliers', response_model=list[schemas.SupplierOut])
 async def list_suppliers(
     user_id: int,
-    categories: str = '',
     favorites_only: bool = False,
     db: AsyncSession = Depends(get_db),
 ):
-    cats = [c.strip() for c in categories.split(',') if c.strip()]
-    suppliers = await crud.list_suppliers(db, cats)
+    suppliers = await crud.list_suppliers(db)
     fav_ids = set(await crud.get_favorite_supplier_ids(db, user_id))
     fav_counts = await crud.get_all_favorites_count(db)
     if favorites_only:
