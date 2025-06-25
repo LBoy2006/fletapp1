@@ -467,7 +467,7 @@ onMounted(() => {
         <div
           v-for="p in pageOrder"
           :key="p"
-          :class="['page w-full flex-shrink-0 scrollbar-hide', { 'no-page-scroll': ['finds', 'suppliers'].includes(p) }]"
+          :class="['page w-full flex-shrink-0 scrollbar-hide', { 'no-page-scroll': ['finds', 'suppliers', 'affiliate'].includes(p) }]"
         >
           <component :is="pages[p]" :t="t" />
         </div>
