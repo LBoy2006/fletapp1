@@ -13,6 +13,7 @@ import Affiliate from './components/Affiliate.vue';
 import Profile from './components/Profile.vue';
 import ProfileSettings from './components/ProfileSettings.vue';
 import NewUser from './components/NewUser.vue';
+import NewUserProfile from './components/NewUserProfile.vue';
 import SupplierModal from './components/SupplierModal.vue';
 import ItemModal from './components/ItemModal.vue';
 import { userData } from './state';
@@ -51,6 +52,7 @@ const baseNavBottom = ref(0);
 const dragOffset = ref(0);
 const isDragging = ref(false);
 const showNewUser = ref(false);
+const showNewUserProfile = ref(false);
 let hideTimer = null;
 
 const dragStyle = computed(() => ({
@@ -154,12 +156,20 @@ function onNavClick(item) {
   //   showSheet(t.value.feedInDev);
   //   return;
   // }
+  if (item === 'profile' && !userData.user.is_member) {
+    showNewUserProfile.value = true;
+  }
   showPage(item);
 }
 
 function onPaid() {
   showNewUser.value = false;
   showPage('finds');
+}
+
+function onPaidProfile() {
+  showNewUserProfile.value = false;
+  showPage('profile');
 }
 
 // --- Блок авторизации Telegram Mini App ---
@@ -447,6 +457,7 @@ onMounted(() => {
 </script>
 <template>
   <NewUser v-if="showNewUser" @paid="onPaid" />
+  <NewUserProfile v-if="showNewUserProfile" @paid="onPaidProfile" />
   <SupplierModal
     v-if="supplierModalVisible"
     :supplier="supplierModalData"
