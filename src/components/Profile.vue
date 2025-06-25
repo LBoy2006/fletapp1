@@ -4,7 +4,7 @@
       <div class="relative flex items-center justify-between">
         <span class="text-lg font-bold text-white">Profile</span>
         <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-          <span class="text-2xl font-extrabold text-white">1chn</span>
+          <span class="text-2xl font-dela text-white">1chn</span>
           <span class="text-sm text-gray-400">[ван чан]</span>
         </div>
         <button class="text-xl z-10" @click="openSettings">

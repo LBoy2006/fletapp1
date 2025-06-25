@@ -58,6 +58,8 @@ const dragStyle = computed(() => ({
   transition: isDragging.value ? 'none' : ''
 }));
 
+
+
 function showPage(page) {
   currentIndex.value = pageOrder.indexOf(page);
   dragOffset.value = 0;

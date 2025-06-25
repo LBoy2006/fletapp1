@@ -8,7 +8,7 @@
 
         <!-- Центрированный заголовок -->
         <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-          <span class="text-2xl font-extrabold text-white">1chn</span>
+          <span class="text-2xl font-dela text-white">1chn</span>
           <span class="text-sm text-gray-400">[ван чан]</span>
         </div>
 

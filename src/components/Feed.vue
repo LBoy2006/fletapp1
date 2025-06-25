@@ -9,7 +9,7 @@
 
         <!-- Центрированный блок -->
         <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-          <span class="text-2xl font-extrabold">1chn</span>
+          <span class="text-2xl font-dela">1chn</span>
           <span class="text-sm text-gray-400">[ван чан]</span>
         </div>
       </div>
