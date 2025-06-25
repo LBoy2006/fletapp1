@@ -16,7 +16,7 @@
     </div>
 
      <!-- 🛠️ Блок "в разработке" -->
-    <div class="flex flex-1 mx-2 items-center justify-center text-center bg-[#222227] rounded-2xl">
+    <div class="card-base flex flex-1 mx-2 items-center justify-center text-center">
 
       <div class="flex flex-col items-center space-y-4 max-w-xs">
         <!-- Эмодзи или картинка -->

@@ -38,6 +38,13 @@ body {
   padding-bottom: calc(70px + env(safe-area-inset-bottom)); /* nav height + безопасный отступ */
 
 }
+
+/* Общий стиль карточек, как на странице поставщиков */
+.card-base {
+  background-color: #191919;
+  border: 1px solid #424242;
+  border-radius: 0.75rem;
+}
 .safe-area {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-top);
@@ -190,7 +197,9 @@ nav.show-labels .nav-label {
 /*  height: 100%; !* ✅ фикс *!*/
 /*}*/
 .find-card {
-  border: 1.5px solid #242434;
+  background-color: #191919;
+  border: 1px solid #424242;
+  border-radius: 0.75rem;
   box-shadow: 0 2px 12px 0 #18192733;
 }
 .like-btn {

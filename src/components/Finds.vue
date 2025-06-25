@@ -117,7 +117,7 @@
         <div
           v-for="f in displayedFinds"
           :key="f.id"
-          class="find-card relative bg-[#222227] rounded-2xl px-3 py-3 flex items-center gap-3 shadow-sm"
+          class="find-card card-base relative px-3 py-3 flex items-center gap-3 shadow-sm"
         >
           <!-- Статус -->
           <div v-if="f.badge" class="absolute left-2 top-2 z-10">
