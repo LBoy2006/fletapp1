@@ -20,7 +20,7 @@
               <img :src="supplier.photo_url" alt="Supplier"
                  class="w-24 h-24 rounded-full object-cover border border border-[0.5px] border-[#424242] m-0 mr-2 " />
 
-               <div class="ml-4 flex flex-col justify-start ">
+               <div class="ml-1 flex flex-col justify-start ">
 
 
                   <div class="text-lg font-bold text-white leading-5">{{ supplier.name }}</div>
