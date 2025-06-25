@@ -14,7 +14,7 @@
       </div>
     </div>
     <!-- Карточка профиля -->
-    <div class="bg-[#191919] border border-[#42424280] rounded-[10px] px-5 py-4">
+    <div class="card-base px-5 py-4">
       <div class="flex justify-between items-center">
         <div>
           <div class="font-bold text-base text-[#DFDFDF]">{{ nickname || '—' }}</div>
@@ -57,7 +57,7 @@
     </div>
 
     <!-- Детальная статистика -->
-    <div class="bg-[#191919] border border-[#42424280] rounded-[10px] px-5 py-5 space-y-3">
+    <div class="card-base px-5 py-5 space-y-3">
       <div class="flex justify-between text-sm">
         <span class="text-[#FFFFFFBF] font-medium">Приглашено пользователей</span>
         <span class="font-extrabold text-[#DFDFDF]">{{ stats.invited ?? '—' }}</span>
@@ -103,7 +103,7 @@
     </div>
 
     <!-- Ссылка и копирование -->
-    <div class="bg-[#191919] border border-[#292929] rounded-[10px] px-5 py-3 flex flex-col gap-2">
+    <div class="card-base px-5 py-3 flex flex-col gap-2">
       <div class="flex items-center gap-2">
         <span class="font-semibold text-[#DFDFDF] text-sm">Твоя реферальная ссылка</span>
         <button @click="copyLink" class="w-20 h-20 flex items-center justify-center">
@@ -125,7 +125,7 @@
     </div>
 
     <!-- Рекламные материалы -->
-    <div class="bg-[#191919] border border-[#292929] rounded-[10px] px-5 py-3">
+    <div class="card-base px-5 py-3">
       <div class="flex items-center gap-2">
         <svg fill="currentColor" class="w-4 h-4 text-[#8B81F5]">
           <circle cx="8" cy="8" r="8"/>

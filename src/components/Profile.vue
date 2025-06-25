@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="relative p-4 space-y-4 overflow-hidden flex-1">
-      <div class="bg-gray-800 p-4 rounded text-center">
+      <div class="card-base p-4 text-center">
         <div class="avatar mx-auto mb-3">
           <span class="num">{{ numDisplay }}</span>
         </div>
@@ -22,7 +22,7 @@
         <div>{{ t.location }}: {{ user.location || '—' }}</div>
         <div>{{ t.status }}: {{ user.status || '—' }}</div>
       </div>
-      <div class="bg-gray-800 p-4 rounded">
+      <div class="card-base p-4">
         <h3 class="text-lg font-bold mb-2">{{ t.aboutClub }}</h3>
         <p>Клуб единомышленников, где агенты обмениваются опытом и секретами эффективных продаж. Присоединяйся и расширяй свои возможности.</p>
       </div>
