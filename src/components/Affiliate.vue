@@ -1,5 +1,5 @@
 <template>
-   <div class="p-0 flex flex-col space-y-1 p-2 ">
+   <div class="p-0 flex flex-col space-y-2 p-2 ">
     <!-- 🔒 Фиксированная шапка -->
     <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 pb-5 relative overflow-visible">
       <div class="relative flex items-center justify-between px-3">
@@ -105,7 +105,7 @@
     <!-- Ссылка и копирование -->
        <button
           @click="copyLink"
-          class="card-base py-2 flex mt-4 h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
+          class=" card-base py-2 flex mt-4 h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
         >
             <svg width="24" height="24" viewBox="-5 -5 64 64" fill="none">
   <!-- Задний (нижний) прямоугольник, только часть обводки -->
@@ -116,21 +116,17 @@
           Твоя реферальная ссылка
         </button>
      <!-- Рекламные материалы -->
-    <a
-
-          :href="stats.materials_link || materialsLink"
-          target="_blank"
-          class="card-base  w-full h-10 mt-2 flex flex-1 items-center justify-center gap-2 text-white py-3 text-base shadow transition"
+     <button
+          @click="openTelegramLink"
+          class=" card-base py-2 flex mt-4 h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
         >
-          <svg width="20" height="20" viewBox="-5 -5 40 40" fill="none" >
-            <path d="
-           M 15 23 L 15 7 Z M 7 15 H 23 Z M 10 2 C 21 -1 26 5 28 10 C 29 15 30 21 22 27 M 19 28
-           Q 15 30 10 28 M 8 27 Q 4 25 2 21 M 1 19 Q 0 15 1 11 M 2 9 Q 4 5 8 3
-"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+  <path fill-rule="evenodd" d="M19.902 4.098a3.75 3.75 0 0 0-5.304 0l-4.5 4.5a3.75 3.75 0 0 0 1.035 6.037.75.75 0 0 1-.646 1.353 5.25 5.25 0 0 1-1.449-8.45l4.5-4.5a5.25 5.25 0 1 1 7.424 7.424l-1.757 1.757a.75.75 0 1 1-1.06-1.06l1.757-1.757a3.75 3.75 0 0 0 0-5.304Zm-7.389 4.267a.75.75 0 0 1 1-.353 5.25 5.25 0 0 1 1.449 8.45l-4.5 4.5a5.25 5.25 0 1 1-7.424-7.424l1.757-1.757a.75.75 0 1 1 1.06 1.06l-1.757 1.757a3.75 3.75 0 1 0 5.304 5.304l4.5-4.5a3.75 3.75 0 0 0-1.035-6.037.75.75 0 0 1-.354-1Z" clip-rule="evenodd" />
+</svg>
+
           Рекламые материалы
-        </a>
+        </button>
+
 
 
   </div>
@@ -173,6 +169,17 @@ async function loadData() {
     console.error(e)
   }
 }
+
+const openTelegramLink = () => {
+  const url = 'https://example.com';
+
+  if (window.Telegram?.WebApp?.openLink) {
+    window.Telegram.WebApp.openLink(materialsLink);
+  } else {
+    alert('Telegram WebApp API недоступен');
+  }
+};
+
 async function onWithdraw() {
   try {
     const resp = await fetch(`${API_BASE}/affiliate/${userData.user.id}/withdraw`, { method: 'POST' })
