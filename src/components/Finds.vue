@@ -57,10 +57,10 @@
     <div class="flex gap-2">
       <div class="flex flex-col flex-1">
         <label class="text-xs text-white">Цена от</label>
-        <input type="number" v-model.number="priceMin" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" /></div>
+        <input type="number" v-model.number="priceMinInput" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" /></div>
       <div class="flex flex-col flex-1">
         <label class="text-xs text-white">до</label>
-        <input type="number" v-model.number="priceMax" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" />
+        <input type="number" v-model.number="priceMaxInput" class="bg-gray-700 text-white text-xs px-2 py-1 rounded" />
       </div>
     </div>
 
@@ -187,8 +187,34 @@ const selectedCategories = ref([])
 const selectedBrands = ref([])
 const showFavOnly = ref(false)
 const filtersOpen = ref(false)
+// Raw values from inputs
+const priceMinInput = ref(null)
+const priceMaxInput = ref(null)
+// Debounced values actually used for filtering
 const priceMin = ref(null)
 const priceMax = ref(null)
+
+function debounce(fn, delay) {
+  let t
+  return (...args) => {
+    clearTimeout(t)
+    t = setTimeout(() => fn(...args), delay)
+  }
+}
+
+const applyPriceFilter = debounce(() => {
+  priceMin.value =
+    Number.isFinite(priceMinInput.value) && !Number.isNaN(priceMinInput.value)
+      ? priceMinInput.value
+      : null
+  priceMax.value =
+    Number.isFinite(priceMaxInput.value) && !Number.isNaN(priceMaxInput.value)
+      ? priceMaxInput.value
+      : null
+}, 300)
+
+watch(priceMinInput, applyPriceFilter)
+watch(priceMaxInput, applyPriceFilter)
 
 const favoritesCount = computed(() => finds.value.filter(f => f.fav).length)
 const displayedFinds = computed(() => {
@@ -202,10 +228,10 @@ const displayedFinds = computed(() => {
   if (selectedBrands.value.length) {
     items = items.filter(f => selectedBrands.value.includes(f.brand))
   }
-  if (priceMin.value !== null) {
+  if (priceMin.value !== null && !Number.isNaN(priceMin.value)) {
     items = items.filter(f => f.price >= priceMin.value)
   }
-  if (priceMax.value !== null) {
+  if (priceMax.value !== null && !Number.isNaN(priceMax.value)) {
     items = items.filter(f => f.price <= priceMax.value)
   }
   return items
