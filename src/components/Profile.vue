@@ -12,24 +12,24 @@
         </button>
       </div>
     </div>
-    <div class="relative p-4 space-y-4 overflow-hidden flex-1">
-      <div class="card-base p-4 text-center">
+    <div class="relative p-4 flex flex-col gap-2 overflow-y-auto scrollbar-hide flex-1">
+      <div class="card-base px-5 py-4 text-center flex flex-col items-center">
         <div class="avatar mx-auto mb-3">
           <span class="num">{{ numDisplay }}</span>
         </div>
-        <div class="font-semibold text-lg">{{ user.agent_number || '—' }}</div>
-        <div>{{ t.daysInClub }}: {{ user.days_in_club ?? '—' }}</div>
-        <div>{{ t.location }}: {{ user.location || '—' }}</div>
-        <div>{{ t.status }}: {{ user.status || '—' }}</div>
+        <div class="font-semibold text-lg text-[#DFDFDF]">{{ user.agent_number || '—' }}</div>
+        <div class="text-sm text-[#DFDFDF]">{{ t.daysInClub }}: {{ user.days_in_club ?? '—' }}</div>
+        <div class="text-sm text-[#DFDFDF]">{{ t.location }}: {{ user.location || '—' }}</div>
+        <div class="text-sm text-[#DFDFDF]">{{ t.status }}: {{ user.status || '—' }}</div>
       </div>
-      <div class="card-base p-4">
-        <h3 class="text-lg font-bold mb-2">{{ t.aboutClub }}</h3>
-        <p>Клуб единомышленников, где агенты обмениваются опытом и секретами эффективных продаж. Присоединяйся и расширяй свои возможности.</p>
+      <div class="card-base px-5 py-4">
+        <h3 class="text-lg font-bold mb-2 text-[#DFDFDF]">{{ t.aboutClub }}</h3>
+        <p class="text-sm text-[#DFDFDF]">Клуб единомышленников, где агенты обмениваются опытом и секретами эффективных продаж. Присоединяйся и расширяй свои возможности.</p>
       </div>
-      <div class="flex justify-around">
-        <a href="https://t.me/secret_channel" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.secretChannel }}</a>
-        <a href="https://t.me/club_chat" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.chat }}</a>
-        <a href="https://t.me/club_support" target="_blank" class="bg-blue-600 px-3 py-2 rounded">{{ t.support }}</a>
+      <div class="flex flex-col gap-2">
+        <a href="https://t.me/secret_channel" target="_blank" class="card-base py-2 flex h-10 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]">{{ t.secretChannel }}</a>
+        <a href="https://t.me/club_chat" target="_blank" class="card-base py-2 flex h-10 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]">{{ t.chat }}</a>
+        <a href="https://t.me/club_support" target="_blank" class="card-base py-2 flex h-10 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]">{{ t.support }}</a>
       </div>
     </div>
   </div>
