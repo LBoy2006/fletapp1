@@ -2,8 +2,8 @@
 <template>
   <div class="h-full flex flex-col space-y-1 p-2">
     <!-- 🔒 Фиксированная шапка -->
-    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] space-y-3 px-3 py-4 border-b border-[#2c2c3a] relative overflow-visible">
-      <div class="relative flex items-center justify-between">
+    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 pb-0 relative overflow-visible space-y-3">
+      <div class="relative flex items-center justify-between px-3">
         <span class="text-lg font-bold text-white">Finds</span>
 
         <!-- Центрированный заголовок -->
@@ -29,7 +29,7 @@
             />
           </svg>
           <span
-            class="absolute -bottom-1 -right-2 bg-black text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center border border-white"
+            class="absolute -bottom-1 -right-1 font-dela text-white text-[12px] rounded-full w-4 h-4 flex items-center justify-center"
           >
             {{ favoritesCount }}
           </span>
@@ -37,10 +37,10 @@
       </div>
 
       <!-- Кнопка фильтра -->
-      <div class="mt-3">
+      <div class="mt-3 py-2">
         <button
           @click="filtersOpen = !filtersOpen"
-          class="w-full bg-purple-700 text-white font-semibold py-1 rounded text-sm"
+          class="w-full bg-[#3B366B] text-white py-1 rounded-xl text-sm"
         >
           Filters
           <span :class="filtersOpen ? 'rotate-180' : ''" class="inline-block transition-transform ml-1">▼</span>
@@ -67,14 +67,14 @@
     <!-- Категории -->
     <div>
       <div class="text-xs mb-1 text-white text-center">Категория</div>
-      <div class="flex flex-wrap justify-center gap-2">
+      <div class="flex flex-wrap gap-2 justify-center">
         <button
           v-for="c in categories"
           :key="c"
           @click="toggleCategory(c)"
           :class="[
-            'px-3 py-1 rounded-full text-xs border',
-            selectedCategories.includes(c) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
+            'px-3 py-1 rounded-full text-xs border border-[0.5px] border-[#424242]',
+            selectedCategories.includes(c) ? 'bg-[#5E56A5] text-white' : 'bg-[#191919] text-gray-500'
           ]"
         >
           {{ c }}
@@ -85,14 +85,14 @@
     <!-- Бренды -->
     <div>
       <div class="text-xs mb-1 text-white text-center">Бренд</div>
-      <div class="flex flex-wrap justify-center gap-2">
+      <div class="flex flex-wrap gap-2 justify-center">
         <button
           v-for="b in brands"
           :key="b"
           @click="toggleBrand(b)"
           :class="[
-            'px-3 py-1 rounded-full text-xs border',
-            selectedBrands.includes(b) ? 'bg-blue-600 text-white' : 'bg-gray-700 text-white'
+            'px-3 py-1 rounded-full text-xs border border-[0.5px] border-[#424242]',
+            selectedBrands.includes(b) ? 'bg-[#5E56A5] text-white' : 'bg-[#191919] text-gray-500'
           ]"
         >
           {{ b }}
