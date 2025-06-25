@@ -33,6 +33,7 @@ async def list_finds(
     brands_list = [c.strip() for c in brands.split(',') if c.strip()]
     finds = await crud.list_finds(db, cats, brands_list, price_min, price_max)
     fav_ids = set()
+    fav_counts = await crud.get_all_find_favorites_count(db)
     if user_id:
         fav_ids = set(await crud.get_favorite_find_ids(db, user_id))
         if favorites_only:
@@ -42,6 +43,7 @@ async def list_finds(
         item = schemas.FindOut.model_validate(f)
         if user_id:
             item.is_favorite = f.id in fav_ids
+        item.favorites_count = fav_counts.get(f.id, 0)
         result.append(item)
     return result
 

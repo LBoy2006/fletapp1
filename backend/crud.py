@@ -208,6 +208,25 @@ async def toggle_favorite_find(db: AsyncSession, user_id: int, find_id: int) -> 
         return True
 
 
+async def get_find_favorites_count(db: AsyncSession, find_id: int) -> int:
+    result = await db.execute(
+        select(func.count(models.FavoriteFind.id)).where(
+            models.FavoriteFind.find_id == find_id
+        )
+    )
+    return result.scalar_one()
+
+
+async def get_all_find_favorites_count(db: AsyncSession) -> dict[int, int]:
+    result = await db.execute(
+        select(
+            models.FavoriteFind.find_id,
+            func.count(models.FavoriteFind.id)
+        ).group_by(models.FavoriteFind.find_id)
+    )
+    return {fid: cnt for fid, cnt in result.all()}
+
+
 async def get_supplier(db: AsyncSession, supplier_id: int) -> models.Supplier | None:
     result = await db.execute(select(models.Supplier).where(models.Supplier.id == supplier_id))
     return result.scalar_one_or_none()
