@@ -14,30 +14,24 @@
           Активируйте профиль, чтобы <br />
           начать операцию
         </p>
-        <button @click="pay" class="glitch-scale text-green-500 hover:underline text-md">
+        <button @click="openPay" class="glitch-scale text-green-500 hover:underline text-md">
           [ ПОЛУЧИТЬ ДОСТУП ]
         </button>
+        <PayModal v-if="payVisible" @close="payVisible=false" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { userData } from '../state'
-import { API_BASE } from '../api'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+import PayModal from './PayModal.vue'
 
 const emit = defineEmits(['paid'])
+const payVisible = ref(false)
 
-async function pay() {
-  if (!userData.user.id) return
-  try {
-    await fetch(`${API_BASE}/users/${userData.user.id}/pay`, { method: 'POST' })
-    userData.user.is_member = true
-    emit('paid')
-  } catch (e) {
-    console.error(e)
-  }
+function openPay() {
+  payVisible.value = true
 }
 
 onMounted(() => {

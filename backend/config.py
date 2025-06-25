@@ -17,6 +17,9 @@ class Settings(BaseSettings):
         env="CORS_ORIGINS",
     )
     TELEGRAM_BOT_TOKEN: str = Field(default="", env="TELEGRAM_BOT_TOKEN")
+    LAVA_API_KEY: str = Field(default="", env="LAVA_API_KEY")
+    LAVA_OFFER_ID: str = Field(default="78fd63a5-1ed5-4f55-900d-b01bf16b6593", env="LAVA_OFFER_ID")
+    TEST_MODE: bool = Field(default=False, env="TEST_MODE")
     class Config:
         env_file = ".env"
 

@@ -78,3 +78,21 @@ class FindOut(BaseModel):
     is_high_margin: bool | None = None
 
     model_config = {"from_attributes": True}
+
+
+class PaymentCreate(BaseModel):
+    user_id: int
+    months: int
+
+
+class PaymentOut(BaseModel):
+    id: int
+    user_id: int
+    months: int
+    amount: int
+    currency: str
+    invoice_id: str | None = None
+    status: str | None = None
+    payment_url: str | None = None
+
+    model_config = {"from_attributes": True}

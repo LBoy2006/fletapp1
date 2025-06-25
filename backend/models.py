@@ -73,3 +73,15 @@ class Find(Base):
     is_hot = Column(Boolean, default=False)
     is_new = Column(Boolean, default=False)
     is_high_margin = Column(Boolean, default=False)
+
+
+class Payment(Base):
+    __tablename__ = 'payments'
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(BigInteger, index=True)
+    months = Column(Integer)
+    amount = Column(Integer)
+    currency = Column(String)
+    invoice_id = Column(String, index=True)
+    status = Column(String)
+    payment_url = Column(String)
