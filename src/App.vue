@@ -220,7 +220,7 @@ onMounted(() => {
     .then(data => {
       userData.user.is_member = data.is_member
       if (!data.is_member) {
-        showNewUser.value = true
+        showNewUser.value = false
       }
       // userData.token = data.token;
     })
