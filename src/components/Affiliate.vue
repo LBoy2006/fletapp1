@@ -14,8 +14,8 @@
       </div>
     </div>
     <!-- Карточка профиля -->
-     <div class="flex-col flex gap-2 overflow-y-auto scrollbar-hide font-sans">
-    <div class="card-base px-5 py-4 mr-4">
+     <div class="flex-col h-full flex gap-2 overflow-y-auto scrollbar-hide font-sans">
+    <div class="card-base px-5 py-4">
       <div class="flex justify-between items-center">
         <div>
           <div class="font-bold text-base text-[#DFDFDF]">{{ nickname || '—' }}</div>
@@ -66,7 +66,7 @@
 
     <!-- Текущая сумма -->
     <div class="flex items-center gap-1 z-10 pl-2">
-      <div class="bg-[#7B6EF6] text-white text-sm font-bold px-3 py-1 rounded-lg flex items-center gap-1">
+      <div class="bg-[#8B81F5] text-white text-sm font-bold px-3 py-1 rounded-lg flex items-center gap-1">
         <span>₽</span> {{ formatR(stats.earned) }}
       </div>
     </div>
@@ -97,22 +97,22 @@
       <div class="w-full border-t border-[#2E2A54] my-1"></div>
       <div class="flex justify-between text-sm">
         <span class="text-[#FFFFFFBF] font-medium">Сумма оплат</span>
-        <span class="font-extrabold text-[#DFDFDF]">{{ formatR(stats.payments_sum) }}</span>
+        <span class="font-extrabold text-[#DFDFDF]">{{ formatR(stats.payments_sum)}} ₽</span>
       </div>
       <div class="w-full border-t border-[#2E2A54] my-1"></div>
       <div class="flex justify-between text-sm">
         <span class="text-[#FFFFFFBF] font-medium">Заработано</span>
-        <span class="font-extrabold text-[#DFDFDF]">{{ formatR(stats.earned) }}</span>
+        <span class="font-extrabold text-[#DFDFDF]">{{ formatR(stats.earned)}} ₽</span>
       </div>
       <div class="w-full border-t border-[#2E2A54] my-1"></div>
       <div class="flex justify-between text-sm">
         <span class="text-[#FFFFFFBF] font-medium">Выплачено</span>
-        <span class="font-extrabold text-[#DFDFDF]">{{ formatR(stats.paid) }}</span>
+        <span class="font-extrabold text-[#DFDFDF]">{{ formatR(stats.paid)}} ₽</span>
       </div>
-      <div class="w-full border-t border-[#2E2A54] my-1"></div>
-      <div class="flex justify-between items-center mt-2">
+      <div class="w-full border-t border-[#2E2A54] mt-1"></div>
+      <div class="flex justify-between items-center ">
         <span class="font-bold text-[#8B81F5] text-base">Баланс</span>
-        <span class="font-extrabold text-[#8B81F5] text-base">{{ formatR(stats.balance) }}</span>
+        <span class="font-extrabold text-[#8B81F5] text-base">{{ formatR(stats.balance)}} ₽</span>
       </div>
     </div>
 
@@ -123,8 +123,8 @@
         :disabled="!canWithdraw || withdrawRequested"
         @click="onWithdraw"
       >Вывести</button>
-      <div class="text-[10px] text-[#DFDFDF] mt-1">Минимальная сумма 5 000₽</div>
-      <div v-if="withdrawRequested" class="text-green-400 text-xs mt-2">
+      <div class="text-[10px] text-[#DFDFDF]">Минимальная сумма 5 000₽</div>
+      <div v-if="withdrawRequested" class="text-green-400 text-xs">
         Запрос отправлен, с вами свяжется администратор в Telegram
       </div>
     </div>
@@ -188,7 +188,7 @@ const progressPercent = computed(() => {
 
 const formatR = (value) => {
   if (value == null) return '—'
-  return value.toLocaleString('ru-RU') + '₽'
+  return value.toLocaleString('ru-RU')
 }
 
 // function formatR(val) {
