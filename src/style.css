@@ -120,6 +120,7 @@ nav {
   transition: transform 0.5s, opacity 0.3s;
   pointer-events: none;
   color: #6b7280;
+  font-weight: bold;
 
 }
 nav.show-labels .nav-label {
