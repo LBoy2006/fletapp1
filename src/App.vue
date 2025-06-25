@@ -11,17 +11,17 @@ import Feed from './components/Feed.vue';
 import Suppliers from './components/Suppliers.vue';
 import Affiliate from './components/Affiliate.vue';
 import Profile from './components/Profile.vue';
-import ProfileSettings from './components/ProfileSettings.vue';
 import NewUser from './components/NewUser.vue';
 import NewUserProfile from './components/NewUserProfile.vue';
 import SupplierModal from './components/SupplierModal.vue';
 import ItemModal from './components/ItemModal.vue';
+import ProfileSettings from './components/ProfileSettings.vue';
 import { userData } from './state';
 import { translations } from './translations.js';
 import { API_BASE } from './api';
 
 const navItems = ['feed', 'suppliers', 'finds', 'affiliate', 'profile'];
-const pageOrder = ['feed', 'suppliers', 'finds', 'affiliate', 'profile', 'settings'];
+const pageOrder = ['feed', 'suppliers', 'finds', 'affiliate', 'profile'];
 const svgModules = import.meta.glob('./icons/*.svg', {
   query: '?raw',
   import: 'default',
@@ -33,7 +33,7 @@ for (const path in svgModules) {
   pageIcons[name] = svgModules[path];
 }
 
-const pages = { feed: Feed, finds: Finds, suppliers: Suppliers, affiliate: Affiliate, profile: Profile, settings: ProfileSettings };
+const pages = { feed: Feed, finds: Finds, suppliers: Suppliers, affiliate: Affiliate, profile: Profile };
 
 const t = translations.en;
 const currentIndex = ref(pageOrder.indexOf('finds'));
@@ -43,6 +43,7 @@ const supplierModalVisible = ref(false);
 const supplierModalData = ref(null);
 const itemModalVisible = ref(false);
 const itemModalData = ref(null);
+const settingsModalVisible = ref(false);
 const pagesRef = ref(null);
 const innerRef = ref(null);
 const navRef = ref(null);
@@ -99,6 +100,14 @@ function showItemModal(data) {
 function hideItemModal() {
   itemModalVisible.value = false;
   itemModalData.value = null;
+}
+
+function showSettingsModal() {
+  settingsModalVisible.value = true;
+}
+
+function hideSettingsModal() {
+  settingsModalVisible.value = false;
 }
 
 async function onItemToggleFavorite() {
@@ -410,6 +419,8 @@ window.showSupplierModal = showSupplierModal;
 window.hideSupplierModal = hideSupplierModal;
 window.showItemModal = showItemModal;
 window.hideItemModal = hideItemModal;
+window.showSettingsModal = showSettingsModal;
+window.hideSettingsModal = hideSettingsModal;
 
 function updateNavForKeyboard() {
   const viewport = window.visualViewport;
@@ -464,6 +475,11 @@ onMounted(() => {
     @close="hideSupplierModal"
     @copied="onLinkCopied"
     @toggle-favorite="onSupplierToggleFavorite"
+  />
+  <ProfileSettings
+    v-if="settingsModalVisible"
+    :t="t"
+    @close="hideSettingsModal"
   />
   <ItemModal
     v-if="itemModalVisible"
