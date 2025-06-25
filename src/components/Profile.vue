@@ -1,6 +1,6 @@
 <template>
   <div class="h-full flex flex-col space-y-1 p-2">
-    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 pb-3 relative overflow-visible">
+    <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 pb-5 relative overflow-visible">
       <div class="relative flex items-center justify-between px-3">
         <span class="text-lg font-bold text-white">Profile</span>
         <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
@@ -12,7 +12,7 @@
         </button>
       </div>
     </div>
-    <div class="relative p-4 flex flex-col gap-2 overflow-y-auto scrollbar-hide flex-1">
+    <div class="relative h-full flex flex-col gap-2 overflow-y-auto scrollbar-hide flex-col">
       <div class="card-base px-5 py-4 text-center flex flex-col items-center">
         <div class="avatar mx-auto mb-3">
           <span class="num">{{ numDisplay }}</span>
