@@ -1,5 +1,5 @@
 <template>
-   <div class="h-full p-0 flex flex-col space-y-1 p-2 ">
+   <div class="p-0 flex flex-col space-y-1 p-2 ">
     <!-- 🔒 Фиксированная шапка -->
     <div class="sticky top-0 z-10 bg-[var(--page-bg-color)] px-0 py-4 pb-5 relative overflow-visible">
       <div class="relative flex items-center justify-between px-3">
@@ -96,7 +96,7 @@
         :disabled="!canWithdraw || withdrawRequested"
         @click="onWithdraw"
       >Вывести</button>
-      <div class="text-[10px] text-[#DFDFDF] mt-1">Минимальная сумма 15 000₽</div>
+      <div class="text-[10px] text-[#DFDFDF] mt-1">Минимальная сумма 5 000₽</div>
       <div v-if="withdrawRequested" class="text-green-400 text-xs mt-2">
         Запрос отправлен, с вами свяжется администратор в Telegram
       </div>
@@ -115,21 +115,23 @@
 </svg>
           Твоя реферальная ссылка
         </button>
+     <!-- Рекламные материалы -->
     <a
 
           :href="stats.materials_link || materialsLink"
           target="_blank"
-          class="rounded-xl bg-[var(--button-color)] w-full h-10 mt-2 flex flex-1 items-center justify-center gap-2 text-white py-3 text-base shadow transition"
+          class="card-base  w-full h-10 mt-2 flex flex-1 items-center justify-center gap-2 text-white py-3 text-base shadow transition"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" >
+          <svg width="20" height="20" viewBox="-5 -5 40 40" fill="none" >
             <path d="
-            M 15 2 H 21 Q 22 2 22 3 V 8 M 11 13 L 21 3 M 11 4 H 7 Q 4 4 4 7 V 17 Q 4 20 7 20 H 17 Q 20 20 20 17 V 13
+           M 15 23 L 15 7 Z M 7 15 H 23 Z M 10 2 C 21 -1 26 5 28 10 C 29 15 30 21 22 27 M 19 28
+           Q 15 30 10 28 M 8 27 Q 4 25 2 21 M 1 19 Q 0 15 1 11 M 2 9 Q 4 5 8 3
 "
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          Перейти на сайт
+          Рекламые материалы
         </a>
-    <!-- Рекламные материалы -->
+
 
   </div>
 </template>
