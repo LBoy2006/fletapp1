@@ -14,16 +14,16 @@
       </div>
     </div>
     <!-- Карточка профиля -->
-     <div class="flex-1 overflow-y-auto scrollbar-hide font-sans">
-    <div class="card-base px-5 py-4">
+     <div class="flex-col flex gap-2 overflow-y-auto scrollbar-hide font-sans">
+    <div class="card-base px-5 py-4 mr-4">
       <div class="flex justify-between items-center">
         <div>
           <div class="font-bold text-base text-[#DFDFDF]">{{ nickname || '—' }}</div>
           <div class="text-xs text-[#DFDFDF] opacity-80 mt-1">{{ stats.motivation || '—' }}</div>
         </div>
-        <div class=" text-white px-4 py-1 text-xs font-semibold">
+        <div class="flex text-white pl-4 py-1 text-xs font-semibold">
 
-                    <svg width="128" height="64" viewBox="0 0 256 48" fill="none">
+                    <svg width="128" height="70" viewBox="0 0 203 48" fill="none">
                       <text x="16" y="40" fill="white"
       font-size="2em"
       font-family="sans-serif"
@@ -45,7 +45,7 @@
       </div>
 
       <!-- Баланс и метрики -->
-      <div class="flex justify-between items-center mt-4">
+      <div class="flex justify-between items-center mt-4 bg-blue-200" >
         <div class="flex items-center gap-2">
           <span class="font-semibold text-[13px] bg-gradient-to-r from-yellow-200 via-yellow-100 to-yellow-200 bg-clip-text text-transparent">₽</span>
           <span class="font-bold text-sm text-[#DFDFDF]">{{ formatR(stats.earned) }}</span>
@@ -106,7 +106,7 @@
     <!-- Ссылка и копирование -->
        <button
           @click="copyLink"
-          class=" card-base py-2 flex mt-4 h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
+          class=" card-base py-2 flex h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
         >
             <svg width="24" height="24" viewBox="-5 -5 64 64" fill="none">
   <!-- Задний (нижний) прямоугольник, только часть обводки -->
@@ -119,7 +119,7 @@
      <!-- Рекламные материалы -->
      <button
           @click="openTelegramLink"
-          class=" card-base py-2 flex mt-4 h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
+          class=" card-base py-2 flex h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
         >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="size-6">
   <path fill-rule="evenodd" d="M19.902 4.098a3.75 3.75 0 0 0-5.304 0l-4.5 4.5a3.75 3.75 0 0 0 1.035 6.037.75.75 0 0 1-.646 1.353 5.25 5.25 0 0 1-1.449-8.45l4.5-4.5a5.25 5.25 0 1 1 7.424 7.424l-1.757 1.757a.75.75 0 1 1-1.06-1.06l1.757-1.757a3.75 3.75 0 0 0 0-5.304Zm-7.389 4.267a.75.75 0 0 1 1-.353 5.25 5.25 0 0 1 1.449 8.45l-4.5 4.5a5.25 5.25 0 1 1-7.424-7.424l1.757-1.757a.75.75 0 1 1 1.06 1.06l-1.757 1.757a3.75 3.75 0 1 0 5.304 5.304l4.5-4.5a3.75 3.75 0 0 0-1.035-6.037.75.75 0 0 1-.354-1Z" clip-rule="evenodd" />
