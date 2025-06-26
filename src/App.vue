@@ -69,6 +69,7 @@ const dragStyle = computed(() => ({
 const restrictedPages = ['feed', 'profile', 'finds', 'affiliate', 'suppliers'];
 
 function showPage(page) {
+  currentIndex.value = pageOrder.indexOf(page);
   if (!userData.user.is_member && restrictedPages.includes(page)) {
     if (page === 'profile') {
       showNewUser.value = false;           // скрыть NewUser
@@ -82,7 +83,7 @@ function showPage(page) {
   // Если участник — обычное поведение
   showNewUser.value = false;
   showNewUserProfile.value = false;
-  currentIndex.value = pageOrder.indexOf(page);
+
   dragOffset.value = 0;
   isDragging.value = false;
   revealLabels();
@@ -492,10 +493,23 @@ onMounted(() => {
   });
 });
 
+
+function onModalSwipe(direction) {
+  // direction: 'left' или 'right'
+  let idx = currentIndex.value;
+
+  if (direction === 'left' && idx < pageOrder.length - 1) {
+    showPage(pageOrder[idx + 1]);
+  }
+  if (direction === 'right' && idx > 0) {
+    showPage(pageOrder[idx - 1]);
+  }
+}
 </script>
 <template>
-  <NewUser v-if="showNewUser" @paid="onPaid" />
-  <NewUserProfile v-if="showNewUserProfile" @paid="onPaidProfile" />
+
+  <NewUser v-if="showNewUser" @paid="onPaid" @swipe="onModalSwipe" />
+  <NewUserProfile v-if="showNewUserProfile" @paid="onPaidProfile" @swipe="onModalSwipe"/>
   <SupplierModal
     v-if="supplierModalVisible"
     :supplier="supplierModalData"
@@ -531,9 +545,9 @@ onMounted(() => {
         </div>
       </div>
     </div>
-    <nav ref="navRef" :class="{'show-labels': showLabels} " :style="{ bottom: navBottom + 'px' }">
-      <button v-for="item in navItems" :key="item" class="nav-btn" :class="{ active: pageOrder[currentIndex]===item }" @click="onNavClick(item)">
-        <span class="icon" v-html="pageIcons[item]"></span>
+    <nav ref="navRef" :class="{'show-labels': showLabels}" :style="{ bottom: navBottom + 'px' }" class="z-99">
+      <button v-for="item in navItems" :key="item" class="nav-btn z-99" :class="{ active: pageOrder[currentIndex]===item }" @click="onNavClick(item)">
+        <span class="icon z-10" v-html="pageIcons[item]"></span>
         <span class="nav-label">{{ t[item] }}</span>
       </button>
     </nav>

@@ -1,9 +1,10 @@
 <template>
   <div
+
         @touchstart="handleTouchStart"
   @touchmove="handleTouchMove"
   @touchend="handleTouchEnd"
-      class="flex items-center justify-center text-center">
+      class="flex items-center justify-center text-center z-10">
 
     <!-- Canvas for falling matrix symbols -->
     <canvas class="fixed inset-0 w-full h-full z-10" id="matrix"></canvas>
@@ -30,19 +31,30 @@
 <script setup>
 
 import PayModal from './PayModal.vue'
-
 import { onMounted, ref } from 'vue';
-import { userData } from '../state'; // путь поправь, если не тот
-const emit = defineEmits(['paid']);
+import { userData } from '../state';
+const emit = defineEmits(['paid', 'swipe']); // <--- Добавил swipe для навигации
+
 const payVisible = ref(false)
 const gesturePoints = ref([]);
 let gestureActive = false;
 
+let startX = null;
+let startY = null;
+
+// Открыть Pay-модалку
+function openPay() {
+  payVisible.value = true;
+}
+
+// Универсальный обработчик для свайпа и рисования "Z"
 function handleTouchStart(e) {
+  if (e.touches.length !== 1) return;
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+
   gestureActive = true;
-  gesturePoints.value = [];
-  const touch = e.touches[0];
-  gesturePoints.value.push({x: touch.clientX, y: touch.clientY});
+  gesturePoints.value = [{x: startX, y: startY}];
 }
 
 function handleTouchMove(e) {
@@ -51,39 +63,50 @@ function handleTouchMove(e) {
   gesturePoints.value.push({x: touch.clientX, y: touch.clientY});
 }
 
-function handleTouchEnd() {
-  gestureActive = false;
-  // 1. Простая фильтрация: три участка движения
-  if (gesturePoints.value.length < 5) return; // мало точек
-
-  // Нарежем путь на три части (начало, середина, конец)
-  const n = gesturePoints.value.length;
-  const p1 = gesturePoints.value.slice(0, Math.floor(n/3));
-  const p2 = gesturePoints.value.slice(Math.floor(n/3), Math.floor(2*n/3));
-  const p3 = gesturePoints.value.slice(Math.floor(2*n/3));
-
-  // 2. Проверим направления
-  const dx1 = p1[p1.length-1].x - p1[0].x; // движение влево
-  const dy2 = p2[p2.length-1].y - p2[0].y; // вниз
-  const dx2 = p2[p2.length-1].x - p2[0].x; // вправо (диагональ)
-  const dx3 = p3[p3.length-1].x - p3[0].x; // опять влево
-
-  if (
-    dx1 < -30 && // первая часть — влево
-    dy2 > 20 && dx2 > 20 && // вторая часть — вниз вправо
-    dx3 < -30 // третья часть — снова влево
-  ) {
-    userData.user.is_member = true;
-    emit('paid');
-    alert('Поздравляем! Вы стали участником клуба! 🎉');
+function handleTouchEnd(e) {
+  // --- Свайп навигация ---
+  if (startX !== null && startY !== null && e.changedTouches) {
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+      emit('swipe', dx > 0 ? 'right' : 'left');
+      // свайп обработан, не обязательно проверять рисунок если не нужно
+      // return;
+    }
+    startX = null;
+    startY = null;
   }
+
+  // --- Пасхалка: рисунок "Z" справа налево ---
+  gestureActive = false;
+  const points = gesturePoints.value;
+  if (points.length > 5) {
+    const n = points.length;
+    const p1 = points.slice(0, Math.floor(n / 3));
+    const p2 = points.slice(Math.floor(n / 3), Math.floor(2 * n / 3));
+    const p3 = points.slice(Math.floor(2 * n / 3));
+
+    const dx1 = p1[p1.length - 1].x - p1[0].x; // первая часть — влево
+    const dy2 = p2[p2.length - 1].y - p2[0].y; // вниз
+    const dx2 = p2[p2.length - 1].x - p2[0].x; // вправо (диагональ)
+    const dx3 = p3[p3.length - 1].x - p3[0].x; // снова влево
+
+    if (
+      dx1 < -30 &&       // влево
+      dy2 > 20 && dx2 > 20 && // вниз вправо
+      dx3 < -30          // снова влево
+    ) {
+      userData.user.is_member = true;
+      emit('paid');
+      alert('Поздравляем! Вы стали участником клуба! 🎉');
+    }
+  }
+  gesturePoints.value = [];
 }
 
 
 
-function openPay() {
-  payVisible.value = true
-}
+
 
 onMounted(() => {
   const canvas = document.getElementById('matrix')

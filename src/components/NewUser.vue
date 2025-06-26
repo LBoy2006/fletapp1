@@ -1,11 +1,14 @@
 <template>
-  <div class="flex items-center justify-center text-center">
+  <div
+      @touchstart="onTouchStart"
+      @touchend="onTouchEnd"
+      class="flex items-center justify-center text-center  z-10">
 
     <!-- Canvas for falling matrix symbols -->
-    <canvas class="fixed inset-0 w-full h-full z-10" id="matrix"></canvas>
+    <canvas class="fixed inset-0 w-full h-full" id="matrix"></canvas>
 
     <!-- Overlay Content -->
-    <div class="modal-overlay fixed inset-0 backdrop-blur-sm flex items-center justify-center z-10">
+    <div class="modal-overlay fixed inset-0 backdrop-blur-sm flex items-center justify-center">
       <div class="space-y-6  text-center pb-20">
         <div class="glitch text-md pb-5" data-text="Запись не найдена">Запись не найдена</div>
         <p class="text-m pb-5 flicker">
@@ -26,7 +29,7 @@
 import { onMounted, ref } from 'vue'
 import PayModal from './PayModal.vue'
 
-const emit = defineEmits(['paid'])
+const emit = defineEmits(['paid','swipe'])
 const payVisible = ref(false)
 
 function openPay() {
@@ -67,6 +70,31 @@ onMounted(() => {
 
   setInterval(draw, 33)
 })
+
+
+
+let startX = null;
+let startY = null;
+
+function onTouchStart(e) {
+  if (e.touches.length !== 1) return;
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+}
+
+function onTouchEnd(e) {
+  if (startX === null || startY === null) return;
+  const dx = e.changedTouches[0].clientX - startX;
+  const dy = e.changedTouches[0].clientY - startY;
+
+  if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+    // свайп влево или вправо
+    emit('swipe', dx > 0 ? 'right' : 'left');
+  }
+
+  startX = null;
+  startY = null;
+}
 </script>
 
 <style scoped>
