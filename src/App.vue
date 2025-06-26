@@ -65,12 +65,31 @@ const dragStyle = computed(() => ({
 
 
 
+
+const restrictedPages = ['feed', 'profile', 'finds', 'affiliate', 'suppliers'];
+
 function showPage(page) {
+  if (!userData.user.is_member && restrictedPages.includes(page)) {
+    if (page === 'profile') {
+      showNewUser.value = false;           // скрыть NewUser
+      showNewUserProfile.value = true;     // показать NewUserProfile
+    } else {
+      showNewUserProfile.value = false;    // скрыть NewUserProfile
+      showNewUser.value = true;            // показать NewUser
+    }
+    return;
+  }
+  // Если участник — обычное поведение
+  showNewUser.value = false;
+  showNewUserProfile.value = false;
   currentIndex.value = pageOrder.indexOf(page);
   dragOffset.value = 0;
   isDragging.value = false;
   revealLabels();
 }
+
+
+
 
 let sheetTimer = null;
 function showSheet(lines) {
@@ -171,15 +190,9 @@ function onLinkCopied() {
 }
 
 function onNavClick(item) {
-  if (item === 'feed') {
-    showFeedOverlay();
-    return;
-  }
-  if (item === 'profile' && !userData.user.is_member) {
-    showNewUserProfile.value = true;
-  }
   showPage(item);
 }
+
 
 function onPaid() {
   showNewUser.value = false;
@@ -190,7 +203,6 @@ function onPaidProfile() {
   showNewUserProfile.value = false;
   showPage('profile');
 }
-
 
   // Если Telegram есть и пользователь есть
 onMounted(async () => {
@@ -203,7 +215,7 @@ onMounted(async () => {
   await new Promise(resolve => setTimeout(resolve, 100)); // можно 300–500 мс для подстраховки
 
   const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
-  const initData = window.Telegram?.WebApp?.initData;
+  let initData = window.Telegram?.WebApp?.initData;
 
   if (tgUser) {
     userData.user = tgUser;
