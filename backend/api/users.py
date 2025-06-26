@@ -17,16 +17,25 @@ async def read_user(user_id: int, db: AsyncSession = Depends(get_db)):
     result = schemas.UserOut.model_validate(user)
     if user.join_date:
         result.days_in_club = (date.today() - user.join_date).days
+
+    # Determine participant level based on days in club and invited novices
+    invited = 0
+    affiliate = await crud.get_affiliate(db, user_id)
+    if affiliate and affiliate.invited is not None:
+        invited = affiliate.invited
+
     if result.days_in_club is not None:
         d = result.days_in_club
-        if d < 30:
-            result.status = 'Новичок'
-        elif d < 180:
-            result.status = 'Агент'
-        elif d < 365:
-            result.status = 'Партнёр'
-        else:
-            result.status = 'Ветеран'
+        status = 'Новобранец'
+        if d > 180:
+            status = 'Легенда'
+        elif d > 90 and invited >= 3:
+            status = 'Куратор'
+        elif d > 30 and invited >= 2:
+            status = 'Резидент'
+        elif d > 7 and invited >= 1:
+            status = 'Агент'
+        result.status = status
     return result
 
 
