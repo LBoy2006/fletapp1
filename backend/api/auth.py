@@ -64,6 +64,7 @@ def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400
 async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
     body = await request.json()
     init_data = body.get('initData')
+    print(init_data)
 
     if not init_data:
         raise HTTPException(status_code=400, detail="initData required")
