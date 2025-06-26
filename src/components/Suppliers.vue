@@ -38,7 +38,7 @@
       </div>
 
       <!-- Кнопка фильтра -->
-      <div class="mt-3 py-2">
+      <div class="mt-3 py-2" ref="dropdownArea">
         <button
           @click="filtersOpen = !filtersOpen"
           class="w-full bg-[#3B366B] text-white py-1 rounded-xl text-sm "
@@ -46,7 +46,7 @@
           Filters
           <span :class="filtersOpen ? 'rotate-180' : ''" class="inline-block transition-transform ml-1">▼</span>
         </button>
-      </div>
+
 
       <!-- Выпадающие фильтры -->
       <transition name="fade">
@@ -70,7 +70,7 @@
             </div>
           </div>
         </div>
-      </transition>
+      </transition> </div>
     </div>
 
     <!-- 📦 Список поставщиков -->
@@ -143,7 +143,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted, watch ,onBeforeUnmount} from 'vue'
 import { userData } from '../state'
 import { API_BASE } from '../api'
 
@@ -166,6 +166,25 @@ const displayedSuppliers = computed(() => {
   }
   return items
 })
+
+
+
+const dropdownArea = ref(null)
+
+function handleClickOutside(e) {
+  if (filtersOpen.value && dropdownArea.value && !dropdownArea.value.contains(e.target)) {
+    filtersOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
 
 function toggleCat(c) {
   const idx = selectedCat.value.indexOf(c)
