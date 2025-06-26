@@ -15,10 +15,10 @@ async def create_invoice(data: schemas.PaymentCreate, db: AsyncSession = Depends
     settings = get_settings()
     amount_map = {1: 1990, 3: 4990, 6: 9990, 12: 19990}
     period_map = {
-        1: 'PERIOD_30_DAYS',
+        1: 'MONTHLY',
         3: 'PERIOD_90_DAYS',
         6: 'PERIOD_180_DAYS',
-        12: 'PERIOD_360_DAYS'
+        12: 'PERIOD_YEAR'
     }
     if data.months not in amount_map:
         raise HTTPException(status_code=400, detail='Invalid plan')
