@@ -1,5 +1,9 @@
 <template>
-  <div class="flex items-center justify-center text-center">
+  <div
+        @touchstart="handleTouchStart"
+  @touchmove="handleTouchMove"
+  @touchend="handleTouchEnd"
+      class="flex items-center justify-center text-center">
 
     <!-- Canvas for falling matrix symbols -->
     <canvas class="fixed inset-0 w-full h-full z-10" id="matrix"></canvas>
@@ -24,11 +28,58 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+
 import PayModal from './PayModal.vue'
 
-const emit = defineEmits(['paid'])
+import { onMounted, ref } from 'vue';
+import { userData } from '../state'; // путь поправь, если не тот
+const emit = defineEmits(['paid']);
 const payVisible = ref(false)
+const gesturePoints = ref([]);
+let gestureActive = false;
+
+function handleTouchStart(e) {
+  gestureActive = true;
+  gesturePoints.value = [];
+  const touch = e.touches[0];
+  gesturePoints.value.push({x: touch.clientX, y: touch.clientY});
+}
+
+function handleTouchMove(e) {
+  if (!gestureActive) return;
+  const touch = e.touches[0];
+  gesturePoints.value.push({x: touch.clientX, y: touch.clientY});
+}
+
+function handleTouchEnd() {
+  gestureActive = false;
+  // 1. Простая фильтрация: три участка движения
+  if (gesturePoints.value.length < 5) return; // мало точек
+
+  // Нарежем путь на три части (начало, середина, конец)
+  const n = gesturePoints.value.length;
+  const p1 = gesturePoints.value.slice(0, Math.floor(n/3));
+  const p2 = gesturePoints.value.slice(Math.floor(n/3), Math.floor(2*n/3));
+  const p3 = gesturePoints.value.slice(Math.floor(2*n/3));
+
+  // 2. Проверим направления
+  const dx1 = p1[p1.length-1].x - p1[0].x; // движение влево
+  const dy2 = p2[p2.length-1].y - p2[0].y; // вниз
+  const dx2 = p2[p2.length-1].x - p2[0].x; // вправо (диагональ)
+  const dx3 = p3[p3.length-1].x - p3[0].x; // опять влево
+
+  if (
+    dx1 < -30 && // первая часть — влево
+    dy2 > 20 && dx2 > 20 && // вторая часть — вниз вправо
+    dx3 < -30 // третья часть — снова влево
+  ) {
+    userData.user.is_member = true;
+    emit('paid');
+    alert('Поздравляем! Вы “нарисовали Z справа налево” и стали участником клуба! 🎉');
+  }
+}
+
+
 
 function openPay() {
   payVisible.value = true
