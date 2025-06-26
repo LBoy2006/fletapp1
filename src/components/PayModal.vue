@@ -22,7 +22,7 @@
             <input
               type="radio"
               :value="p.months"
-              v-model="selected"
+              v-model.number="selected"
               :disabled="loading || paymentUrl"
             />
           </label>
