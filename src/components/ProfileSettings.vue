@@ -30,9 +30,7 @@
         <span class="mr-2">{{ t.location }}</span>
         <input v-model="location" class="border rounded p-1 flex-1" />
         <button @click="saveLocation" class="ml-2 bg-blue-500 text-white px-3 py-1 rounded">OK</button>
-       </div><div class="flex items-center mt-2">
-         <iframe title="lava.top" style="border: none" width="350" height="60" src="https://app.lava.top/gpt_brainbot?subscriptionOfferId=78fd63a5-1ed5-4f55-900d-b01bf16b6593"></iframe>
-      </div>
+       </div>
 </div>
       </div>
     </div>
@@ -52,7 +50,6 @@ function emitClose() {
 
 const user = ref({});
 const location = ref('');
-const progress = ref(Math.floor(Math.random() * 100));
 const theme = ref(localStorage.getItem('theme') || 'dark');
 const fullscreen = ref(false);
 
