@@ -30,6 +30,7 @@ def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400
 
     # 1. Парсим строку
     data = dict(urllib.parse.parse_qsl(init_data))
+    print(data)
     hash_ = data.pop('hash', None)
     #data.pop('signature', None)
 
@@ -49,7 +50,8 @@ def check_telegram_auth(init_data: str, bot_token: str, max_age_sec: int = 86400
         msg=check_string.encode('utf-8'),
         digestmod=hashlib.sha256
     ).hexdigest()
-
+    print(expected_hash)
+    print(hash_)
     if expected_hash != hash_:
              raise HTTPException(status_code=403, detail="Invalid Telegram WebApp initData signature")
 
@@ -98,6 +100,7 @@ async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
     # Обычная авторизация
     bot_token = get_settings().TELEGRAM_BOT_TOKEN
     user_data = check_telegram_auth(init_data, bot_token)
+
     user_json = user_data['user']
     user_obj = json.loads(user_json)
     user_id = int(user_obj['id'])
