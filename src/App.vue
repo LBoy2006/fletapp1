@@ -191,53 +191,56 @@ function onPaidProfile() {
   showPage('profile');
 }
 
-// --- Блок авторизации Telegram Mini App ---
-onMounted(() => {
-  let tgUser = null;
-  let initData = null;
-
-  if (window.Telegram && window.Telegram.WebApp) {
-    tgUser = window.Telegram.WebApp.initDataUnsafe?.user;
-    initData = window.Telegram.WebApp.initData;
-  }
 
   // Если Telegram есть и пользователь есть
+onMounted(async () => {
+  // Гарантированно дождаться готовности SDK
+  if (window.Telegram?.WebApp) {
+    Telegram.WebApp.ready(); // запускает SDK
+  }
+
+  // Дождаться полного DOM + viewport, Telegram SDK может подгружаться медленно
+  await new Promise(resolve => setTimeout(resolve, 100)); // можно 300–500 мс для подстраховки
+
+  const tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+  const initData = window.Telegram?.WebApp?.initData;
+
   if (tgUser) {
     userData.user = tgUser;
   } else {
-    // Локальная отладка
-    tgUser = {
+    // Локальный тест
+    userData.user = {
       id: 123456,
       first_name: "Тест",
       last_name: "Пользователь",
       username: "test_user",
       is_member: false
     };
-    initData = 'test_init_data=123'; // Любая строка-заглушка
-    userData.user = tgUser;
+    initData = 'test_init_data=123';
   }
 
-  // Отправляем данные на backend
-  fetch(`${API_BASE}/auth/telegram`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      initData,
-      user: tgUser  // <-- добавляем также user, если нужно
-    })
-  })
-    .then(res => res.json())
-    .then(data => {
-      userData.user.is_member = data.is_member
-      if (!data.is_member) {
-        showNewUser.value = true
-      }
-      // userData.token = data.token;
-    })
-    .catch(err => {
-      console.error('Auth error:', err);
+  try {
+    const res = await fetch(`${API_BASE}/auth/telegram`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData, user: userData.user })
     });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      userData.user.is_member = data.is_member;
+      if (!data.is_member) {
+        showNewUser.value = true;
+      }
+    } else {
+      console.error('Auth failed:', data);
+    }
+  } catch (err) {
+    console.error('Auth error:', err);
+  }
 });
+
 
 // --- /Блок авторизации ---
 
