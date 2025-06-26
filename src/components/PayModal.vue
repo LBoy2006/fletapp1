@@ -19,14 +19,20 @@
             :class="{ 'bg-[#18181B]': selected===p.months }"
           >
             <span class="text-white">{{ p.label }}</span>
-            <input type="radio" :value="p.months" v-model="selected" />
+            <input
+              type="radio"
+              :value="p.months"
+              v-model="selected"
+              :disabled="loading || paymentUrl"
+            />
           </label>
           <button
             v-if="!paymentUrl"
             @click="confirm"
             class="rounded-xl bg-[var(--button-color)] text-white py-2 mt-2"
+            :disabled="loading"
           >
-            Подтвердить
+            {{ loading ? 'Создание...' : 'Подтвердить' }}
           </button>
           <a
             v-if="paymentUrl"
@@ -55,12 +61,14 @@ const plans = [
 ];
 const selected = ref(plans[0].months);
 const paymentUrl = ref('');
+const loading = ref(false);
 
 function emitClose() {
   emit('close');
 }
 
 async function confirm() {
+  loading.value = true;
   try {
     const resp = await fetch(`${API_BASE}/payments`, {
       method: 'POST',
@@ -74,5 +82,6 @@ async function confirm() {
   } catch (e) {
     console.error(e);
   }
+  loading.value = false;
 }
 </script>
