@@ -38,7 +38,7 @@ def test_generate_agent_number(client, db_session):
     async def run():
         async with SessionLocal() as db:
             num1 = await crud.generate_agent_number(db)
-            await crud.create_user(db, user_id=2, agent_number=num1)
+            await crud.create_user(db, user_id=2, agent_number=num1, telegram_username='user2')
             num2 = await crud.generate_agent_number(db)
             return num1, num2
 
