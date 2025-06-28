@@ -17,7 +17,7 @@
 
 
 <!--    фейковые товары -->
-    <div class="flex-1 relative pt-1 scrollbar-hide h-full overflow-auto fixed font-sans justify-between ">
+    <div class="flex-1 relative pt-1 scrollbar-hide h-full mb-2 overflow-auto fixed font-sans justify-between ">
       <div class="gap-2 top-1 pb-5  ">
         <div
           v-for="f in displayedFinds.slice(0, 5)"
