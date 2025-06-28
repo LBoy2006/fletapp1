@@ -40,11 +40,13 @@ async def create_user(
     *,
     user_id: int,
     agent_number: str,
+    telegram_username: str | None = None,
     referrer_id: int | None = None,
 ) -> models.User:
     user = models.User(
         id=user_id,
         agent_number=agent_number,
+        telegram_username=telegram_username,
         join_date=date.today(),
         location="",
         is_member=False,

@@ -3,6 +3,7 @@ from datetime import date, datetime
 
 class UserBase(BaseModel):
     agent_number: str
+    telegram_username: str | None = None
     join_date: date | None = None
     location: str | None = None
 

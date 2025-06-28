@@ -83,6 +83,7 @@ async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
                     db,
                     user_id=user_id,
                     agent_number=agent_number,
+                    telegram_username=test_user.get("username"),
                     referrer_id=None,
                 )
                 await crud.create_affiliate(db, user.id)
@@ -121,6 +122,7 @@ async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
             db,
             user_id=user_id,
             agent_number=agent_number,
+            telegram_username=username,
             referrer_id=referrer_id,
         )
         await crud.create_affiliate(db, user.id)

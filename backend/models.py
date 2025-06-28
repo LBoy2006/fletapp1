@@ -5,6 +5,7 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(BigInteger, primary_key=True, index=True)
     agent_number = Column(String, unique=True, index=True)
+    telegram_username = Column(String, index=True)
     join_date = Column(Date)
     location = Column(String)
     is_member = Column(Boolean, default=False)
