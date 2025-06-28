@@ -17,12 +17,12 @@
 
 
 <!--    фейковые товары -->
-    <div class=" flex-1 relative pt-1 scrollbar-hide overflow-auto fixed font-sans ">
+    <div class="flex-1 relative pt-1 scrollbar-hide h-full overflow-auto fixed font-sans justify-between ">
       <div class="gap-2 top-1 pb-5  ">
         <div
-          v-for="f in displayedFinds.slice(0, 6)"
+          v-for="f in displayedFinds.slice(0, 5)"
           :key="f.id"
-          class="card-items z-9999 relative top-0 card-base flex m-0 items-center "
+          class="card-items z-9999 relative top-0 card-base flex m-0 items-center overflow-auto "
         >
 
           <!-- Фото -->
@@ -36,7 +36,7 @@
           </div>
 
           <!-- Описание -->
-          <div class="flex-1 min-w-0 pl-2 h-full flex flex-col justify-between">
+          <div class="flex-1 min-w-0 max-h pl-2 h-full flex flex-col justify-between">
             <div>
             <div class="text-gray-400 text-lg font-bold leading-tight truncate">{{ f.name }}</div>
             <div class="text-xs text-gray-400 mt-0.5">В избранном {{ f.favorites_count || 0 }}</div>
