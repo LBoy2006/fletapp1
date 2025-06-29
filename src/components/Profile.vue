@@ -14,10 +14,8 @@
     </div>
     <div class="relative h-full flex flex-col gap-2 justify-between overflow-y-auto scrollbar-hide flex-col">
       <div class="card-base px-5 py-4 text-center flex flex-col items-center">
-        <div class="avatar mx-auto mb-3">
-          <span class="num">{{ numDisplay }}</span>
-        </div>
-        <div class="font-semibold text-lg text-[#DFDFDF]">{{ user.agent_number || '—' }}</div>
+        <img :src="avatarUrl" class="w-24 h-24 rounded-full object-cover border border-[0.5px] border-[#424242] mb-3" />
+        <div class="font-semibold text-lg text-[#DFDFDF]">{{ numDisplay }}</div>
         <div class="text-sm text-[#DFDFDF]">{{ t.daysInClub }}: {{ user.days_in_club ?? '—' }}</div>
         <div class="text-sm text-[#DFDFDF]">{{ t.location }}: {{ user.location || '—' }}</div>
         <div class="text-sm text-[#DFDFDF]">{{ t.status }}: {{ user.status || '—' }}</div>
@@ -39,6 +37,11 @@
 import { ref, onMounted, watch, computed } from 'vue';
 import { userData } from '../state';
 import { API_BASE } from '../api';
+import av1 from '../img/1.webp';
+import av2 from '../img/2.webp';
+import av3 from '../img/3.webp';
+import av4 from '../img/4.webp';
+import av5 from '../img/5.webp';
 const props = defineProps({ t: Object });
 
 const user = ref({});
@@ -47,6 +50,18 @@ const numDisplay = computed(() => {
   if (!user.value.agent_number) return '---';
   const parts = user.value.agent_number.split('_');
   return parts[1] || user.value.agent_number;
+});
+
+const avatarMap = {
+  'Новобранец': av1,
+  'Агент': av2,
+  'Резидент': av3,
+  'Куратор': av4,
+  'Легенда': av5
+};
+
+const avatarUrl = computed(() => {
+  return avatarMap[user.value.status] || av1;
 });
 
 async function loadUser() {
@@ -73,21 +88,3 @@ watch(() => userData.user.id, id => {
   if (id) loadUser();
 });
 </script>
-
-<style scoped>
-.avatar {
-  width: 96px;
-  height: 96px;
-  background: url('assets/agent.svg') no-repeat center/contain;
-  position: relative;
-  margin: auto;
-}
-.avatar .num {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: monospace;
-  color: var(--active-color);
-}
-</style>
