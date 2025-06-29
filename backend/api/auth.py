@@ -86,7 +86,11 @@ async def telegram_auth(request: Request, db: AsyncSession = Depends(get_db)):
                     telegram_username=test_user.get("username"),
                     referrer_id=None,
                 )
-                await crud.create_affiliate(db, user.id)
+                existing_affiliate = await crud.get_affiliate(db, user.id)
+                if not existing_affiliate:
+                    await crud.create_affiliate(db, user.id)
+
+
 
             return {
                 "id": user.id,

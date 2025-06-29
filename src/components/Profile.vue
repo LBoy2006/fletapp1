@@ -12,7 +12,7 @@
         </button>
       </div>
     </div>
-    <div class="relative h-full flex flex-col gap-2 overflow-y-auto scrollbar-hide flex-col">
+    <div class="relative h-full flex flex-col gap-2 justify-between overflow-y-auto scrollbar-hide flex-col">
       <div class="card-base px-5 py-4 text-center flex flex-col items-center">
         <div class="avatar mx-auto mb-3">
           <span class="num">{{ numDisplay }}</span>
@@ -22,7 +22,7 @@
         <div class="text-sm text-[#DFDFDF]">{{ t.location }}: {{ user.location || '—' }}</div>
         <div class="text-sm text-[#DFDFDF]">{{ t.status }}: {{ user.status || '—' }}</div>
       </div>
-      <div class="card-base px-5 py-4">
+      <div class=" px-5 py-4">
         <h3 class="text-lg font-bold mb-2 text-[#DFDFDF]">{{ t.aboutClub }}</h3>
         <p class="text-sm text-[#DFDFDF]">Клуб единомышленников, где агенты обмениваются опытом и секретами эффективных продаж. Присоединяйся и расширяй свои возможности.</p>
       </div>

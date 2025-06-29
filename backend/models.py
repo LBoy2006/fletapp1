@@ -15,7 +15,7 @@ class User(Base):
 class Affiliate(Base):
     __tablename__ = 'affiliates'
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(BigInteger, index=True)
+    user_id = Column(BigInteger, unique=True, index=True)
     motivation = Column(String)
     share = Column(Integer)
     invited = Column(Integer)

@@ -7,7 +7,7 @@
         <span class="text-lg font-bold text-white">Affiliate</span>
 
         <!-- Центрированный блок -->
-        <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+        <div class="absolute left-1/2 transform -translate-x-1/2 flex flex-col justify-between items-center">
           <span class="text-2xl font-dela text-white">1chn</span>
           <span class="text-sm text-gray-400">[ван чан]</span>
         </div>
@@ -132,7 +132,7 @@
     <!-- Ссылка и копирование -->
        <button
           @click="copyLink"
-          class=" card-base py-2 flex h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
+          class=" card-base py-2 flex h-10 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
         >
             <svg width="24" height="24" viewBox="-5 -5 64 64" fill="none">
   <!-- Задний (нижний) прямоугольник, только часть обводки -->
@@ -145,7 +145,7 @@
      <!-- Рекламные материалы -->
      <button
           @click="openTelegramLink"
-          class=" card-base py-2 flex h-10 flex-1 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
+          class="card-base py-2 flex h-10 w-full items-center justify-center gap-1 bg-[#18181B] text-white transition hover:bg-[#232226]"
         >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" class="size-6">
   <path fill-rule="evenodd" d="M19.902 4.098a3.75 3.75 0 0 0-5.304 0l-4.5 4.5a3.75 3.75 0 0 0 1.035 6.037.75.75 0 0 1-.646 1.353 5.25 5.25 0 0 1-1.449-8.45l4.5-4.5a5.25 5.25 0 1 1 7.424 7.424l-1.757 1.757a.75.75 0 1 1-1.06-1.06l1.757-1.757a3.75 3.75 0 0 0 0-5.304Zm-7.389 4.267a.75.75 0 0 1 1-.353 5.25 5.25 0 0 1 1.449 8.45l-4.5 4.5a5.25 5.25 0 1 1-7.424-7.424l1.757-1.757a.75.75 0 1 1 1.06 1.06l-1.757 1.757a3.75 3.75 0 1 0 5.304 5.304l4.5-4.5a3.75 3.75 0 0 0-1.035-6.037.75.75 0 0 1-.354-1Z" clip-rule="evenodd" />
