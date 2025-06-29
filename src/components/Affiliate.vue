@@ -15,7 +15,7 @@
     </div>
      <div class="flex-col h-full flex flex-1 justify-between gap-2 overflow-y-auto scrollbar-hide font-sans">
     <!-- Карточка профиля -->
-
+<div class="relative flex-col h-full flex flex-1 justify-between gap-2 overflow-y-auto scrollbar-hide font-sans">
     <div class="card-base px-5 py-2 flex justify-between flex-col">
       <div class="flex justify-between items-end">
         <div>
@@ -56,14 +56,14 @@
     ></div>
 
     <!-- Текущая сумма -->
-    <div class="flex items-center gap-1 z-10 pl-2">
+    <div class="flex items-center gap-1 z-20 pl-2">
       <div class="bg-[#8B81F5] text-white text-sm font-bold px-3 py-1 rounded-lg flex items-center gap-1">
         <span>₽</span> {{ formatR(stats.earned) }}
       </div>
     </div>
 
     <!-- Целевой уровень -->
-    <div class="flex items-center gap-1 z-10 pr-2">
+    <div class="flex items-center gap-1 z-20 pr-2">
       <div class="bg-[#2b2b2b] text-white text-sm font-bold px-3 py-1 rounded-lg flex items-center gap-1">
         <span>₽</span> {{ formatR(nextLevel) }}
       </div>
@@ -147,8 +147,26 @@
 
 
 
-  </div>
-   </div>
+
+    <div class="absolute inset-0 flex items-center w-full h-full text-center z-30 backdrop-blur-xl border-0.5rem rounded-xl z-1">
+      <div class="flex-col items-center justify-center">
+      <div class="flex-col p-1 items-center justify-center space-y-4 ">
+        <!-- Эмодзи или картинка -->
+        <div class="text-6xl">🚫</div> <!-- Можно заменить на <img> -->
+
+        <!-- Тексты -->
+        <div>
+          <p class="text-lg font-semibold">Лента находится<br>в разработке</p>
+          <p class="text-sm text-gray-400 mt-2">
+            Скоро любой агент сможет публиковать свои находки, отчёты и результаты
+          </p>
+        </div>
+      </div></div></div>
+</div>
+</div>
+ </div>
+
+
 </template>
 
 <script setup>

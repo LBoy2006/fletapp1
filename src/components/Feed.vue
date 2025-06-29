@@ -1,6 +1,6 @@
 <!--Feed.vue-->
 <template>
-  <div class="-mb-3 p-1  m-1 flex flex-col justify-center bg-danger-500 space-y-1 h-full">
+  <div class="-mb-3 p-2 flex flex-col justify-center bg-danger-500 space-y-1 h-full">
     <!-- 🔒 Фиксированная шапка -->
     <div class="absolute fixed top-0 z-99 bg-[var(--page-bg-color)] px-0 py-4 relative pb-5 overflow-visible">
       <div class="relative flex items-center justify-between px-3">
@@ -17,17 +17,17 @@
 
 
 <!--    фейковые товары -->
-    <div class="flex-1 relative pt-1 scrollbar-hide h-full mb-2 overflow-auto fixed font-sans justify-between ">
+    <div class="flex-1 flex relative scrollbar-hide my-1 overflow-hidden rounded-xl fixed font-sans justify-between ">
       <div class="gap-2 top-1 pb-5  ">
         <div
-          v-for="f in displayedFinds.slice(0, 5)"
+          v-for="f in displayedFinds.slice(0, 6)"
           :key="f.id"
           class="card-items z-9999 relative top-0 card-base flex m-0 items-center overflow-auto "
         >
 
           <!-- Фото -->
-          <div class="relative z-0">
-            <img :src="f.photo_url" alt="" class="w-24 h-24 rounded-xl object-cover border border border-[0.5px] border-[#424242] m-0 mr-2 " />
+          <div class="relative z-0 m-3">
+            <img :src="f.photo_url" alt="" class="w-24 h-24 rounded-xl m-1 object-cover border border border-[0.5px] border-[#424242] m-0 mr-2 " />
             <div class="absolute -top-1 -left-1 z-1 flex text-[20px] mx-0">
               <span v-if="f.is_hot">🔥</span>
               <span v-if="f.is_new" >🆕</span>
@@ -39,7 +39,7 @@
           <div class="flex-1 min-w-0 max-h pl-2 h-full flex flex-col justify-between">
             <div>
             <div class="text-gray-400 text-lg font-bold leading-tight truncate">{{ f.name }}</div>
-            <div class="text-xs text-gray-400 mt-0.5">В избранном {{ f.favorites_count || 0 }}</div>
+            <div class="text-xs text-gray-400 ">В избранном {{ f.favorites_count || 0 }}</div>
   </div>
             <div class="text-sm text-gray-400 mt-1 truncate ">{{ f.description }}</div>
             <div class="flex flex-wrap gap-x-2 gap-y-0.5 mt-2 text-2xl text-[#5E56A5] font-sans font-bold">
