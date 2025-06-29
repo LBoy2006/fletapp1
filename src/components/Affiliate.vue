@@ -13,17 +13,18 @@
         </div>
       </div>
     </div>
+     <div class="flex-col h-full flex flex-1 justify-between gap-2 overflow-y-auto scrollbar-hide font-sans">
     <!-- Карточка профиля -->
-     <div class="flex-col h-full flex gap-2 overflow-y-auto scrollbar-hide font-sans">
-    <div class="card-base px-5 py-4">
-      <div class="flex justify-between items-center">
+
+    <div class="card-base px-5 py-2 flex justify-between flex-col">
+      <div class="flex justify-between items-end">
         <div>
           <div class="font-bold text-base text-[#DFDFDF]">{{ nickname || '—' }}</div>
           <div class="text-xs text-[#DFDFDF] opacity-80 mt-1">{{ stats.motivation || '—' }}</div>
         </div>
-        <div class="flex text-white pl-4 py-1 text-xs font-semibold">
+        <div class="flex text-white pl-4 pt-0 text-xs font-semibold">
 
-                    <svg width="128" height="70" viewBox="0 0 203 48" fill="none">
+                    <svg width="128" height="40" viewBox="0 20 203 48" fill="none">
                       <text x="16" y="40" fill="white"
       font-size="2em"
       font-family="sans-serif"
@@ -44,17 +45,7 @@
         </div>
       </div>
 
-      <!-- Баланс и метрики -->
-<!--      <div class="flex justify-between items-center mt-4 bg-blue-200" >-->
-<!--        <div class="flex items-center gap-2">-->
-<!--          <span class="font-semibold text-[13px] bg-gradient-to-r from-yellow-200 via-yellow-100 to-yellow-200 bg-clip-text text-transparent">₽</span>-->
-<!--          <span class="font-bold text-sm text-[#DFDFDF]">{{ formatR(stats.earned) }}</span>-->
-<!--        </div>-->
-<!--        <div class="flex items-center gap-2">-->
-<!--          <span class="font-semibold text-[13px] bg-gradient-to-r from-yellow-200 via-yellow-100 to-yellow-200 bg-clip-text text-transparent">₽</span>-->
-<!--          <span class="font-bold text-sm text-[#DFDFDF]">{{ formatR(stats.payments_sum) }}</span>-->
-<!--        </div>-->
-<!--      </div>-->
+
 <!--      прогресбар -->
       <div class="mt-4 bg-[#1f1f1f] rounded-xl px-1 py-1">
   <div class="relative flex justify-between items-center h-10 w-full rounded-lg overflow-hidden">
@@ -84,15 +75,15 @@
 
 
     <!-- Детальная статистика -->
-    <div class="card-base px-5 py-5 space-y-3">
-      <div class="flex justify-between text-sm">
+    <div class="flex-col card-base justify-around flex px-5 py-2 space-y-2 flex-1">
+      <div class="flex flex justify-between text-sm">
         <span class="text-[#FFFFFFBF] font-medium">Приглашено пользователей</span>
         <span class="font-extrabold text-[#DFDFDF]">{{ stats.invited ?? '—' }}</span>
       </div>
       <div class="w-full border-t border-[#2E2A54] my-1"></div>
       <div class="flex justify-between text-sm">
         <span class="text-[#FFFFFFBF] font-medium">Твоя комиссия</span>
-        <span class="font-extrabold text-[#DFDFDF]">{{ stats.share ?? '—' }}%</span>
+        <span class="font-extrabold text-[#DFDFDF]">{{ stats.share ?? '—' }} %</span>
       </div>
       <div class="w-full border-t border-[#2E2A54] my-1"></div>
       <div class="flex justify-between text-sm">
@@ -117,9 +108,9 @@
     </div>
 
     <!-- Кнопка "Вывести" -->
-    <div class="bg-[#3B366B] border border-white/20 rounded-[10px] px-6 py-3 text-center flex flex-col items-center">
+    <div class="bg-[#3B366B] border border-white/20 rounded-[10px] px-3 py-2 text-center flex flex-col items-center">
       <button
-        class="w-full bg-[#5E56A5] rounded-[8px] text-white font-bold py-2 disabled:opacity-50"
+        class="w-4/5 bg-[#5E56A5] rounded-[8px] text-white font-bold py-1 disabled:opacity-50"
         :disabled="!canWithdraw || withdrawRequested"
         @click="onWithdraw"
       >Вывести</button>

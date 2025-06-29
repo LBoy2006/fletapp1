@@ -13,12 +13,22 @@
       </div>
     </div>
     <div class="relative h-full flex flex-col gap-2 justify-between overflow-y-auto scrollbar-hide flex-col">
-      <div class="card-base px-5 py-4 text-center flex flex-col items-center">
-        <img :src="avatarUrl" class="w-24 h-24 rounded-full object-cover border border-[0.5px] border-[#424242] mb-3" />
-        <div class="font-semibold text-lg text-[#DFDFDF]">{{ numDisplay }}</div>
-        <div class="text-sm text-[#DFDFDF]">{{ t.daysInClub }}: {{ user.days_in_club ?? '—' }}</div>
-        <div class="text-sm text-[#DFDFDF]">{{ t.location }}: {{ user.location || '—' }}</div>
-        <div class="text-sm text-[#DFDFDF]">{{ t.status }}: {{ user.status || '—' }}</div>
+      <div class="card-base p-3 flex flex-row justify-start">
+        <img :src="avatarUrl" class="w-24 h-24 mr-4 rounded-full object-cover border border-[0.5px] border-[#424242] " />
+        <div class="flex-row flex-1 flex justify-between">
+          <div class="flex-col justify-between text-start">
+            <div class="text-sm text-[#DFDFDF] pt-2">Агент:</div>
+            <div class="text-sm text-[#DFDFDF]">{{ t.daysInClub }}:</div>
+            <div class="text-sm text-[#DFDFDF]">{{ t.location }}:</div>
+            <div class="text-sm text-[#DFDFDF]">{{ t.status }}:</div>
+          </div>
+           <div class="flex-col justify-between text-end">
+            <div class="font-semibold text-lg text-[#DFDFDF]">{{ numDisplay }}</div>
+            <div class="text-sm text-[#DFDFDF]">{{ user.days_in_club ?? '—' }}</div>
+            <div class="text-sm text-[#DFDFDF]">{{ user.location || '—' }}</div>
+            <div class="text-sm text-[#DFDFDF]">{{ user.status || '—' }}</div>
+           </div>
+        </div>
       </div>
       <div class=" px-5 py-4">
         <h3 class="text-lg font-bold mb-2 text-[#DFDFDF]">{{ t.aboutClub }}</h3>
@@ -48,8 +58,8 @@ const user = ref({});
 
 const numDisplay = computed(() => {
   if (!user.value.agent_number) return '---';
-  const parts = user.value.agent_number.split('_');
-  return parts[1] || user.value.agent_number;
+  // const parts = user.value.agent_number.split('_');
+  return user.value.agent_number;
 });
 
 const avatarMap = {
