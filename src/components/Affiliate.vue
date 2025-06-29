@@ -13,9 +13,9 @@
         </div>
       </div>
     </div>
-     <div class="flex-col h-full flex flex-1 justify-between gap-2 overflow-y-auto scrollbar-hide font-sans">
+     <div class="flex-col h-full relative flex flex-1 justify-between gap-2 overflow-y-auto scrollbar-hide font-sans">
     <!-- Карточка профиля -->
-<div class="relative flex-col h-full flex flex-1 justify-between gap-2 overflow-y-auto scrollbar-hide font-sans">
+<div class=" flex-col h-full flex flex-1 justify-between gap-2 overflow-y-auto scrollbar-hide font-sans">
     <div class="card-base px-5 py-2 flex justify-between flex-col">
       <div class="flex justify-between items-end">
         <div>
@@ -148,7 +148,7 @@
 
 
       <!--таймер-->
-    <div class="absolute inset-0 flex items-center w-full h-full text-center justify-center z-30 backdrop-blur-xl border-0.5rem rounded-xl z-1">
+    <div class="absolute flex  items-center inset-0 text-center justify-center z-30 backdrop-blur-xl border-0.5rem rounded-xl z-1">
 
       <div class="flex-col p-1 flex-1 flex space-y-4 ">
         <!-- Эмодзи или картинка -->
