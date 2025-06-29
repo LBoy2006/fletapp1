@@ -147,24 +147,23 @@
 
 
 
+      <!--таймер-->
+    <div class="absolute inset-0 flex items-center w-full h-full text-center justify-center z-30 backdrop-blur-xl border-0.5rem rounded-xl z-1">
 
-    <div class="absolute inset-0 flex items-center w-full h-full text-center z-30 backdrop-blur-xl border-0.5rem rounded-xl z-1">
-      <div class="flex-col items-center justify-center">
-      <div class="flex-col p-1 items-center justify-center space-y-4 ">
+      <div class="flex-col p-1 flex-1 flex space-y-4 ">
         <!-- Эмодзи или картинка -->
         <div class="text-6xl">🚫</div> <!-- Можно заменить на <img> -->
 
         <!-- Тексты -->
         <div>
-          <p class="text-lg font-semibold">Лента находится<br>в разработке</p>
-          <p class="text-sm text-gray-400 mt-2">
-            Скоро любой агент сможет публиковать свои находки, отчёты и результаты
-          </p>
+          <p class="text-lg font-semibold">Доступ к партнерке<br>откоется через</p>
+          <p class="font-extrabold text-2xl text-[#8B81F5] mt-2"> 31 дней 10:05:12 </p>
         </div>
-      </div></div></div>
-</div>
-</div>
+      </div>
+    </div>
+  </div>
  </div>
+</div>
 
 
 </template>

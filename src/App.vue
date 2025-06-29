@@ -68,6 +68,17 @@ const dragStyle = computed(() => ({
 
 const restrictedPages = ['feed', 'profile', 'finds', 'affiliate', 'suppliers'];
 
+let sheetTimer = null;
+
+
+
+
+function showSheet(lines) {
+  sheetLines.value = Array.isArray(lines) ? lines : [lines];
+  sheetVisible.value = true;
+  clearTimeout(sheetTimer);
+  sheetTimer = setTimeout(() => (sheetVisible.value = false), 3000);
+}
 function showPage(page) {
   currentIndex.value = pageOrder.indexOf(page);
   if (!userData.user.is_member && restrictedPages.includes(page)) {
@@ -87,17 +98,6 @@ function showPage(page) {
   dragOffset.value = 0;
   isDragging.value = false;
   revealLabels();
-}
-
-
-
-
-let sheetTimer = null;
-function showSheet(lines) {
-  sheetLines.value = Array.isArray(lines) ? lines : [lines];
-  sheetVisible.value = true;
-  clearTimeout(sheetTimer);
-  sheetTimer = setTimeout(() => (sheetVisible.value = false), 3000);
 }
 
 function hideSheet() {
@@ -528,10 +528,6 @@ function onModalSwipe(direction) {
     @close="hideItemModal"
     @copied="onLinkCopied"
     @toggle-favorite="onItemToggleFavorite"
-  />
-  <FeedOverlay
-    v-if="feedOverlayVisible"
-    @close="hideFeedOverlay"
   />
   <div class="min-h-screen flex flex-col overflow-hidden">
     <div ref="pagesRef" class="flex-1 overflow-x-hidden">
