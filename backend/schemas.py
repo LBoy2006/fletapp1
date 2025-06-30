@@ -21,6 +21,7 @@ class UserOut(UserBase):
 
 class AffiliateBase(BaseModel):
     user_id: int
+    join_date: date | None = None
     motivation: str | None = None
     share: int | None = None
     invited: int | None = None

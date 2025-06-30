@@ -64,7 +64,14 @@ async def create_affiliate(db: AsyncSession, user_id: int) -> models.Affiliate:
     )
     phrase = result.scalar_one_or_none() or ""
     link = generate_referral_link(user_id)
-    stat = models.Affiliate(user_id=user_id, motivation=phrase, referral_link=link)
+    user = await get_user(db, user_id)
+    join_date = user.join_date if user else date.today()
+    stat = models.Affiliate(
+        user_id=user_id,
+        join_date=join_date,
+        motivation=phrase,
+        referral_link=link,
+    )
     db.add(stat)
     await db.commit()
     await db.refresh(stat)

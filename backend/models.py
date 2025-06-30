@@ -16,6 +16,7 @@ class Affiliate(Base):
     __tablename__ = 'affiliates'
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(BigInteger, unique=True, index=True)
+    join_date = Column(Date)
     motivation = Column(String)
     share = Column(Integer)
     invited = Column(Integer)

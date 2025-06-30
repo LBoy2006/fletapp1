@@ -148,16 +148,16 @@
 
 
       <!--таймер-->
-    <div class="absolute flex  items-center inset-0 text-center justify-center z-30 backdrop-blur-xl border-0.5rem rounded-xl z-1">
+    <div v-if="showTimer" class="absolute flex  items-center inset-0 text-center justify-center z-30 backdrop-blur-xl rounded-xl">
 
       <div class="flex-col p-1 flex-1 flex space-y-4 ">
         <!-- Эмодзи или картинка -->
-        <div class="text-6xl">🚫</div> <!-- Можно заменить на <img> -->
+        <div class="text-6xl">🚫</div>
 
         <!-- Тексты -->
         <div>
-          <p class="text-lg font-semibold">Доступ к партнерке<br>откоется через</p>
-          <p class="font-extrabold text-2xl text-[#8B81F5] mt-2"> 31 дней 10:05:12 </p>
+          <p class="text-lg font-semibold">Доступ к партнерке<br>откроется через</p>
+          <p class="font-extrabold text-2xl text-[#8B81F5] mt-2">{{ countdown }}</p>
         </div>
       </div>
     </div>
@@ -169,13 +169,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { userData } from '../state'
 import { API_BASE } from '../api'
 
 const stats = ref({})
 const nickname = ref('')
 const withdrawRequested = ref(false)
+const countdown = ref('')
+const showTimer = ref(false)
+let timerId
 const materialsLink = "https://app.lava.top/products/bee68592-a5ab-49a8-b5e6-f6a576e29255/78fd63a5-1ed5-4f55-900d-b01bf16b6593?paymentParams=CiAgICAgICAgewogICAgICAgICAgImludm9pY2VJZCI6ICI1NjUyMmNjYi1jOGY3LTQ2NzItODU3Yy1jZWZkNTAyOTA2OGEiLAogICAgICAgICAgInBheW1lbnRTZXR0aW5ncyI6IHsiaWQiOiI1NjUyMmNjYi1jOGY3LTQ2NzItODU3Yy1jZWZkNTAyOTA2OGEiLCJ0eXBlIjoiaW52b2ljZSIsInN0YXR1cyI6ImluLXByb2dyZXNzIiwiYW1vdW50X3RvdGFsIjp7ImN1cnJlbmN5IjoiUlVCIiwiYW1vdW50Ijo5OTkwLjB9LCJwcm92aWRlciI6eyJuYW1lIjoiYmFuazEzMSIsInBhcmFtZXRlcnMiOnsicHVibGljX3Rva2VuIjoiMzUwMTEyMGU0NDA5ZGY5Y2I0OWM0OWM1NzUwZTMxMmUwMmE3MzA1MDQ3OGEyNmUyYjI1MjA5OTE2MzQ3YmZhYSIsInN0eWxlc2hlZXQiOiJodHRwczovL3dpZGdldC5iYW5rMTMxLnJ1L3BheW1lbnQtZm9ybS5jc3MiLCJzY3JpcHQiOiJodHRwczovL3dpZGdldC5iYW5rMTMxLnJ1L3BheW1lbnQtZm9ybS5qcyJ9fX0KICAgICAgICB9CiAgICAgIA"
 
 
@@ -205,6 +208,28 @@ const formatR = (value) => {
 // }
 const canWithdraw = computed(() => (stats.value.balance || 0) >= 5000)
 
+function updateCountdown() {
+  if (!stats.value.join_date) return
+  const end = new Date(stats.value.join_date)
+  end.setDate(end.getDate() + 30)
+  const diff = end - new Date()
+  if (diff <= 0) {
+    showTimer.value = false
+    countdown.value = ''
+    if (timerId) {
+      clearInterval(timerId)
+      timerId = null
+    }
+    return
+  }
+  showTimer.value = true
+  const days = Math.floor(diff / 86400000)
+  const hours = Math.floor((diff / 3600000) % 24)
+  const minutes = Math.floor((diff / 60000) % 60)
+  const seconds = Math.floor((diff / 1000) % 60)
+  countdown.value = `${days} дней ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+}
+
 async function loadData() {
   if (!userData.user.id) return
   try {
@@ -221,6 +246,9 @@ async function loadData() {
     if (resp.ok) {
       stats.value = await resp.json()
       withdrawRequested.value = stats.value.withdraw_requested
+      updateCountdown()
+      if (timerId) clearInterval(timerId)
+      timerId = setInterval(updateCountdown, 1000)
     }
   } catch (e) {
     console.error(e)
@@ -253,5 +281,6 @@ function copyLink() {
   navigator.clipboard.writeText(stats.value.referral_link || '').catch(() => {})
 }
 onMounted(loadData)
+onUnmounted(() => { if (timerId) clearInterval(timerId) })
 watch(() => userData.user.id, id => { if (id) loadData() })
 </script>
