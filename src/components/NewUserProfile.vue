@@ -4,26 +4,50 @@
         @touchstart="handleTouchStart"
   @touchmove="handleTouchMove"
   @touchend="handleTouchEnd"
-      class="flex items-center justify-center text-center z-10">
+      class="flex z-10">
 
     <!-- Canvas for falling matrix symbols -->
-    <canvas class="fixed inset-0 w-full h-full z-10" id="matrix"></canvas>
+    <canvas class="fixed  w-full h-[calc(100%-70px)] z-10 mx-20 " id="matrix"></canvas>
 
     <!-- Overlay Content -->
-    <div class="modal-overlay fixed inset-0 backdrop-blur-sm flex items-center justify-center z-10">
-      <div class="space-y-6  text-center pb-20">
-        <div class="glitch text-md pb-5" data-text="Запись не найдена">Запись не найдена</div>
-        <div class="text-sm text-orange-300">Это раздел профиля</div>
-        <p class="text-m pb-5 flicker">
-          Доступ к системе закрыт<br />
-          Активируйте профиль, чтобы <br />
-          начать операцию
-        </p>
+    <div class="modal-overlay h-[calc(100%-70px)] flex flex-col gap-10 backdrop-blur-sm justify-around z-10">
+      <div class=" flex flex-row justify-start items-center gap-4">
+        <img src='../img/error.webp' class="w-16 h-16  rounded-full object-cover " />
+        <div class="flex-row flex-1 flex justify-between gap-3">
+          <div class="flex-col justify-between text-start">
+            <div class="text-sm text-[#DFDFDF]">номер агента:</div>
+            <div class="text-sm text-[#DFDFDF]">дней в клубе:</div>
+            <div class="text-sm text-[#DFDFDF]">локация:</div>
+            <div class="text-sm text-[#DFDFDF]">статус:</div>
+          </div>
+           <div class="flex-col justify-between text-end">
+            <div class="notfound-glow text-pink-300 text-sm">not found</div>
+            <div class="notfound-glow text-pink-300 text-sm">not found</div>
+            <div class="notfound-glow text-pink-300 text-sm">not found</div>
+            <div class="notfound-glow text-pink-300 text-sm">not found</div>
+           </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <p class="text-m flicker">
+         Добро пожаловать в сеть [1CHN] <br />  Для входа в систему требуется<br /> активация профиля  <br /><br />💳 Разовый взнос — 5000₽   <br />+ 30 дней доступа включены
+        </p>      </div>
+
+      <div class="text-center">
+
         <button @click="openPay" class="glitch-scale text-green-500 hover:underline text-md">
           [ ПОЛУЧИТЬ ДОСТУП ]
         </button>
         <PayModal v-if="payVisible" @close="payVisible=false" />
       </div>
+      <div class="text-center">
+
+        <button @click="openSup" class="text-white pt-10 hover:underline text-sm">
+          [ тех-поддержка ]
+        </button>
+        <PayModal v-if="payVisible" @close="payVisible=false" />
+      </div>
+
     </div>
   </div>
 </template>
@@ -104,7 +128,11 @@ function handleTouchEnd(e) {
   gesturePoints.value = [];
 }
 
+const SUPPORT_LINK = 'https://t.me/your_support_channel';
 
+function openSup() {
+  window.open(SUPPORT_LINK, '_blank');
+}
 
 
 
@@ -145,6 +173,15 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
+.notfound-glow {
+  text-shadow:
+    0 0 8px #ff0033,
+    0 0 12px #ff0033,
+    0 0 24px #ff0033,
+    0 0 32px #ff0033;
+}
+
 .glitch {
   color: white;
   font-family: monospace;
